@@ -1,0 +1,53 @@
+// --------------------------------------------------
+// Navbar
+// --------------------------------------------------
+
+.navbar-custom {
+    background-color: $gray-800;
+
+    & .lines {
+        cursor: pointer;
+        display: block;
+        width: 1.5rem;
+
+        > span {
+            background-color: $gray-100;
+            display: block;
+            height: 0.125rem;
+            margin-bottom: 0.3125rem;
+        }
+    }
+
+    & .navbar-brand,
+    & .nav-link {
+        color: $gray-500;
+
+        &:hover,
+        &.active,
+        &:focus {
+            color: $gray-300;
+        }
+    }
+
+    & .navbar-brand {
+        font-size: 0.9375rem;
+        margin-right: .5rem;
+
+        > img {
+            height: auto;
+            width: 2rem;
+        }
+    }    
+
+    & .nav-link {
+        font-size: .875rem;
+
+        &.show {
+            color: $gray-300;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        height: 4.375rem;
+    }
+}

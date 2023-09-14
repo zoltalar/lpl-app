@@ -1,0 +1,39 @@
+// --------------------------------------------------
+// Horizontal Navigation
+// --------------------------------------------------
+
+.top-nav {
+    background-color: $white;
+    box-shadow: var(--#{$prefix}box-shadow);
+
+    .navbar {
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    .navbar-nav {
+
+        .nav-link {
+            font-size: 0.9375rem;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        height: 3.4375rem;
+
+        .navbar-nav {
+
+            .nav-item:first-of-type {
+    
+                .nav-link {
+                    padding-left: 0;
+                }
+            }
+
+            .nav-link {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    }
+}

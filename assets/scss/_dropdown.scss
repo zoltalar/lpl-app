@@ -1,0 +1,11 @@
+// --------------------------------------------------
+// Dropdowns
+// --------------------------------------------------
+
+.dropdown-menu {
+    --#{$prefix}dropdown-border-radius: #{$border-radius-sm};
+    --#{$prefix}dropdown-link-active-bg: #{$gray-200};
+    --#{$prefix}dropdown-link-active-color: #{$gray-900};
+    --#{$prefix}dropdown-link-color: #{$gray-700};
+    --#{$prefix}dropdown-link-hover-bg: #{$gray-200};
+}
