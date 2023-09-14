@@ -6,7 +6,13 @@
     background-color: $gray-800;
     height: 4.375rem;
 
-    & .lines {
+    .avatar {
+        height: auto;
+        opacity: .95;
+        width: 2.375rem;
+    }
+
+    .lines {
         cursor: pointer;
         display: block;
         width: 1.5rem;
@@ -23,8 +29,8 @@
         }
     }
 
-    & .navbar-brand,
-    & .nav-link {
+    .navbar-brand,
+    .nav-link {
         color: $gray-500;
 
         &:hover,
@@ -34,17 +40,17 @@
         }
     }
 
-    & .navbar-brand {
+    .navbar-brand {
         font-size: 0.9375rem;
         margin-right: .5rem;
 
         > img {
             height: auto;
-            width: 2rem;
+            width: 2.375rem;
         }
     }    
 
-    & .nav-link {
+    .nav-link {
         font-size: .875rem;
 
         &.show {
