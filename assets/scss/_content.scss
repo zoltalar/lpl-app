@@ -1,0 +1,21 @@
+// --------------------------------------------------
+// Content
+// --------------------------------------------------
+
+.content {
+    padding-top: 4.375rem;
+
+    @include media-breakpoint-up(lg) {
+        padding-top: 7.8125rem;
+    }
+}
+
+.page-title-box {
+    padding: 1.5rem 0;
+
+    .page-title {
+        color: var(--bs-gray-900);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+}

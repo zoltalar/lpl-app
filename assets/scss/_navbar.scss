@@ -4,6 +4,7 @@
 
 .navbar-custom {
     background-color: $gray-800;
+    height: 4.375rem;
 
     & .lines {
         cursor: pointer;
@@ -15,6 +16,10 @@
             display: block;
             height: 0.125rem;
             margin-bottom: 0.3125rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -47,7 +52,7 @@
         }
     }
 
-    @include media-breakpoint-up(lg) {
-        height: 4.375rem;
+    .navbar-toggler {
+        border-color: transparent;
     }
 }

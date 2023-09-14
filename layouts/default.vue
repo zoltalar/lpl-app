@@ -5,7 +5,11 @@
                 <navbar />
                 <topnav />
             </header>
+            <div class="content">
+                <div class="container">
+                    <slot />
+                </div>
+            </div>
         </client-only>
-        <slot />
     </div>
 </template>

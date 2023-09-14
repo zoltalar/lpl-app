@@ -1,8 +1,11 @@
 {
     "attribute": "Attribute",
+    "attributes": "Attributes",
     "campaign": "Campaign",
     "create_new": "Create New",
     "dashboard": "Dashboard",
+    "import": "Import",
+    "manage": "Manage",
     "phplists": "phplists",
     "subscriber": "Subscriber",
     "subscribers": "Subscribers",

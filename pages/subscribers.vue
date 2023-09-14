@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="page-title-box">
-            <h4 class="page-title">{{ $t('dashboard') }}</h4>
+            <h4 class="page-title">{{ $t('subscribers') }}</h4>
         </div>
     </div>
 </template>
