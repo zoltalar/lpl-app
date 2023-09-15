@@ -1,0 +1,19 @@
+// --------------------------------------------------
+// Tables
+// --------------------------------------------------
+
+.table {
+    --#{$prefix}table-bg: $white;
+    font-size: $font-size-base;
+
+    tr {
+        
+        > th {
+            background-color: $table-header-bg;
+            color: $gray-600;
+            font-size: $table-header-font-size;
+            font-weight: normal;
+            vertical-align: bottom;
+        }
+    }
+}
