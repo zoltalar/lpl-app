@@ -19,3 +19,44 @@
         margin: 0;
     }
 }
+
+.sortable {
+    color: $gray-700;
+    display: block;
+    position: relative;
+    text-decoration: none;
+
+    &:after,
+    &:before {
+        bottom: -.125rem;
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        opacity: .4;
+        position: absolute;
+    }
+    
+    &:after {
+        content: '\2191';
+        right: .5em;
+    }
+    
+    &:before {
+        content: '\2193';
+        right: 1em;
+    }
+    
+    &.asc {
+
+        &:after {
+            opacity: 1;
+        }
+    }
+    
+    &.desc {
+
+        &:before {
+            opacity: 1;
+        }
+    }
+}

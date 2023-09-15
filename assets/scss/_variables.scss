@@ -20,6 +20,8 @@ $input-font-size:               $font-size-base !default;
 
 // Tables
 $table-border-color:            #f3f3f3 !default;
+$table-cell-padding-x:          .75rem !default;
+$table-cell-padding-y:          $table-cell-padding-x !default;
 $table-cell-vertical-align:     middle !default;
 $table-header-bg:               #f8f9fa !default;
 $table-header-font-size:        0.8125rem !default;

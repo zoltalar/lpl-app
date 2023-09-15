@@ -14,7 +14,7 @@
                         <div class="row toolbar">
                             <div class="col-sm-8">
                                 <div class="btn-group" role="group" aria-label="Subscriber options">
-                                    <button type="button" class="btn btn-primary">{{ $t('create') }}</button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
                                     <button type="button" class="btn btn-secondary">{{ $t('refresh') }}</button>
                                 </div>
                             </div>
@@ -34,59 +34,82 @@
                                 <thead>
                                     <tr>
                                         <th width="10%">
-                                            <a href="/companies" class="sortable">ID</a>
+                                            <a href="/subscribers" class="sortable">{{ $t('id') }}</a>
                                         </th>
                                         <th width="35%">
-                                            <a href="/companies" class="sortable">Name</a>
+                                            <a href="/subscribers" class="sortable">{{ $t('email') }}</a>
                                         </th>
                                         <th width="15%">
-                                            <a href="/companies" class="sortable">Active</a>
+                                            <a href="/subscribers" class="sortable">{{ $t('confirmed') }}</a>
                                         </th>
-                                        <th class="text-end">Actions</th>
+                                        <th width="15%">
+                                            <a href="/subscribers" class="sortable">{{ $t('blacklisted') }}</a>
+                                        </th>
+                                        <th class="text-end">{{ $t('actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td> 1 </td>
-                                        <td> Flu Demo 2023 </td>
+                                        <td> sample@domain.com </td>
                                         <td><span class="badge text-bg-primary"> Yes </span></td>
+                                        <td><span class="badge text-bg-danger"> No </span></td>
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm">
                                                 <button title="Edit" type="button" class="btn btn-light"><i class="mdi mdi-pencil"></i></button>
-                                                <button title="Reorder Fields" type="button" class="btn btn-light"><i class="mdi mdi-sort"></i></button>
-                                                <button title="Duplicate" type="button" class="btn btn-light"><i class="mdi mdi-content-duplicate"></i></button>
                                                 <button title="View" type="button" class="btn btn-light"><i class="mdi mdi-eye-outline"></i></button>
-                                                <button title="Archive" type="button" class="btn btn-warning"><i class="mdi mdi-floppy"></i></button>
                                                 <button title="Delete" type="button" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td> 2 </td>
-                                        <td> Abbott 2023 </td>
+                                        <td> john@example.com </td>
                                         <td><span class="badge text-bg-primary"> Yes </span></td>
+                                        <td><span class="badge text-bg-danger"> No </span></td>
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm">
                                                 <button title="Edit" type="button" class="btn btn-light"><i class="mdi mdi-pencil"></i></button>
-                                                <button title="Reorder Fields" type="button" class="btn btn-light"><i class="mdi mdi-sort"></i></button>
-                                                <button title="Duplicate" type="button" class="btn btn-light"><i class="mdi mdi-content-duplicate"></i></button>
                                                 <button title="View" type="button" class="btn btn-light"><i class="mdi mdi-eye-outline"></i></button>
-                                                <button title="Archive" type="button" class="btn btn-warning"><i class="mdi mdi-floppy"></i></button>
                                                 <button title="Delete" type="button" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>      
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <nav class="mt-3" aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>                 
                     </div>
                 </div>
             </div>
         </div>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvas-title">Offcanvas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <subscriber-create-form />
+            </div>
+        </div>   
     </div>
 </template>
 <script setup>
 definePageMeta({
     layout: 'default'
 })
+function create() {
+
+}
 </script>
