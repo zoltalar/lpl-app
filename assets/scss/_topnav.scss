@@ -19,6 +19,28 @@
         }
     }
 
+    @include media-breakpoint-down(lg) {
+
+        .dropdown {
+
+            .dropdown-item {
+
+                &:hover,
+                &:focus,
+                &.active {
+                    background-color: transparent;
+                }
+            }
+
+            .dropdown-menu {
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                padding-top: 0;
+            }
+        }
+    }
+
     @include media-breakpoint-up(lg) {
         height: 3.4375rem;
 
