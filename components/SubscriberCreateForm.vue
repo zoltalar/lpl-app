@@ -19,9 +19,10 @@
         </div>
         <div class="mb-3">
             <div class="form-check form-switch">
-                <input type="checkbox" id="input-blacklisted" class="form-check-input" :true-value="1" :false-value="0" v-model="subscriber.blacklisted">
+                <input type="checkbox" id="input-blacklisted" class="form-check-input" aria-describedby="text-blacklisted" :true-value="1" :false-value="0" v-model="subscriber.blacklisted">
                 <label for="input-blacklisted" class="form-check-label">{{ $t('blacklisted') }}</label>
             </div>
+            <div id="text-blacklisted" class="form-text">Indicate if email address is blacklisted.</div>
         </div>
         <div class="mb-0">
             <button type="submit" class="btn btn-primary">{{ $t('create') }}</button>
@@ -35,7 +36,14 @@ const subscriber = reactive({
     confirmed: 0,
     blacklisted: 0
 })
-function store() {
-    console.log('Store...')
+let errors = ref({})
+async function store() {
+    const { data, error } = await useApiFetch('/api/admin/users/store', {
+        method: 'POST',
+        body: { subscriber },        
+    })
+    if (error) {
+        errors = error.value?.data.errors
+    }
 }
 </script>

@@ -2,4 +2,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/scss/app.scss'],
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.API_BASE_URL
+    }
+  }
 })
