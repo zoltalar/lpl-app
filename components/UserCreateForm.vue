@@ -50,7 +50,7 @@
     </form>
 </template>
 <script setup>
-const state = () => {
+const initialState = () => {
     return {
         email: '',
         password: '',
@@ -60,7 +60,7 @@ const state = () => {
         disabled: 0
     }
 }
-const user = ref(state())
+const user = ref(initialState())
 const { errors, clearErrors, transformErrors } = useUserForm()
 const store = async () => {
     clearErrors()
@@ -78,9 +78,9 @@ const store = async () => {
     }
 }
 const reset = () => {
-    const keys = Object.keys(state())
+    const keys = Object.keys(initialState())
     keys.forEach((key) => {
-        user.value[key] = state()[key]
+        user.value[key] = initialState()[key]
     })
     clearErrors()
 }
