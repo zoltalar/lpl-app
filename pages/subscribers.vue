@@ -96,8 +96,8 @@
         </div>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_employee') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_user') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
             </div>
             <div class="offcanvas-body">
                 <user-create-form />

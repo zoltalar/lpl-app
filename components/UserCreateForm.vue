@@ -7,49 +7,81 @@
             <div class="invalid-feedback d-block" v-if="errors.email !== undefined">
                 {{ errors.email }}
             </div>
-            <div id="text-email" class="form-text" v-else>We'll never share your email with anyone else.</div>
         </div>
         <div class="mb-3">
             <label for="input-password" class="form-label">{{ $t('password') }}</label>
             <input type="password" class="form-control" id="input-password" v-model="user.password">
+            <div class="invalid-feedback d-block" v-if="errors.password !== undefined">
+                {{ errors.password }}
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input type="checkbox" id="input-html-email" class="form-check-input" aria-describedby="text-html-email" :true-value="1" :false-value="0" v-model="user.html_email">
+                <label for="input-html-email" class="form-check-label">{{ $t('html_email') }}</label>
+            </div>
+            <div id="text-html-email" class="form-text">{{ $t('messages.form_text_user_html_email') }}</div>
         </div>
         <div class="mb-3">
             <div class="form-check form-switch">
                 <input type="checkbox" id="input-confirmed" class="form-check-input" aria-describedby="text-confirmed" :true-value="1" :false-value="0" v-model="user.confirmed">
                 <label for="input-confirmed" class="form-check-label">{{ $t('confirmed') }}</label>
             </div>
-            <div id="text-confirmed" class="form-text">Indicate if email address is confirmed.</div>
-        </div>
+            <div id="text-confirmed" class="form-text">{{ $t('messages.form_text_user_confirmed') }}</div>
+        </div>        
         <div class="mb-3">
             <div class="form-check form-switch">
                 <input type="checkbox" id="input-blacklisted" class="form-check-input" aria-describedby="text-blacklisted" :true-value="1" :false-value="0" v-model="user.blacklisted">
                 <label for="input-blacklisted" class="form-check-label">{{ $t('blacklisted') }}</label>
             </div>
-            <div id="text-blacklisted" class="form-text">Indicate if email address is blacklisted.</div>
+            <div id="text-blacklisted" class="form-text">{{ $t('messages.form_text_user_blacklisted') }}</div>
+        </div>
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input type="checkbox" id="input-disabled" class="form-check-input" aria-describedby="text-disabled" :true-value="1" :false-value="0" v-model="user.disabled">
+                <label for="input-disabled" class="form-check-label">{{ $t('disabled') }}</label>
+            </div>
+            <div id="text-disabled" class="form-text">{{ $t('messages.form_text_user_disabled') }}</div>
         </div>
         <div class="mb-0">
             <button type="submit" class="btn btn-primary">{{ $t('create') }}</button>
+            <button class="btn btn-secondary ms-2" @click.prevent="reset">{{ $t('reset') }}</button>
         </div>
     </form>
 </template>
 <script setup>
-import { ref, toRaw } from 'vue'
-const user = ref({
-    email: '',
-    password: '',
-    confirmed: 0,
-    blacklisted: 0
-})
-const errors = useValidation()
-const { $transformErrors } = useNuxtApp()
+const state = () => {
+    return {
+        email: '',
+        password: '',
+        html_email: 1,
+        confirmed: 0,
+        blacklisted: 0,
+        disabled: 0
+    }
+}
+const user = ref(state())
+const { errors, clearErrors, transformErrors } = useUserForm()
 const store = async () => {
-    errors.value = {}
-    const response = await $fetch('http://lpl-api.local/api/admin/users/store', {
+    clearErrors()
+    const config = useRuntimeConfig()
+    const response = await $fetch('/api/admin/users/store', {
         method: 'post',
-        body: user._rawValue
+        body: user._rawValue,
+        baseURL: config.public.baseURL
     })
     .catch((error) => {
-        errors.value = $transformErrors(error.response._data.errors)
+        errors.value = transformErrors(error.response._data.errors)
     })
+    if (response.data.data) {
+        reset()
+    }
+}
+const reset = () => {
+    const keys = Object.keys(state())
+    keys.forEach((key) => {
+        user.value[key] = state()[key]
+    })
+    clearErrors()
 }
 </script>

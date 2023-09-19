@@ -4,12 +4,15 @@
     "attributes": "Attributes",
     "blacklisted": "Blacklisted",
     "campaign": "Campaign",
+    "close": "Close",
     "confirmed": "Confirmed",
     "create": "Create",
-    "create_employee": "Create Employee",
     "create_new": "Create New",
+    "create_user": "Create User",
     "dashboard": "Dashboard",
+    "disabled": "Disabled",
     "email": "Email",
+    "html_email": "HTML Email",
     "id": "ID",
     "import": "Import",
     "logout": "Logout",
@@ -17,9 +20,17 @@
     "password": "Password",
     "phplists": "phplists",
     "refresh": "Refresh",
+    "reset": "Reset",
     "settings": "Settings",
     "subscriber": "Subscriber",
     "subscribers": "Subscribers",
     "toggle_navigation": "Toggle Navigation",
-    "user": "User"
+    "user": "User",
+
+    "messages": {
+        "form_text_user_blacklisted": "Indicate if email address is blacklisted.",
+        "form_text_user_confirmed": "Indicate if email address is confirmed.",
+        "form_text_user_disabled": "Indicate if this account is disabled.",
+        "form_text_user_html_email": "Send this subscriber HTML emails."
+    }
 }
