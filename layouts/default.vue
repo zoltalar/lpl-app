@@ -9,7 +9,7 @@
                 <div class="container">
                     <slot />
                 </div>
-            </div>
+            </div>            
         </client-only>
-    </div>
+    </div>    
 </template>

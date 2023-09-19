@@ -102,14 +102,27 @@
             <div class="offcanvas-body">
                 <user-create-form />
             </div>
-        </div>   
+        </div>
+        <button class="btn btn-primary" @click.prevent="add">Test</button>
+        <toasts :toasts="[{ 
+            id: Math.round(Math.random() * 10000), 
+            show: false, 
+            body: 'Initial toast...'
+        }]" />  
     </div>
 </template>
 <script setup>
 definePageMeta({
     layout: 'default'
 })
-function create() {
-
+</script>
+<script>
+let toasts = []
+const add = () => {
+    toasts = [{ 
+        id: Math.round(Math.random() * 10000), 
+        show: false, 
+        body: 'Initial toast...'
+    }]
 }
 </script>
