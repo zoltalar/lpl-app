@@ -1,9 +1,6 @@
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 export function useValidation() {
-    const error = ref({})
-
-    function normalizeErrors() {
-        
-    }
+    const errors = ref({})
+    return errors
 }
