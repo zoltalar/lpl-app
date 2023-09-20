@@ -1,4 +1,4 @@
-export function useForm() {
+export default function useForm() {
     const errors = ref({})
     return errors
 }
