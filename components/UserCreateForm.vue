@@ -50,7 +50,7 @@
     </form>
 </template>
 <script setup>
-const emit = defineEmits(['user:created'])
+const emits = defineEmits(['users:created'])
 const initialState = () => {
     return {
         email: '',
@@ -75,7 +75,7 @@ const store = async () => {
         errors.value = transformErrors(error.response._data.errors)
     })
     if (response.data.data) {
-        emit('user:created', response.data.data)
+        emits('users:created', response.data.data)
         reset()
     }
 }

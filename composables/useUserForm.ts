@@ -5,7 +5,7 @@ export default function useUserForm() {
         errors.value = {}
     }
 
-    const transformErrors = () => {
+    const transformErrors = (errors) => {
         const transformed = {}
         for (const property in errors) {
             if (errors[property][0]) {

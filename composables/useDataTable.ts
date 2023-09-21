@@ -1,6 +1,7 @@
 export default function useDataTable() {
     const resource = ref({})
     const search = ref('')
+    const sort = ref('')
     const page = ref(1)
     const limit = ref(10)
     const filters = ref({})
@@ -15,6 +16,7 @@ export default function useDataTable() {
     return {
         resource,
         search,
+        sort,
         page,
         limit,
         filters,
