@@ -1,11 +1,8 @@
 <template>
-    <user-list @sort="test" />
+    <user-list />
 </template>
 <script setup>
 definePageMeta({
     layout: 'default'
 })
-const test = () => {
-    alert('test')
-}
 </script>

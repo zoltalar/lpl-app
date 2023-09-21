@@ -8,10 +8,9 @@ const props = defineProps({
     collection: { type: String },
     column: { type: String }
 })
-const emits = defineEmits(['sort'])
 const direction = ref('')
 const store = useSortableColumnStore()
-const { setColumn } = store
+const { setCollection, setColumn, setDirection } = store
 const { currentColumn } = storeToRefs(store)
 watch(currentColumn, (newColumn, oldColumn) => {
     if (newColumn !== props.column) {
@@ -19,13 +18,14 @@ watch(currentColumn, (newColumn, oldColumn) => {
     }
 })
 const sort = () => {    
-    setColumn(props.column)
     if (direction.value === 'desc') {
         direction.value = 'asc'
     } else {
         direction.value = 'desc'
     }
-    emits('sort', props.collection, props.column, direction.value)
+    setCollection(props.collection)
+    setColumn(props.column)
+    setDirection(direction.value)
 }
 const css = () => {
     let classes = {}

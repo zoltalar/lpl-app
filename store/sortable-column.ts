@@ -4,15 +4,25 @@ export const useSortableColumnStore = defineStore({
     id: 'sortable-column-store',
     state: () => {
         return {
-            column: ''
+            collection: '',
+            column: '',
+            direction: ''
         }
     },
     actions: {
+        setCollection(collection) {
+            this.collection = collection
+        },
         setColumn(column) {
             this.column = column
+        },
+        setDirection(direction) {
+            this.direction = direction
         }
     },
     getters: {
-        currentColumn: state => state.column
+        currentCollection: state => state.collection,
+        currentColumn: state => state.column,
+        currentDirection: state => state.direction
     }
 })
