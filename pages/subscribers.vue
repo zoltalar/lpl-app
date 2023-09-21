@@ -1,5 +1,5 @@
 <template>
-    <user-list endpoint="/api/admin/users/index" />
+    <user-list />
 </template>
 <script setup>
 definePageMeta({

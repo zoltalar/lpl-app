@@ -18,6 +18,7 @@
     "import": "Import",
     "logout": "Logout",
     "manage": "Manage",
+    "no": "No",
     "password": "Password",
     "phplists": "phplists",
     "refresh": "Refresh",
@@ -27,6 +28,7 @@
     "subscribers": "Subscribers",
     "toggle_navigation": "Toggle Navigation",
     "user": "User",
+    "yes": "Yes",
 
     "messages": {
         "form_text_user_blacklisted": "Indicate if email address is blacklisted.",

@@ -14,7 +14,7 @@
                         <div class="col-sm-8">
                             <div class="btn-group" role="group" aria-label="Subscriber options">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
-                                <button type="button" class="btn btn-secondary">{{ $t('refresh') }}</button>
+                                <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -51,8 +51,8 @@
                                 <tr v-for="(user, i) in users">
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td><span class="badge text-bg-primary"> Yes </span></td>
-                                    <td><span class="badge text-bg-danger"> No </span></td>
+                                    <td><yes-no :expression="user.confirmed" /></td>
+                                    <td><yes-no :expression="user.blacklisted" /></td>
                                     <td class="text-end">
                                         <div class="btn-group btn-group-sm">
                                             <button title="Edit" type="button" class="btn btn-light"><i class="mdi mdi-pencil"></i></button>
@@ -92,16 +92,15 @@
 </template>
 <script setup>
 const { resource, search, page, limit, filters, fetchResource } = useDataTable()
-const props = defineProps({
-    endpoint: { type: String }
-})
 const users = computed(() => {
     return resource.value.data
 })
+const refresh = () => {
+    fetchResource('/api/admin/users/index').then((data) => {
+        resource.value = data
+    })
+}
 onMounted(() => {
-    fetchResource(props.endpoint)
-        .then((response) => { 
-            resource.value = response
-        })
+    refresh()
 })
 </script>
