@@ -1,11 +1,11 @@
 export default function useUserForm() {
     const errors = useForm()
 
-    function clearErrors() {
+    const clearErrors = () => {
         errors.value = {}
     }
 
-    function transformErrors(errors) {
+    const transformErrors = () => {
         const transformed = {}
         for (const property in errors) {
             if (errors[property][0]) {

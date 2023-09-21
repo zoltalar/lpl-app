@@ -33,16 +33,16 @@
                             <thead>
                                 <tr>
                                     <th width="10%">
-                                        <a href="/subscribers" class="sortable">{{ $t('id') }}</a>
+                                        <sortable-column href="/subscribers" collection="users" column="users.id">{{ $t('id') }}</sortable-column>
                                     </th>
                                     <th width="35%">
-                                        <a href="/subscribers" class="sortable">{{ $t('email') }}</a>
+                                        <sortable-column href="/subscribers" collection="users" column="users.email">{{ $t('email') }}</sortable-column>
                                     </th>
                                     <th width="15%">
-                                        <a href="/subscribers" class="sortable">{{ $t('confirmed') }}</a>
+                                        <sortable-column href="/subscribers" collection="users" column="users.confirmed">{{ $t('confirmed') }}</sortable-column>
                                     </th>
                                     <th width="15%">
-                                        <a href="/subscribers" class="sortable">{{ $t('blacklisted') }}</a>
+                                        <sortable-column href="/subscribers" collection="users" column="users.blacklisted">{{ $t('blacklisted') }}</sortable-column>
                                     </th>
                                     <th class="text-end">{{ $t('actions') }}</th>
                                 </tr>
