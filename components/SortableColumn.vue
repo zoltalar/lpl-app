@@ -6,7 +6,6 @@ const props = defineProps({
     collection: { type: String },
     column: { type: String }
 })
-const element = ref(null)
 const direction = ref('')
 const sort = () => {
     if (direction.value === 'desc') {
