@@ -76,7 +76,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                        </div>                 
+                        </div>            
                     </div>
                 </div>
             </div>
@@ -93,15 +93,21 @@
     </div>    
 </template>
 <script setup>
-const { resource, search, page, limit, filters, fetchResource } = useDataTable()
+const props = defineProps({
+    endpoint: { type: String }
+})
+const { 
+    resource, 
+    search, 
+    sort, 
+    page, 
+    limit, 
+    filters, 
+    refresh 
+} = useDataTable(props)
 const users = computed(() => {
     return resource.value.data
 })
-const refresh = () => {
-    fetchResource('/api/admin/users/index').then((data) => {
-        resource.value = data
-    })
-}
 onMounted(() => {
     refresh()
 })
