@@ -19,14 +19,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <form>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search">
-                                        <button type="button" class="btn btn-secondary">
-                                            <i class="mdi mdi-text-search" />
-                                        </button>
-                                    </div>
-                                </form>
+                                <search-form v-model="search" />
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -60,6 +53,11 @@
                                                 <button title="View" type="button" class="btn btn-light"><i class="mdi mdi-eye-outline"></i></button>
                                                 <button title="Delete" type="button" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="users && users.length === 0">
+                                        <td colspan="5">
+                                            {{ $t('messages.no_users') }}
                                         </td>
                                     </tr>
                                 </tbody>

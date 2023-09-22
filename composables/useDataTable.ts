@@ -24,7 +24,10 @@ export default function useDataTable(props) {
     }
 
     const query = () => {
-        return { sort: sort.value }
+        return { 
+            search: search.value,
+            sort: sort.value 
+        }
     }
 
     const refresh = () => {
@@ -34,6 +37,10 @@ export default function useDataTable(props) {
     }
 
     watch(sort, () => {
+        refresh()
+    })
+
+    watch(search, () => {
         refresh()
     })
 

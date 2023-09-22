@@ -23,6 +23,7 @@
     "phplists": "phplists",
     "refresh": "Refresh",
     "reset": "Reset",
+    "search": "Search",
     "settings": "Settings",
     "subscriber": "Subscriber",
     "subscribers": "Subscribers",
@@ -34,6 +35,7 @@
         "form_text_user_blacklisted": "Indicate if email address is blacklisted.",
         "form_text_user_confirmed": "Indicate if email address is confirmed.",
         "form_text_user_disabled": "Indicate if this account is disabled.",
-        "form_text_user_html_email": "Send this subscriber HTML emails."
+        "form_text_user_html_email": "Send this subscriber HTML emails.",
+        "no_users": "There are no users to display."
     }
 }

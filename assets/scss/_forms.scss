@@ -31,6 +31,20 @@
     }
 }
 
+.form-search {
+
+    .input-group {
+        position: relative;
+
+        .btn-close {
+            position: absolute;
+            right: 3rem;
+            top: .4375rem;
+            z-index: $zindex-dropdown;
+        }
+    }
+}
+
 .toolbar {
     margin-bottom: 1.25rem;
 }
