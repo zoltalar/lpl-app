@@ -15,6 +15,10 @@ export default function useDataTable(props) {
         return (currentDirection.value === 'desc' ? '-' : '') + currentColumn.value
     })
 
+    const meta = computed(() => {
+        return resource.value.meta || {}
+    })
+
     const fetchResource = async () => {
         const config = useRuntimeConfig()
         return await $fetch(props.endpoint, {
@@ -26,7 +30,8 @@ export default function useDataTable(props) {
     const query = () => {
         return { 
             search: search.value,
-            sort: sort.value 
+            sort: sort.value,
+            page: page.value
         }
     }
 
@@ -36,11 +41,15 @@ export default function useDataTable(props) {
         })
     }
 
+    watch(search, () => {
+        refresh()
+    })
+
     watch(sort, () => {
         refresh()
     })
 
-    watch(search, () => {
+    watch(page, () => {
         refresh()
     })
 
@@ -48,6 +57,7 @@ export default function useDataTable(props) {
         resource,
         search,
         sort,
+        meta,
         page,
         limit,
         filters,

@@ -7,7 +7,13 @@
                 @keydown="typing = true"
                 v-model="search"
             >
-            <button type="button" class="btn-close" :title="$t('clear_search')" :aria-label="$t('close')" @click.prevent="clear" v-if="hasInput()"></button>
+            <button
+                type="button"
+                class="btn-close"
+                :title="$t('clear_search')"
+                :aria-label="$t('close')"
+                @click.prevent="clear"
+                v-if="hasInput()"></button>
             <button type="submit" class="btn btn-secondary">
                 <i class="mdi mdi-text-search" />
             </button>
