@@ -1,15 +1,13 @@
 <template>
-    <form class="form-search" @submit.prevent="search">
+    <form class="form-search" @submit.prevent>
         <div class="input-group">
             <input
                 type="text"
                 class="form-control"
-                :value="modelValue"
-                :placeholder="$t('search')"
                 @keydown="typing = true"
-                ref="input"
+                v-model="search"
             >
-            <button type="button" class="btn-close" :aria-label="$t('close')" @click.prevent="clear" v-if="hasInput()"></button>
+            <button type="button" class="btn-close" :title="$t('clear_search')" :aria-label="$t('close')" @click.prevent="clear" v-if="hasInput()"></button>
             <button type="submit" class="btn btn-secondary">
                 <i class="mdi mdi-text-search" />
             </button>
@@ -19,27 +17,23 @@
 <script setup>
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
-const input = ref('')
+const search = ref('')
 const typing = ref(false)
 let timeout = null
-watch(typing, () => {
+watch(search, () => {
     if (timeout) {
         clearTimeout(timeout)
         timeout = null
     }
     timeout = setTimeout(() => {
         typing.value = false
-        search()
-    }, 1000)
+        emits('update:modelValue', search.value)
+    }, 400)
 })
 const clear = () => {
-    input.value.value = ''
-    search()
+    search.value = ''
 }
 const hasInput = () => {
-    return input.value && input.value.value.length > 0
-}
-const search = () => {
-    emits('update:modelValue', input.value.value)
+    return search.value !== ''
 }
 </script>

@@ -1,16 +1,22 @@
 <template>
-    <a class="sortable" :class="css()" @click.prevent="sort"><slot /></a>
+    <a
+        :href="link()"
+        class="sortable"
+        :class="css()" 
+        @click.prevent="sort"
+    >
+        <slot />
+    </a>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useSortableColumnStore } from '~/store/sortable-column'
 const props = defineProps({
-    collection: { type: String },
     column: { type: String }
 })
 const direction = ref('')
 const store = useSortableColumnStore()
-const { setCollection, setColumn, setDirection } = store
+const { setColumn, setDirection } = store
 const { currentColumn } = storeToRefs(store)
 watch(currentColumn, (newColumn, oldColumn) => {
     if (newColumn !== props.column) {
@@ -23,7 +29,6 @@ const sort = () => {
     } else {
         direction.value = 'desc'
     }
-    setCollection(props.collection)
     setColumn(props.column)
     setDirection(direction.value)
 }
@@ -37,5 +42,9 @@ const css = () => {
         classes['desc'] = true
     }
     return classes
+}
+const link = () => {
+    const collection = props.column.split('.')[0]
+    return `/${collection}`
 }
 </script>
