@@ -1,19 +1,11 @@
-import { storeToRefs } from 'pinia'
-import { useSortableColumnStore } from '~/store/sortable-column'
 
 export default function useDataTable(props) {
     const resource = ref({})
     const search = ref('')
+    const sort = ref('')
     const page = ref(1)
     const limit = ref(10)
     const filters = ref({})
-
-    const store = useSortableColumnStore()
-    const { currentColumn, currentDirection } = storeToRefs(store)
-
-    const sort = computed(() => {
-        return (currentDirection.value === 'desc' ? '-' : '') + currentColumn.value
-    })
 
     const meta = computed(() => {
         return resource.value.meta || {}
