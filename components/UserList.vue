@@ -12,14 +12,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row toolbar">
-                            <div class="col-sm-8">
+                            <div class="col-md-7 col-lg-8">
                                 <div class="btn-group" role="group" aria-label="Subscriber options">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
                                     <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <search-form v-model="search" />
+                            <div class="col-md-5 col-lg-4">
+                                <search-form class="mt-3 mt-sm-0" v-model="search" />
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -64,8 +64,14 @@
                             </table>
                         </div>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-lg-5">
                                 <pagination :meta="meta" class="mt-3" v-model="page" />
+                            </div>
+                            <div class="col-lg-3">
+                                <page-size class="mt-0 mt-lg-3 mb-3" v-model="limit" />
+                            </div>
+                            <div class="col-lg-4">
+                                Test
                             </div>
                         </div>            
                     </div>
