@@ -1,5 +1,8 @@
+import { useI18n } from 'vue-i18n'
 
 export default function useDataTable(props) {
+    const { t } = useI18n()
+
     const resource = ref({})
     const search = ref('')
     const sort = ref('')
@@ -9,6 +12,20 @@ export default function useDataTable(props) {
 
     const meta = computed(() => {
         return resource.value.meta || {}
+    })
+
+    const info = computed(() => {
+        let text = ''
+
+        if (meta.value.total > 0) {
+            text = t('messages.pagination_meta_info', {
+                from: meta.value.from,
+                to: meta.value.to,
+                total: meta.value.total
+            })
+        }
+
+        return text
     })
 
     const fetchResource = async (params = {}) => {
@@ -64,6 +81,7 @@ export default function useDataTable(props) {
         page,
         limit,
         filters,
+        info,
         refresh
     }
 }

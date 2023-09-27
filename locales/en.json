@@ -40,6 +40,7 @@
         "form_text_user_confirmed": "Indicate if email address is confirmed.",
         "form_text_user_disabled": "Indicate if this account is disabled.",
         "form_text_user_html_email": "Send this subscriber HTML emails.",
-        "no_users": "There are no users to display."
+        "no_users": "There are no users to display.",
+        "pagination_meta_info": "From {from} to {to} of {total}"
     }
 }

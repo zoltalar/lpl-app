@@ -71,7 +71,9 @@
                                 <page-size class="mt-0 mt-lg-3 mb-3" v-model="limit" />
                             </div>
                             <div class="col-lg-4">
-                                Test
+                                <div class="mt-0 mt-lg-4 text-start text-lg-end">
+                                    {{ info }}
+                                </div>
                             </div>
                         </div>            
                     </div>
@@ -84,7 +86,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
             </div>
             <div class="offcanvas-body">
-                <user-create-form />
+                <user-create-form @created="() => alert('here')" />
             </div>
         </div>
     </div>    
@@ -100,7 +102,8 @@ const {
     meta,
     page, 
     limit, 
-    filters, 
+    filters,
+    info,
     refresh 
 } = useDataTable(props)
 const users = computed(() => {

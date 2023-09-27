@@ -7,9 +7,7 @@
     </div>
 </template>
 <script setup>
-const props = defineProps({
-    modelValue: { type: Number }
-})
+defineProps('modelValue')
 const emits = defineEmits(['update:modelValue'])
 const limit = ref(10)
 const options = computed(() => {

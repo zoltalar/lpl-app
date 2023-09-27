@@ -50,7 +50,7 @@
     </form>
 </template>
 <script setup>
-const emits = defineEmits(['users:created'])
+const emits = defineEmits(['created'])
 const initialState = () => {
     return {
         email: '',
@@ -62,21 +62,22 @@ const initialState = () => {
     }
 }
 const user = ref(initialState())
-const { errors, clearErrors, transformErrors } = useUserForm()
+const { errors, clearErrors, transformErrors } = useForm()
 const store = async () => {
     clearErrors()
     const config = useRuntimeConfig()
     const response = await $fetch('/api/admin/users/store', {
         method: 'post',
-        body: user._rawValue,
+        body: user.value,
         baseURL: config.public.baseURL
     })
     .catch((error) => {
         errors.value = transformErrors(error.response._data.errors)
     })
+    console.log(response)
     if (response.data.data) {
-        emits('users:created', response.data.data)
         reset()
+        emits('created', response.data.data)
     }
 }
 const reset = () => {
