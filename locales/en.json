@@ -12,7 +12,9 @@
     "create_subscriber": "Create Subscriber",
     "create_user": "Create User",
     "dashboard": "Dashboard",
+    "delete": "Delete",
     "disabled": "Disabled",
+    "edit": "Edit",
     "email": "Email",
     "html_email": "HTML Email",
     "id": "ID",
@@ -33,9 +35,11 @@
     "subscribers": "Subscribers",
     "toggle_navigation": "Toggle Navigation",
     "user": "User",
+    "view": "View",
     "yes": "Yes",
 
     "messages": {
+        "confirm_destroy_name": "Are you sure you want to delete '{name}'?",
         "form_text_user_blacklisted": "Indicate if email address is blacklisted.",
         "form_text_user_confirmed": "Indicate if email address is confirmed.",
         "form_text_user_disabled": "Indicate if this account is disabled.",

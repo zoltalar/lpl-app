@@ -58,7 +58,7 @@ export default function useDataTable(props) {
     }
 
     watch(search, () => {
-        refresh()
+        refresh({ page: 1 })
     })
 
     watch(sort, () => {

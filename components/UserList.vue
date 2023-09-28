@@ -49,9 +49,9 @@
                                         <td><yes-no :expression="user.blacklisted" /></td>
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm">
-                                                <button title="Edit" type="button" class="btn btn-light"><i class="mdi mdi-pencil"></i></button>
-                                                <button title="View" type="button" class="btn btn-light"><i class="mdi mdi-eye-outline"></i></button>
-                                                <button title="Delete" type="button" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
+                                                <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
+                                                <button type="button" class="btn btn-light" :title="$t('view')"><i class="mdi mdi-eye-outline"></i></button>
+                                                <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)"><i class="mdi mdi-close"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -80,7 +80,22 @@
                 </div>
             </div>
         </div>
-        <toast id="my-toast">Tesing toasts...</toast>
+        <!--
+        <div class="toast-container bottom-0 end-0 p-3">
+            <toast>
+                <template #header>
+                    <strong class="me-auto">Success</strong>
+                </template>
+                Tesing toasts...
+            </toast>
+            <toast>
+                <template #header>
+                    <strong class="me-auto">Success</strong>
+                </template>
+                Tesing toasts...
+            </toast>
+        </div>
+        -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_subscriber') }}</h5>
@@ -93,6 +108,8 @@
     </div>    
 </template>
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const props = defineProps({
     endpoint: { type: String }
 })
@@ -102,14 +119,20 @@ const {
     sort,
     meta,
     page, 
-    limit, 
-    filters,
+    limit,
     info,
     refresh 
 } = useDataTable(props)
 const users = computed(() => {
     return resource.value.data
 })
+const destroy = (user) => {
+    const name = user.email
+    const message = t('messages.confirm_destroy_name', { name })
+    if (confirm(message)) {
+        alert('destroying...')
+    }
+}
 onMounted(() => {
     refresh()
 })
