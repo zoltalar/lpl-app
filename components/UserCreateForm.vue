@@ -74,10 +74,9 @@ const store = async () => {
     .catch((error) => {
         errors.value = transformErrors(error.response._data.errors)
     })
-    console.log(response)
-    if (response.data.data) {
+    if (response.data) {
         reset()
-        emits('created', response.data.data)
+        emits('created', response.data)
     }
 }
 const reset = () => {

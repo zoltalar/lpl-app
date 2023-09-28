@@ -9,10 +9,3 @@
         </div>
     </div>
 </template>
-<script setup>
-import { Toast } from 'bootstrap'
-onMounted(() => {
-    const toast = new Toast(document.getElementById('toast-1'))
-    toast.show()
-})
-</script>

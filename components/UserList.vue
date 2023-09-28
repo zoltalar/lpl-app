@@ -70,7 +70,7 @@
                             <div class="col-lg-3">
                                 <page-size class="mt-0 mt-lg-3 mb-3" v-model="limit" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-sm-4">
                                 <div class="mt-0 mt-lg-4 text-start text-lg-end">
                                     {{ info }}
                                 </div>
@@ -80,13 +80,14 @@
                 </div>
             </div>
         </div>
+        <toast id="my-toast">Tesing toasts...</toast>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_subscriber') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
             </div>
             <div class="offcanvas-body">
-                <user-create-form @created="() => alert('here')" />
+                <user-create-form @created="() => refresh()" />
             </div>
         </div>
     </div>    
