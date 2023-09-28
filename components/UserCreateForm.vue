@@ -73,10 +73,10 @@ const store = async () => {
         onResponse({ request, response, options }) {
             reset()
             emits('created')
+        },
+        onResponseError({ request, response, options }) {
+            errors.value = transformErrors(response._data.errors)
         }
-    })
-    .catch((error) => {
-        errors.value = transformErrors(error.response._data.errors)
     })
 }
 const reset = () => {
