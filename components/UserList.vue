@@ -126,11 +126,16 @@ const {
 const users = computed(() => {
     return resource.value.data
 })
-const destroy = (user) => {
+const destroy = async (user) => {
     const name = user.email
     const message = t('messages.confirm_destroy_name', { name })
     if (confirm(message)) {
-        alert('destroying...')
+        const config = useRuntimeConfig()
+        const response = await $fetch(`/api/admin/users/destroy/${user.id}`, {
+            method: 'delete',
+            baseURL: config.public.baseURL
+        })
+        console.log(response.status)
     }
 }
 onMounted(() => {
