@@ -66,18 +66,18 @@ const { errors, clearErrors, transformErrors } = useForm()
 const store = async () => {
     clearErrors()
     const config = useRuntimeConfig()
-    const response = await $fetch('/api/admin/users/store', {
+    await $fetch('/api/admin/users/store', {
         method: 'post',
         body: user.value,
-        baseURL: config.public.baseURL
+        baseURL: config.public.baseURL,
+        onResponse({ request, response, options }) {
+            reset()
+            emits('created')
+        }
     })
     .catch((error) => {
         errors.value = transformErrors(error.response._data.errors)
     })
-    if (response.data) {
-        reset()
-        emits('created', response.data)
-    }
 }
 const reset = () => {
     const keys = Object.keys(initialState())

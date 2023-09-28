@@ -131,11 +131,15 @@ const destroy = async (user) => {
     const message = t('messages.confirm_destroy_name', { name })
     if (confirm(message)) {
         const config = useRuntimeConfig()
-        const response = await $fetch(`/api/admin/users/destroy/${user.id}`, {
+        await $fetch(`/api/admin/users/destroy/${user.id}`, {
             method: 'delete',
-            baseURL: config.public.baseURL
+            baseURL: config.public.baseURL,
+            onResponse({ request, response, options }) {
+                if (response.status === 204) {
+                    refresh()
+                }
+            },
         })
-        console.log(response.status)
     }
 }
 onMounted(() => {
