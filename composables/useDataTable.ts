@@ -28,37 +28,32 @@ export default function useDataTable(props) {
         return text
     })
 
-    const fetchResource = async (params = {}) => {
+    const fetchResource = async () => {
         const config = useRuntimeConfig()
         return await $fetch(props.endpoint, {
-            params: query(params),
+            params: query(),
             baseURL: config.public.baseURL
         })
     }
 
-    const query = (params = {}) => {
-        let query = { 
+    const query = () => {
+        return { 
             search: search.value,
             sort: sort.value,
             page: page.value,
             limit: limit.value
         }
-        if (Object.keys(params).length > 0) {
-            for (const [key, value] of Object.entries(params)) {
-                query[key] = value
-            }
-        }
-        return query
     }
 
-    const refresh = (params = {}) => {
-        fetchResource(params).then((data) => {
+    const refresh = () => {
+        fetchResource().then((data) => {
             resource.value = data
         })
     }
 
     watch(search, () => {
-        refresh({ page: 1 })
+        page.value = 1
+        refresh()
     })
 
     watch(sort, () => {
@@ -70,7 +65,8 @@ export default function useDataTable(props) {
     })
 
     watch(limit, () => {
-        refresh({ page: 1 })
+        page.value = 1
+        refresh()
     })
 
     return {
