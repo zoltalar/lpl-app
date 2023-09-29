@@ -80,29 +80,14 @@
                 </div>
             </div>
         </div>
-        <!--
-        <div class="toast-container bottom-0 end-0 p-3">
-            <toast>
-                <template #header>
-                    <strong class="me-auto">Success</strong>
-                </template>
-                Tesing toasts...
-            </toast>
-            <toast>
-                <template #header>
-                    <strong class="me-auto">Success</strong>
-                </template>
-                Tesing toasts...
-            </toast>
-        </div>
-        -->
+        <toasts :messages="messages" />
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_subscriber') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
             </div>
             <div class="offcanvas-body">
-                <user-create-form @created="() => refresh()" />
+                <user-create-form @created="() => afterCreated()" />
             </div>
         </div>
     </div>    
@@ -123,11 +108,21 @@ const {
     info,
     refresh 
 } = useDataTable(props)
+const { messages, push } = useToasts()
 const users = computed(() => {
     return resource.value.data
 })
+const afterCreated = () => {
+    const model = t('subscriber')
+    refresh()
+    push({ 
+        header: t('success'),
+        body: t('messages.model_created', { model })
+    })
+}
 const destroy = async (user) => {
     const name = user.email
+    const model = t('subscriber')
     const message = t('messages.confirm_destroy_name', { name })
     if (confirm(message)) {
         const config = useRuntimeConfig()
@@ -137,6 +132,10 @@ const destroy = async (user) => {
             onResponse({ request, response, options }) {
                 if (response.status === 204) {
                     refresh()
+                    push({ 
+                        header: t('success'),
+                        body: t('messages.model_destroyed', { model })
+                    })
                 }
             },
         })

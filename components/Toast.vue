@@ -10,10 +10,12 @@
     </div>
 </template>
 <script setup>
-import { Toast } from 'bootstrap'
+const { $bootstrap } = useNuxtApp()
 const toast = ref(null)
+const bind = () => {
+    (new $bootstrap.Toast(toast.value)).show()
+}
 onMounted(() => {
-    const bsToast = new Toast(toast.value)
-    bsToast.show()
+    bind()
 })
 </script>

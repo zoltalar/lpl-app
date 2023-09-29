@@ -33,6 +33,7 @@
     "settings": "Settings",
     "subscriber": "Subscriber",
     "subscribers": "Subscribers",
+    "success": "Success",
     "toggle_navigation": "Toggle Navigation",
     "user": "User",
     "view": "View",
@@ -44,6 +45,8 @@
         "form_text_user_confirmed": "Indicate if email address is confirmed.",
         "form_text_user_disabled": "Indicate if this account is disabled.",
         "form_text_user_html_email": "Send this subscriber HTML emails.",
+        "model_created": "{model} has been created successfully.",
+        "model_destroyed": "{model} has been deleted successfully.",
         "no_users": "There are no users to display.",
         "pagination_meta_info": "From {from} to {to} of {total}"
     }
