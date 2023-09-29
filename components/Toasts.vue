@@ -10,6 +10,6 @@
 </template>
 <script setup>
 const props = defineProps({
-    messages: { type: Object }
+    messages: { type: Array }
 })
 </script>

@@ -1,10 +1,10 @@
 export default function useToasts() {
     const messages = ref([])
-    const push = (message) => {
+    const addToast = (message) => {
         messages.value.push(message)
     }
     return {
         messages,
-        push
+        addToast
     }
 }

@@ -108,14 +108,14 @@ const {
     info,
     refresh 
 } = useDataTable(props)
-const { messages, push } = useToasts()
+const { messages, addToast } = useToasts()
 const users = computed(() => {
     return resource.value.data
 })
 const afterCreated = () => {
     const model = t('subscriber')
     refresh()
-    push({ 
+    addToast({ 
         header: t('success'),
         body: t('messages.model_created', { model })
     })
@@ -132,7 +132,7 @@ const destroy = async (user) => {
             onResponse({ request, response, options }) {
                 if (response.status === 204) {
                     refresh()
-                    push({ 
+                    addToast({ 
                         header: t('success'),
                         body: t('messages.model_destroyed', { model })
                     })
