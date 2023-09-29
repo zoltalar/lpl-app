@@ -71,8 +71,10 @@ const store = async () => {
         body: user.value,
         baseURL: config.public.baseURL,
         onResponse({ request, response, options }) {
-            reset()
-            emits('created')
+            if (response._data.data) {
+                reset()
+                emits('created')
+            }
         },
         onResponseError({ request, response, options }) {
             errors.value = transformErrors(response._data.errors)

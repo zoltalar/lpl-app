@@ -50,7 +50,7 @@
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm">
                                                 <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
-                                                <button type="button" class="btn btn-light" :title="$t('view')"><i class="mdi mdi-eye-outline"></i></button>
+                                                <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)"><i class="mdi mdi-eye-outline"></i></button>
                                                 <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)"><i class="mdi mdi-close"></i></button>
                                             </div>
                                         </td>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <toasts :messages="messages" />
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-subscriber-create" aria-labelledby="offcanvas-title">
+        <div class="offcanvas offcanvas-start" id="offcanvas-subscriber-create" tabindex="-1" aria-labelledby="offcanvas-title">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_subscriber') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
@@ -90,6 +90,13 @@
                 <user-create-form @created="() => afterCreated()" />
             </div>
         </div>
+        <modal id="modal-subscriber-view" :title="$t('subsciber_details')" size="lg">
+            <user-view :user="selectedUser" />
+            <template #footer>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+                <button type="button" class="btn btn-primary">{{ $t('save') }}</button>
+            </template>
+        </modal>        
     </div>    
 </template>
 <script setup>
@@ -109,6 +116,8 @@ const {
     refresh 
 } = useDataTable(props)
 const { messages, addToast } = useToasts()
+const { $bootstrap } = useNuxtApp()
+const selectedUser = ref({})
 const users = computed(() => {
     return resource.value.data
 })
@@ -140,6 +149,12 @@ const destroy = async (user) => {
             },
         })
     }
+}
+const show = (user) => {
+    selectedUser.value = user
+    const el = document.getElementById('modal-subscriber-view')
+    const modal = new $bootstrap.Modal(el)
+    modal.show()
 }
 onMounted(() => {
     refresh()
