@@ -12,21 +12,28 @@
 import { storeToRefs } from 'pinia'
 import { useSortableColumnStore } from '~/store/sortable-column'
 const props = defineProps({
-  modelValue: { type: String },
-  column: { type: String }
+  modelValue: { 
+    type: String 
+  },
+  column: { 
+    type: String, 
+    required: true
+  }
 })
 const emits = defineEmits(['update:modelValue'])
-const sort = ref('')
-const direction = ref('')
+const sort = ref<string>('')
+const direction = ref<string>('')
 const store = useSortableColumnStore()
 const { setColumn, setDirection } = store
 const { currentColumn } = storeToRefs(store)
-watch(currentColumn, (newColumn, oldColumn) => {
+// Watch
+watch(currentColumn, (newColumn) => {
   if (newColumn !== props.column) {
     direction.value = ''
   }
 })
-const order = () => {    
+// Functions
+const order = (): void => {    
   if (direction.value === 'desc') {
     sort.value = props.column
     direction.value = 'asc'
@@ -38,8 +45,8 @@ const order = () => {
   setDirection(direction.value)
   emits('update:modelValue', sort.value)
 }
-const css = () => {
-  let classes = {}
+const css = (): object => {
+  let classes: Record<string, boolean> = {}
   if (direction.value === 'asc') {
     classes['asc'] = true
     classes['desc'] = false
@@ -49,7 +56,7 @@ const css = () => {
   }
   return classes
 }
-const link = () => {
+const link = (): string => {
   const collection = props.column.split('.')[0]
   return `/${collection}`
 }

@@ -9,15 +9,19 @@ export const useSortableColumnStore = defineStore({
     }
   },
   actions: {
-    setColumn(column: string) {
+    setColumn(column: string): void {
       this.column = column
     },
-    setDirection(direction: string) {
+    setDirection(direction: string): void {
       this.direction = direction
     }
   },
   getters: {
-    currentColumn: state => state.column,
-    currentDirection: state => state.direction
+    currentColumn(state): string {
+      return state.column
+    },
+    currentDirection(state): string {
+      return state.direction
+    }
   }
 })
