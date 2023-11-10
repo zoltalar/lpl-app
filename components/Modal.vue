@@ -10,13 +10,13 @@
           <slot />
         </div>
         <div class="modal-footer">
-          <slot name="footer" />                    
+          <slot name="footer" />
         </div>
       </div>
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   title: { 
     type: String,
@@ -24,11 +24,14 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'sm'
+    default: 'sm',
+    validator(value: string): boolean {
+      return ['sm', 'md', 'lg', 'xl'].includes(value)
+    }
   }
 })
-const css = () => {
-  let classes = {}
+const css = (): object => {
+  let classes: Record<string, boolean> = {}
   const key = ['modal', props.size].join('-')
   classes[key] = true
   return classes

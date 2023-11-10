@@ -8,7 +8,7 @@
     <slot />
   </a>
 </template>
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useSortableColumnStore } from '~/store/sortable-column'
 const props = defineProps({

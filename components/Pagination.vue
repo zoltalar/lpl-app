@@ -28,7 +28,7 @@
     </ul>
   </nav>
 </template>
-<script setup>
+<script setup lang="ts">
 const props = defineProps(['modelValue', 'meta'])
 const emits = defineEmits(['update:modelValue'])
 const current = computed(() => {

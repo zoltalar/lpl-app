@@ -49,7 +49,7 @@
     </div>
   </form>
 </template>
-<script setup>
+<script setup lang="ts">
 const emits = defineEmits(['created'])
 const initialState = () => {
   return {

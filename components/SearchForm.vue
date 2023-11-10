@@ -20,7 +20,7 @@
     </div>
   </form>
 </template>
-<script setup>
+<script setup lang="ts">
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
 const search = ref('')
