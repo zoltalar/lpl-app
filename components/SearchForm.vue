@@ -23,9 +23,10 @@
 <script setup lang="ts">
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
-const search = ref('')
-const typing = ref(false)
-let timeout = null
+const search = ref<string>('')
+const typing = ref<boolean>(false)
+let timeout: any = null
+// Watch
 watch(search, () => {
   if (timeout) {
     clearTimeout(timeout)
@@ -36,10 +37,11 @@ watch(search, () => {
     emits('update:modelValue', search.value)
   }, 400)
 })
-const clear = () => {
+// Functions
+const clear = (): void => {
   search.value = ''
 }
-const hasInput = () => {
+const hasInput = (): boolean => {
   return search.value !== ''
 }
 </script>
