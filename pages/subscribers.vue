@@ -1,8 +1,8 @@
 <template>
-    <user-list endpoint="/api/admin/users/index" />
+  <user-list endpoint="/api/admin/users/index" />
 </template>
-<script setup>
+<script setup lang="ts">
 definePageMeta({
-    layout: 'default'
+  layout: 'default'
 })
 </script>

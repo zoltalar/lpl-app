@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <p>Authentication Layout</p>
-        <slot />
-    </div>
+  <div>
+    <p>Authentication Layout</p>
+    <slot />
+  </div>
 </template>

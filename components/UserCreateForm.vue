@@ -82,10 +82,10 @@ const store = async () => {
     })
 }
 const reset = () => {
-    const keys = Object.keys(initialState())
-    keys.forEach((key) => {
-        user.value[key] = initialState()[key]
-    })
-    clearErrors()
+  const keys = Object.keys(initialState())
+  keys.forEach((key) => {
+    user.value[key] = initialState()[key]
+  })
+  clearErrors()
 }
 </script>
