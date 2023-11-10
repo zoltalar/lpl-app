@@ -9,7 +9,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { TToastMessage } from '~/types'
 const props = defineProps({
-  messages: { type: Array }
+  messages: { type: Array<TToastMessage> }
 })
 </script>
