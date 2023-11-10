@@ -31,26 +31,25 @@
 <script setup lang="ts">
 const props = defineProps(['modelValue', 'meta'])
 const emits = defineEmits(['update:modelValue'])
-const current = computed(() => {
+const current = computed<number>(() => {
   return props.meta.current_page || 1
 })
-const last = computed(() => {
+const last = computed<number>(() => {
   return props.meta.last_page || 1
 })
-const range = computed(() => {
-  let i = 1
+const range = computed<number[]>(() => {
+  let i: number = 1
   if (current.value - 2 > 0) {
     i = current.value - 2
   }
-  const range = []
-  const max = i + 5
+  const range: number[] = []
+  const max: number = i + 5
   for ( ; i <= last.value && i <= max; i++) {
     range.push(i)
   }
   return range
 })
-const goto = (page) => {
-  page = parseInt(page)
+const goto = (page: number) => {
   emits('update:modelValue', page)
 }
 </script>
