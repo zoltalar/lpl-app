@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   css: ['~/assets/scss/app.scss'],
   runtimeConfig: {
     public: {
-      baseURL: process.env.API_BASE_URL
+      apiUrl: process.env.API_BASE_URL
     }
   },
   modules: [

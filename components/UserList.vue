@@ -101,6 +101,7 @@
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import type { IUser } from '~/types'
 const { t } = useI18n()
 const props = defineProps({
   endpoint: { type: String }
@@ -118,8 +119,11 @@ const {
 const { messages, addToast } = useToasts()
 const { $bootstrap } = useNuxtApp()
 const selectedUser = ref({})
-const users = computed(() => {
-  return resource.value.data
+const users = computed<IUser[]>(() => {
+  if (resource.value.data) {
+    return resource.value.data
+  }
+  return []
 })
 const afterCreated = () => {
   const model = t('subscriber')
@@ -129,7 +133,7 @@ const afterCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
-const destroy = async (user) => {
+const destroy = async (user: IUser) => {
   const name = user.email
   const model = t('subscriber')
   const message = t('messages.confirm_destroy_name', { name })

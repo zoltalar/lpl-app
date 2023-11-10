@@ -29,13 +29,17 @@
   </nav>
 </template>
 <script setup lang="ts">
+import type { IApiResourceMeta } from '~/types'
 const props = defineProps(['modelValue', 'meta'])
 const emits = defineEmits(['update:modelValue'])
+const meta = computed<IApiResourceMeta>(() => {
+  return {...props.meta}
+})
 const current = computed<number>(() => {
-  return props.meta.current_page || 1
+  return meta.value?.current_page
 })
 const last = computed<number>(() => {
-  return props.meta.last_page || 1
+  return meta.value?.last_page
 })
 const range = computed<number[]>(() => {
   let i: number = 1

@@ -1,22 +1,24 @@
 import { useI18n } from 'vue-i18n'
+import type { IApiResource, IApiResourceMeta } from '~/types'
 
 export default function useDataTable(props) {
   const { t } = useI18n()
-
-  const resource = ref({})
-  const search = ref('')
-  const sort = ref('')
-  const page = ref(1)
-  const limit = ref(10)
+  const resource = ref<IApiResource>({})
+  const search = ref<string>('')
+  const sort = ref<string>('')
+  const page = ref<number>(1)
+  const limit = ref<number>(10)
   const filters = ref({})
-
-  const meta = computed(() => {
-    return resource.value.meta || {}
+  // Computed
+  const meta = computed<IApiResourceMeta|undefined>(() => {
+    if (resource.value.meta) {
+      return resource.value.meta
+    }
+    return undefined
   })
-
-  const info = computed(() => {
+  const info = computed<string>(() => {
     let text = ''
-    if (meta.value.total > 0) {
+    if (meta.value && meta.value.total > 0) {
       text = t('messages.pagination_meta_info', {
         from: meta.value.from,
         to: meta.value.to,
@@ -25,14 +27,7 @@ export default function useDataTable(props) {
     }
     return text
   })
-  const fetchResource = async () => {
-    const config = useRuntimeConfig()
-    return await $fetch(props.endpoint, {
-      params: query(),
-      baseURL: config.public.baseURL
-    })
-  }
-
+  // Functions
   const query = () => {
     return { 
       search: search.value,
@@ -41,31 +36,27 @@ export default function useDataTable(props) {
       limit: limit.value
     }
   }
-
-  const refresh = () => {
-    fetchResource().then((data) => {
-      resource.value = data
+  const refresh = async () => {
+    const { data } = await useApi(props.endpoint, {
+      params: query()
     })
+    resource.value.data = data
   }
-
+  // Watch
   watch(search, () => {
     page.value = 1
     refresh()
   })
-
   watch(sort, () => {
     refresh()
   })
-
   watch(page, () => {
     refresh()
   })
-
   watch(limit, () => {
     page.value = 1
     refresh()
   })
-
   return {
     resource,
     search,
