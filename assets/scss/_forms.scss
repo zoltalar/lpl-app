@@ -3,48 +3,48 @@
 // --------------------------------------------------
 
 .app-search {
-    max-width: 14rem;
+  max-width: 14rem;
 
-    .btn {
-        background-color: $top-nav-search-bg;
-        border: none;
-        border-radius: 0 1.875rem 1.875rem 0;
-        padding-right: 0.9375rem;
+  .btn {
+    background-color: $top-nav-search-bg;
+    border: none;
+    border-radius: 0 1.875rem 1.875rem 0;
+    padding-right: 0.9375rem;
+  }
+
+  .form-control {
+    background-color: $top-nav-search-bg;
+    border: none;
+    border-radius: 1.875rem 0 0 1.875rem;
+    color: $gray-500;
+    height: 2.375rem;
+    padding-left: 1.25rem;
+
+    &:focus {
+      box-shadow: none;
+      outline: none;
     }
 
-    .form-control {
-        background-color: $top-nav-search-bg;
-        border: none;
-        border-radius: 1.875rem 0 0 1.875rem;
-        color: $gray-500;
-        height: 2.375rem;
-        padding-left: 1.25rem;
-
-        &:focus {
-            box-shadow: none;
-            outline: none;
-        }
-
-        &::placeholder {
-            color: $gray-500;
-        }
+    &::placeholder {
+      color: $gray-500;
     }
+  }
 }
 
 .form-search {
 
-    .input-group {
-        position: relative;
+  .input-group {
+    position: relative;
 
-        .btn-close {
-            position: absolute;
-            right: 3rem;
-            top: .4375rem;
-            z-index: $zindex-dropdown;
-        }
+    .btn-close {
+      position: absolute;
+      right: 3rem;
+      top: .4375rem;
+      z-index: $zindex-dropdown;
     }
+  }
 }
 
 .toolbar {
-    margin-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
 }

@@ -3,60 +3,60 @@
 // --------------------------------------------------
 
 .content {
-    padding-top: 4.375rem;
+  padding-top: 4.375rem;
 
-    @include media-breakpoint-up(lg) {
-        padding-top: 7.8125rem;
-    }
+  @include media-breakpoint-up(lg) {
+    padding-top: 7.8125rem;
+  }
 }
 
 .page-title-box {
-    padding: 1.5rem 0;
+  padding: 1.5rem 0;
 
-    .page-title {
-        color: var(--bs-gray-900);
-        font-size: 1.1rem;
-        margin: 0;
-    }
+  .page-title {
+    color: var(--bs-gray-900);
+    font-size: 1.1rem;
+    margin: 0;
+  }
 }
 
 .sortable {
-    color: $gray-700;
+  color: $gray-700;
+  display: block;
+  position: relative;
+  text-decoration: none;
+
+  &:after,
+  &:before {
+    bottom: -.125rem;
     display: block;
-    position: relative;
-    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: .4;
+    position: absolute;
+  }
+  
+  &:after {
+    content: '\2191';
+    right: .5em;
+  }
+  
+  &:before {
+    content: '\2193';
+    right: 1em;
+  }
+  
+  &.asc {
 
-    &:after,
-    &:before {
-        bottom: -.125rem;
-        display: block;
-        font-size: 1rem;
-        font-weight: 600;
-        opacity: .4;
-        position: absolute;
-    }
-    
     &:after {
-        content: '\2191';
-        right: .5em;
+      opacity: 1;
     }
-    
+  }
+  
+  &.desc {
+
     &:before {
-        content: '\2193';
-        right: 1em;
+      opacity: 1;
     }
-    
-    &.asc {
-
-        &:after {
-            opacity: 1;
-        }
-    }
-    
-    &.desc {
-
-        &:before {
-            opacity: 1;
-        }
-    }
+  }
 }
