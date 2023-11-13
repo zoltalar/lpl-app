@@ -14,7 +14,7 @@
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
                 <div class="btn-group" role="group" aria-label="Subscriber options">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                 </div>
               </div>
@@ -81,21 +81,16 @@
       </div>
     </div>
     <toasts :messages="messages" />
-    <div class="offcanvas offcanvas-start" id="offcanvas-subscriber-create" tabindex="-1" aria-labelledby="offcanvas-title">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvas-title">{{ $t('create_subscriber') }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" :aria-label="$t('close')"></button>
-      </div>
-      <div class="offcanvas-body">
-        <user-create-form @created="() => afterCreated()" />
-      </div>
-    </div>
-    <modal id="modal-subscriber-view" :title="$t('subsciber_details')" size="lg">
-      <user-view :user="selectedUser" />
+    <modal id="modal-subscriber-create" :title="$t('create_subscriber')" size="md">
+      <user-create-form ref="formUserCreate" @created="handleCreate" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
-        <button type="button" class="btn btn-primary">{{ $t('save') }}</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
       </template>
+    </modal>
+    <modal id="modal-subscriber-view" :title="$t('subsciber_details')" size="lg">
+      <user-view :user="selectedUser" />      
     </modal>        
   </div>
 </template>
@@ -118,12 +113,18 @@ const {
 } = useDataTable(props)
 const { messages, addToast } = useToasts()
 const { $bootstrap } = useNuxtApp()
-const selectedUser = ref({})
+const formUserCreate = ref<null | { reset: () => void, store: () => void }>(null)
+const selectedUser = ref<IUser>({} as IUser)
+// Computed
 const users = computed<IUser[]>(() => {
   return resource?.value?.data
 })
+// Functions
 const afterCreated = () => {
+  const el = document.getElementById('modal-subscriber-create')
+  const modal = $bootstrap.Modal.getOrCreateInstance(el)
   const model = t('subscriber')
+  modal.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -135,10 +136,8 @@ const destroy = async (user: IUser) => {
   const model = t('subscriber')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
-    const config = useRuntimeConfig()
-    await $fetch(`/api/admin/users/destroy/${user.id}`, {
+    await useApi(`/admin/users/destroy/${user.id}`, {
       method: 'delete',
-      baseURL: config.public.baseURL,
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
@@ -151,11 +150,24 @@ const destroy = async (user: IUser) => {
     })
   }
 }
-const show = (user) => {
+const handleCreate = (): void => {
+  afterCreated()
+}
+const reset = (): void => {
+  if (formUserCreate.value) {
+    formUserCreate.value.reset()
+  }
+}
+const show = (user: IUser): void => {
   selectedUser.value = user
   const el = document.getElementById('modal-subscriber-view')
   const modal = new $bootstrap.Modal(el)
   modal.show()
+}
+const store = (): void => {
+  if (formUserCreate.value) {
+    formUserCreate.value.store()
+  }
 }
 onMounted(() => {
   refresh()

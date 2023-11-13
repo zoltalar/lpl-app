@@ -43,23 +43,20 @@
       </div>
       <div id="text-disabled" class="form-text">{{ $t('messages.form_text_user_disabled') }}</div>
     </div>
-    <div class="mb-0">
-      <button type="submit" class="btn btn-primary">{{ $t('create') }}</button>
-      <button class="btn btn-secondary ms-2" @click.prevent="reset">{{ $t('reset') }}</button>
-    </div>
   </form>
-  <pre>{{ errors }}</pre>
 </template>
 <script setup lang="ts">
+import type { IUser } from '~/types'
 const emits = defineEmits(['created'])
-const form = reactive({
+const fields = {
   email: '',
   password: '',
   html_email: 1,
   confirmed: 0,
   blacklisted: 0,
   disabled: 0
-})
+}
+const form: Partial<IUser> = reactive({...fields})
 const { errors, clearErrors, error, getErrors } = useForm()
 // Functions
 const store = async () => {
@@ -81,9 +78,10 @@ const store = async () => {
 }
 const reset = () => {
   const keys = Object.keys(form)
-  keys.forEach((key) => {
-    // form[key] = 
+  keys.forEach((key: string) => {
+    form[key] = fields[key]
   })
   clearErrors()
 }
+defineExpose({ reset, store })
 </script>

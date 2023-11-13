@@ -30,7 +30,7 @@ const props = defineProps({
     }
   }
 })
-const css = (): object => {
+const css = (): Record<string, boolean> => {
   let classes: Record<string, boolean> = {}
   const key = ['modal', props.size].join('-')
   classes[key] = true

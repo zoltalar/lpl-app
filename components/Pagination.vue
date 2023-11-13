@@ -33,7 +33,7 @@ import type { IApiResourceMeta } from '~/types'
 const props = defineProps(['modelValue', 'meta'])
 const emits = defineEmits(['update:modelValue'])
 const meta = computed<IApiResourceMeta>(() => {
-  return {...props.meta}
+  return props.meta
 })
 const current = computed<number>(() => {
   return meta.value?.current_page
