@@ -75,7 +75,6 @@ const store = async () => {
       }
     },
     onResponseError({ request, response, options }) {
-      console.log(response)
       errors.value = getErrors(response._data.errors)
     }
   })

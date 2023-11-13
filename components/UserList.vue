@@ -120,10 +120,7 @@ const { messages, addToast } = useToasts()
 const { $bootstrap } = useNuxtApp()
 const selectedUser = ref({})
 const users = computed<IUser[]>(() => {
-  if (resource.value.data) {
-    return resource.value.data
-  }
-  return []
+  return resource?.value?.data
 })
 const afterCreated = () => {
   const model = t('subscriber')

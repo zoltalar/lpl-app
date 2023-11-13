@@ -1,7 +1,7 @@
 // Interfaces
 export interface IApiResource {
-  data?: IUser[],
-  meta?: IApiResourceMeta
+  data: IUser[],
+  meta: IApiResourceMeta
 }
 export interface IApiResourceMeta {
   current_page: number,
