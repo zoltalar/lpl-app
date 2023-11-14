@@ -1,6 +1,6 @@
 // Interfaces
 export interface IApiResource {
-  data: IUser[],
+  data: IList[] | IUser[],
   meta: IApiResourceMeta
 }
 export interface IApiResourceMeta {
@@ -21,7 +21,14 @@ export interface IApiResourceMetaLink {
 export interface IBaseModel {
   id: number
 }
-export interface IUser extends IBaseModel {
+export interface IList extends IBaseModel, ITimestamps {
+  name: string,
+  description: string | null,
+  list_order: number | null,
+  active: number | null,
+  category_id: number | null
+}
+export interface IUser extends IBaseModel, ITimestamps {
   uuid: string,
   email: string,
   password?: string | null,
@@ -35,6 +42,10 @@ export interface IUser extends IBaseModel {
   unique_id: string,
   subscribe_page: number | null,
   rss_frequency: string | null,
+}
+export interface ITimestamps {
+  created_at: string | null,
+  updated_at: string | null
 }
 // Types
 export type TToastMessage = {

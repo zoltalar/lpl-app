@@ -14,6 +14,12 @@
                 <nuxt-link to="/subscribers/import" class="dropdown-item">{{ $t('import') }}</nuxt-link>
               </div>
             </li>
+            <li class="nav-item dropdown">
+              <a id="top-nav-lists" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('lists') }}</a>
+              <div class="dropdown-menu" aria-labelledby="top-nav-lists">
+                <nuxt-link to="/lists" class="dropdown-item">{{ $t('manage') }}</nuxt-link>
+              </div>
+            </li>
           </ul>
         </div>
       </nav>

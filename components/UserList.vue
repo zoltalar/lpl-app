@@ -13,8 +13,8 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" aria-label="Subscriber options">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" aria-controls="Create new subscriber">{{ $t('create') }}</button>
+                <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                 </div>
               </div>
@@ -42,7 +42,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(user, i) in users">
+                  <tr v-for="user in users">
                     <td>{{ user.id }}</td>
                     <td>{{ user.email }}</td>
                     <td><yes-no :expression="user.confirmed" /></td>
