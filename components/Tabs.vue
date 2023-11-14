@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-tabs" ref="tabs">
+  <ul class="nav nav-tabs" role="tablist">
     <slot />
   </ul>
 </template>

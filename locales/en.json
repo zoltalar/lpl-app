@@ -3,6 +3,7 @@
     "attribute": "Attribute",
     "attributes": "Attributes",
     "blacklisted": "Blacklisted",
+    "bounce_count": "Bounce Count",
     "bounces": "Bounces",
     "campaign": "Campaign",
     "campaigns": "Campaigns",
@@ -13,6 +14,7 @@
     "create_new": "Create New",
     "create_subscriber": "Create Subscriber",
     "create_user": "Create User",
+    "created_at": "Created At",
     "dashboard": "Dashboard",
     "delete": "Delete",
     "disabled": "Disabled",
@@ -27,8 +29,10 @@
     "manage": "Manage",
     "navigation": "Navigation",
     "no": "No",
+    "opted_in": "Opted In",
     "page_size": "Page Size",
     "password": "Password",
+    "password_set?": "Password Set?",
     "phplists": "phplists",
     "refresh": "Refresh",
     "reset": "Reset",
@@ -41,7 +45,10 @@
     "subscribers": "Subscribers",
     "success": "Success",
     "toggle_navigation": "Toggle Navigation",
+    "unique_id": "Unique ID",
+    "updated_at": "Updated At",
     "user": "User",
+    "uuid": "UUID",
     "view": "View",
     "yes": "Yes",
 
@@ -54,6 +61,7 @@
         "model_created": "{model} has been created successfully.",
         "model_destroyed": "{model} has been deleted successfully.",
         "no_users": "There are no users to display.",
-        "pagination_meta_info": "From {from} to {to} of {total}"
+        "pagination_meta_info": "From {from} to {to} of {total}",
+        "user_blacklisted": "Subscriber is blacklisted. No emails will be sent to this email address."
     }
 }

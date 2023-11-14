@@ -24,7 +24,8 @@ export interface IBaseModel {
 export interface IUser extends IBaseModel {
   uuid: string,
   email: string,
-  password: string | null,
+  password?: string | null,
+  password_set: number,
   html_email: number,
   confirmed: number,
   disabled: number,

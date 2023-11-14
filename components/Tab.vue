@@ -1,11 +1,14 @@
 <template>
-  <li class="nav-item">
+  <li class="nav-item" role="presentation">
     <a
-      :href="hash()"
+      :href="href()"
       class="nav-link"
+      :class="{'active': active}"
+      :id="id()"
       aria-current="page"
       ref="anchor"
       data-bs-toggle="tab"
+      :data-bs-target="target"
     >
       {{ title }}
     </a>
@@ -18,20 +21,22 @@ const props = defineProps({
     required: true,
     default: ''
   },
+  target: {
+    type: String,
+    required: true
+  },
   active: {
     type: Boolean,
     required: false,
     default: false
   }
 })
-const emits = defineEmits(['tabSelect'])
-const slot = ref<HTMLSpanElement|null>(null)
 const anchor = ref<HTMLAnchorElement|null>(null)
 // Functions
-const hash = (): string => {
+const href = (): string => {
   return ['#', props.title.toLowerCase()].join('')
 }
-const select = () => {
-  emits('tabSelect', { content: slot.value?.innerHTML })
+const id = (): string => {
+  return ['tab', props.title.toLowerCase()].join('-')
 }
 </script>
