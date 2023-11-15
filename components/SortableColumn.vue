@@ -10,7 +10,7 @@
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useSortableColumnStore } from '~/store/sortable-column'
+import { useDataTableStore } from '~/store/data-table'
 const props = defineProps({
   modelValue: { 
     type: String 
@@ -23,11 +23,11 @@ const props = defineProps({
 const emits = defineEmits(['update:modelValue'])
 const sort = ref<string>('')
 const direction = ref<string>('')
-const store = useSortableColumnStore()
+const store = useDataTableStore()
 const { setColumn, setDirection } = store
-const { currentColumn } = storeToRefs(store)
+const { getColumn } = storeToRefs(store)
 // Watch
-watch(currentColumn, (newColumn) => {
+watch(getColumn, (newColumn) => {
   if (newColumn !== props.column) {
     direction.value = ''
   }

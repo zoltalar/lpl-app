@@ -56,7 +56,7 @@
                     </td>
                   </tr>
                   <tr v-if="lists && lists.length === 0">
-                    <td colspan="3">
+                    <td colspan="5">
                       {{ $t('messages.no_lists') }}
                     </td>
                   </tr>
@@ -79,7 +79,16 @@
           </div>
         </div>
       </div>
-    </div>      
+    </div>
+    <toasts :messages="messages" />
+    <modal id="modal-list-create" :title="$t('create_list')" size="md">
+      <list-create-form ref="formListCreate" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
+      </template>
+    </modal>     
   </div>
 </template>
 <script setup lang="ts">
@@ -101,11 +110,23 @@ const {
 } = useDataTable(props)
 const { messages, addToast } = useToasts()
 const { $bootstrap } = useNuxtApp()
+const formListCreate = ref<null | { reset: () => void, store: () => void }>(null)
 const selectedList = ref<IList>({} as IList)
 // Computed
 const lists = computed<IList[]>(() => {
   return resource?.value?.data
 })
+// Functions
+const reset = (): void => {
+  if (formListCreate.value) {
+    formListCreate.value.reset()
+  }
+}
+const store = (): void => {
+  if (formListCreate.value) {
+    formListCreate.value.store()
+  }
+}
 onMounted(() => {
   refresh()
 })

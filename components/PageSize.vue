@@ -10,9 +10,9 @@
 import { useDataTableStore } from '~/store/data-table'
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
-const limit = ref<number>(10)
-const options: number[] = [5, 10, 25, 50, 100]
 const dataTableStore = useDataTableStore()
+const limit = ref<number>(dataTableStore.getPerPage)
+const options: number[] = [5, 10, 25, 50, 100]
 // Watch
 watch(limit, () => {
   dataTableStore.setPerPage(limit.value)

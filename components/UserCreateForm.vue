@@ -1,8 +1,8 @@
 <template>
-  <form @submit.prevent="store" novalidate>
+  <form novalidate @submit.prevent="store">
     <div class="mb-3">
       <label for="input-email" class="form-label">{{ $t('email') }}</label>
-      <span class="text-danger ms-1">*</span>
+      <required-input />
       <input type="email" class="form-control" id="input-email" aria-describedby="text-email" v-model="form.email">
       <div class="invalid-feedback d-block" v-if="error('email') !== null">
         {{ error('email') }}

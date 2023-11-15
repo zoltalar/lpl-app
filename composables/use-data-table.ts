@@ -1,7 +1,9 @@
 import { useI18n } from 'vue-i18n'
+import { useDataTableStore } from '~/store/data-table'
 import type { IApiResource, IApiResourceMeta } from '~/types'
 
 export default function useDataTable(props) {
+  const dataTableStore = useDataTableStore()
   const { t } = useI18n()
   const resource = ref<IApiResource>({
     data: [],
@@ -10,7 +12,7 @@ export default function useDataTable(props) {
   const search = ref<string>('')
   const sort = ref<string>('')
   const page = ref<number>(1)
-  const limit = ref<number>(10)
+  const limit = ref<number>(dataTableStore.getPerPage)
   const filters = ref({})
   // Computed
   const meta = computed<IApiResourceMeta>(() => {
