@@ -3,21 +3,31 @@
     <div class="mb-3">
       <label for="input-name" class="form-label">{{ $t('name') }}</label>
       <required-input />
-      <input type="text" class="form-control" id="input-name" aria-describedby="text-name" v-model="form.name">
+      <input type="text" class="form-control" id="input-name" v-model="form.name">
       <div class="invalid-feedback d-block" v-if="error('name') !== null">
         {{ error('name') }}
       </div>
     </div>
     <div class="mb-3">
       <label for="input-description" class="form-label">{{ $t('description') }}</label>
-      <textarea class="form-control" id="input-description" rows="5" aria-describedby="text-description" v-model="form.description"></textarea>
+      <textarea class="form-control" id="input-description" rows="5" v-model="form.description"></textarea>
+      <div class="invalid-feedback d-block" v-if="error('description') !== null">
+        {{ error('description') }}
+      </div>
     </div>
     <div class="mb-3">
       <label for="input-list-order" class="form-label">{{ $t('list_order') }}</label>
-      <input type="number" class="form-control" id="input-list-order" aria-describedby="text-list-order" v-model="form.list_order">
+      <input type="number" class="form-control" id="input-list-order" v-model="form.list_order">
       <div class="invalid-feedback d-block" v-if="error('list_order') !== null">
         {{ error('list_order') }}
       </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-check form-switch">
+        <input type="checkbox" id="input-active" class="form-check-input" aria-describedby="text-active" :true-value="1" :false-value="0" v-model="form.active">
+        <label for="input-active" class="form-check-label">{{ $t('active') }}</label>
+      </div>
+      <div id="text-active" class="form-text">{{ $t('messages.form_text_list_active') }}</div>
     </div>
   </form>
 </template>
@@ -27,7 +37,8 @@ const emits = defineEmits(['created'])
 const fields = {
   name: '',
   description: '',
-  list_order: 0
+  list_order: 0,
+  active: 0
 }
 const form: Partial<IList> = reactive({...fields})
 const { errors, clearErrors, error, getErrors } = useForm()

@@ -82,7 +82,7 @@
     </div>
     <toasts :messages="messages" />
     <modal id="modal-subscriber-create" :title="$t('create_subscriber')" size="md">
-      <user-create-form ref="formUserCreate" @created="handleCreate" />
+      <user-create-form ref="formUserCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
@@ -120,17 +120,6 @@ const users = computed<IUser[]>(() => {
   return resource?.value?.data
 })
 // Functions
-const afterCreated = () => {
-  const el = document.getElementById('modal-subscriber-create')
-  const modal = $bootstrap.Modal.getOrCreateInstance(el)
-  const model = t('subscriber')
-  modal.hide()
-  refresh()
-  addToast({ 
-    header: t('success'),
-    body: t('messages.model_created', { model })
-  })
-}
 const destroy = async (user: IUser) => {
   const name = user.email
   const model = t('subscriber')
@@ -141,7 +130,7 @@ const destroy = async (user: IUser) => {
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
-          addToast({ 
+          addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
           })
@@ -150,8 +139,19 @@ const destroy = async (user: IUser) => {
     })
   }
 }
-const handleCreate = (): void => {
-  afterCreated()
+const handleCreated = (): void => {
+  onCreated()
+}
+const onCreated = () => {
+  const el = document.getElementById('modal-subscriber-create')
+  const modal = $bootstrap.Modal.getOrCreateInstance(el)
+  const model = t('subscriber')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_created', { model })
+  })
 }
 const reset = (): void => {
   if (formUserCreate.value) {

@@ -82,7 +82,7 @@
     </div>
     <toasts :messages="messages" />
     <modal id="modal-list-create" :title="$t('create_list')" size="md">
-      <list-create-form ref="formListCreate" />
+      <list-create-form ref="formListCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
@@ -117,6 +117,20 @@ const lists = computed<IList[]>(() => {
   return resource?.value?.data
 })
 // Functions
+const handleCreated = (): void => {
+  onCreated()
+}
+const onCreated = () => {
+  const el = document.getElementById('modal-list-create')
+  const modal = $bootstrap.Modal.getOrCreateInstance(el)
+  const model = t('list')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_created', { model })
+  })
+}
 const reset = (): void => {
   if (formListCreate.value) {
     formListCreate.value.reset()

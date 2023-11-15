@@ -8,7 +8,7 @@
     <tab :title="$t('campaigns')" target="#user-campaigns" />
     <tab :title="$t('bounces')" target="#user-bounces" />
   </tabs>
-  <div class="tab-content py-2">
+  <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="user-general" role="tabpanel" aria-labelledby="tab-general">
       <table class="table table-sm">
         <tbody>
@@ -120,7 +120,10 @@
       </table>
     </div>
     <div class="tab-pane fade" id="user-lists" role="tabpanel" aria-labelledby="tab-lists">
-      <p>Test 2</p>
+      <ul class="mb-0" v-if="lists && lists.length > 0">
+        <li v-for="list in lists">{{ list.name }}</li>
+      </ul>
+      <p class="mb-0" v-else>{{ $t('messages.user_no_lists') }}</p>
     </div>
     <div class="tab-pane fade" id="user-campaigns" role="tabpanel" aria-labelledby="tab-campaigns">
       <p>Test 3</p>
@@ -131,10 +134,15 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { IList } from '~/types'
 const props = defineProps({
   user: {
     type: Object,
     required: true
   }
+})
+// Computed
+const lists = computed<IList[]>(() => {
+  return props.user.lists
 })
 </script>

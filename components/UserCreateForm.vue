@@ -3,14 +3,14 @@
     <div class="mb-3">
       <label for="input-email" class="form-label">{{ $t('email') }}</label>
       <required-input />
-      <input type="email" class="form-control" id="input-email" aria-describedby="text-email" v-model="form.email">
+      <input type="email" class="form-control" id="input-email" maxlength="255" v-model="form.email">
       <div class="invalid-feedback d-block" v-if="error('email') !== null">
         {{ error('email') }}
       </div>
     </div>
     <div class="mb-3">
       <label for="input-password" class="form-label">{{ $t('password') }}</label>
-      <input type="password" class="form-control" id="input-password" v-model="form.password">
+      <input type="password" class="form-control" id="input-password" maxlength="40" v-model="form.password">
       <div class="invalid-feedback d-block" v-if="error('password') !== null">
         {{ error('password') }}
       </div>
