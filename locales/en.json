@@ -37,6 +37,7 @@
     "lists": "Lists",
     "logout": "Logout",
     "manage": "Manage",
+    "members": "Members",
     "name": "Name",
     "navigation": "Navigation",
     "no": "No",
@@ -79,6 +80,9 @@
         "no_users": "There are no users to display.",
         "pagination_meta_info": "From {from} to {to} of {total}",
         "user_blacklisted": "Subscriber is blacklisted. No emails will be sent to this email address.",
-        "user_no_lists": "This subscriber does not belong to any list yet."
+        "user_no_lists": "This subscriber does not belong to any list yet.",
+        "users_blacklisted_count": "Blacklisted subscribers",
+        "users_confirmed_unblacklisted_count": "Confirmed and not blacklisted subscribers",
+        "users_unconfirmed_unblacklisted_count": "Unconfirmed and not blacklisted subscribers"
     }
 }

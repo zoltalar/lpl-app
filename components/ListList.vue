@@ -36,6 +36,9 @@
                       <sortable-column column="lists.active" v-model="sort">{{ $t('active') }}</sortable-column>
                     </th>
                     <th width="15%">
+                      {{ $t('members') }}
+                    </th>
+                    <th width="15%">
                       <sortable-column column="lists.list_order" v-model="sort">{{ $t('list_order') }}</sortable-column>
                     </th>
                     <th class="text-end">{{ $t('actions') }}</th>
@@ -46,6 +49,32 @@
                     <td>{{ list.id }}</td>
                     <td>{{ list.name }}</td>
                     <td><yes-no :expression="list.active" /></td>
+                    <td>
+                      <span
+                        class="text-success cursor-help"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        :data-bs-title="$t('messages.users_confirmed_unblacklisted_count')"
+                      >
+                        {{ list.users_confirmed_unblacklisted_count }}
+                      </span>
+                      (<span
+                        class="text-warning cursor-help"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        :data-bs-title="$t('messages.users_unconfirmed_unblacklisted_count')"
+                      >
+                        {{ list.users_unconfirmed_unblacklisted_count }}
+                      </span>, 
+                      <span
+                        class="text-danger cursor-help"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        :data-bs-title="$t('messages.users_blacklisted_count')"
+                      >
+                        {{ list.users_blacklisted_count }}
+                      </span>)
+                    </td>
                     <td>{{ list.list_order }}</td>
                     <td class="text-end">
                       <div class="btn-group btn-group-sm">
@@ -55,7 +84,7 @@
                     </td>
                   </tr>
                   <tr v-if="lists && lists.length === 0">
-                    <td colspan="5">
+                    <td colspan="6">
                       {{ $t('messages.no_lists') }}
                     </td>
                   </tr>
@@ -161,5 +190,6 @@ const store = (): void => {
 }
 onMounted(() => {
   refresh()
+  new $bootstrap.Tooltip(document.body, { selector: "[data-bs-toggle='tooltip']" })
 })
 </script>

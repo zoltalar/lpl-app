@@ -29,7 +29,10 @@ export interface IList extends IBaseModel, ITimestamps {
   description: string | null,
   list_order: number | null,
   active: number | null,
-  category_id: number | null
+  category_id: number | null,
+  users_confirmed_unblacklisted_count?: number,
+  users_unconfirmed_unblacklisted_count?: number,
+  users_blacklisted_count?: number
 }
 export interface IUser extends IBaseModel, ITimestamps {
   uuid: string,
