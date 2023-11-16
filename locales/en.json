@@ -65,6 +65,7 @@
     "yes": "Yes",
 
     "messages": {
+        "confirm_delete_model": "Are you sure you want to delete this {model}?",
         "confirm_destroy_name": "Are you sure you want to delete '{name}'?",
         "form_text_list_active": "Only active lists can be shown on subscribe pages",
         "form_text_user_blacklisted": "Indicate if email address is blacklisted.",

@@ -29,20 +29,43 @@
       </div>
       <div id="text-active" class="form-text">{{ $t('messages.form_text_list_active') }}</div>
     </div>
+    <div class="mb-3">
+      <label for="input-category-id" class="form-label">{{ $t('category') }}</label>
+      <div class="input-group">
+        <select class="form-select" :disabled="categories.length === 0" v-model="form.category_id">
+          <option :value="null"></option>
+          <option :value="category.id" v-for="category in categories">{{ category.name }}</option>
+        </select>
+        <button type="button" class="btn btn-secondary" @click.prevent="fetchCategories">
+          <i class="mdi mdi-refresh" />
+        </button>
+      </div>
+    </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IList } from '~/types'
+import { useCategoryStore } from '~/store/category'
+import type { ICategory, IList } from '~/types'
 const emits = defineEmits(['created'])
 const fields = {
   name: '',
   description: '',
   list_order: 0,
-  active: 0
+  active: 0,
+  category_id: null
 }
 const form: Partial<IList> = reactive({...fields})
 const { errors, clearErrors, error, getErrors } = useForm()
+const categoryStore = useCategoryStore()
+// Computed
+const categories = computed<ICategory[]>(() => {
+  return categoryStore.getCollection
+})
 // Functions
+const fetchCategories = async () => {
+  const response = await categoryStore.fetchCollection()
+  categoryStore.setCollection(response.data)
+}
 const store = async () => {
   await useApi('/admin/lists/store', {
     method: 'post',

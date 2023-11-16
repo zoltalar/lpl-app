@@ -50,8 +50,7 @@
                     <td class="text-end">
                       <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
-                        <button type="button" class="btn btn-light" :title="$t('view')"><i class="mdi mdi-eye-outline"></i></button>
-                        <button type="button" class="btn btn-danger" :title="$t('delete')"><i class="mdi mdi-close"></i></button>
+                        <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(list)"><i class="mdi mdi-close"></i></button>
                       </div>
                     </td>
                   </tr>
@@ -117,6 +116,25 @@ const lists = computed<IList[]>(() => {
   return resource?.value?.data
 })
 // Functions
+const destroy = async (list: IList) => {
+  const name = list.name
+  const model = t('list')
+  const message = t('messages.confirm_destroy_name', { name })
+  if (confirm(message)) {
+    await useApi(`/admin/lists/destroy/${list.id}`, {
+      method: 'delete',
+      onResponse({ request, response, options }) {
+        if (response.status === 204) {
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.model_destroyed', { model })
+          })
+        }
+      },
+    })
+  }
+}
 const handleCreated = (): void => {
   onCreated()
 }

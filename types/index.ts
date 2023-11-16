@@ -1,6 +1,6 @@
 // Interfaces
 export interface IApiResource {
-  data: IList[] | IUser[],
+  data: ICategory[] | IList[] | IUser[],
   meta: IApiResourceMeta
 }
 export interface IApiResourceMeta {
