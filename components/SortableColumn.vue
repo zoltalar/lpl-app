@@ -57,7 +57,7 @@ const css = (): object => {
   return classes
 }
 const link = (): string => {
-  const collection = props.column.split('.')[0]
+  const collection = props.column.split('.')[0] || ''
   return `/${collection}`
 }
 </script>

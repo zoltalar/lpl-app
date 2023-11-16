@@ -21,6 +21,9 @@ export interface IApiResourceMetaLink {
 export interface IBaseModel {
   id: number
 }
+export interface ICategory extends IBaseModel {
+  name: string
+}
 export interface IList extends IBaseModel, ITimestamps {
   name: string,
   description: string | null,
