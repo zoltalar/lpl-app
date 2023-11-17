@@ -1,5 +1,5 @@
 <template>
-  <form novalidate @submit.prevent="store">
+  <form novalidate @submit.prevent="update">
     <div class="mb-3">
       <label for="input-name" class="form-label">{{ $t('name') }}</label>
       <required-input />
@@ -44,20 +44,39 @@
   </form>
 </template>
 <script setup lang="ts">
-const emits = defineEmits(['created'])
+import type { IList } from '~/types'
+const props = defineProps({
+  list: {
+    type: Object,
+    required: true
+  }
+})
+const emits = defineEmits(['updated'])
 const { form, categories, fetchCategories } = useListForm()
-const { errors, clearErrors, error, getErrors } = useForm()
+const { errors, error, getErrors } = useForm()
+// Computed
+const list = computed<IList>(() => {
+  return props.list as IList
+})
+// Watch
+watch(list, () => {
+  const keys = Object.keys(form)
+  keys.forEach((key: string) => {
+    if (key in list.value) {
+      form[key] = list.value[key]
+    }
+  })
+}, { immediate: true })
 // Functions
-const store = async () => {
-  await useApi('/admin/lists/store', {
-    method: 'post',
+const update = async () => {
+  await useApi(`/admin/lists/update/${list.value.id}`, {
+    method: 'put',
     body: { ...form },
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -65,12 +84,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  const keys = Object.keys(form)
-  keys.forEach((key: string) => {
-    form[key] = fields[key]
-  })
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>

@@ -26,9 +26,6 @@
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th width="10%">
-                      <sortable-column column="lists.id" v-model="sort">{{ $t('id') }}</sortable-column>
-                    </th>
                     <th width="30%">
                       <sortable-column column="lists.name" v-model="sort">{{ $t('name') }}</sortable-column>
                     </th>
@@ -41,12 +38,14 @@
                     <th width="15%">
                       <sortable-column column="lists.list_order" v-model="sort">{{ $t('list_order') }}</sortable-column>
                     </th>
+                    <td width="15%">
+                      <sortable-column column="lists.category_id" v-model="sort">{{ $t('category') }}</sortable-column>
+                    </td>
                     <th class="text-end">{{ $t('actions') }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="list in lists">
-                    <td>{{ list.id }}</td>
                     <td>{{ list.name }}</td>
                     <td><yes-no :expression="list.active" /></td>
                     <td>
@@ -76,9 +75,13 @@
                       </span>)
                     </td>
                     <td>{{ list.list_order }}</td>
+                    <td>
+                      <span v-if="list.category_id">{{ list?.category?.name }}</span>
+                      <span v-else> - </span>
+                    </td>
                     <td class="text-end">
                       <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
+                        <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(list)"><i class="mdi mdi-pencil"></i></button>
                         <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(list)"><i class="mdi mdi-close"></i></button>
                       </div>
                     </td>
@@ -116,7 +119,14 @@
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
       </template>
-    </modal>     
+    </modal>
+    <modal id="modal-list-edit" :title="$t('edit_list')" size="md">
+      <list-edit-form :list="selectedList" ref="formListEdit" @updated="handleUpdated" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+      </template>
+    </modal> 
   </div>
 </template>
 <script setup lang="ts">
@@ -139,10 +149,11 @@ const {
 const { messages, addToast } = useToasts()
 const { $bootstrap } = useNuxtApp()
 const formListCreate = ref<null | { reset: () => void, store: () => void }>(null)
+const formListEdit = ref<null | { update: () => void }>(null)
 const selectedList = ref<IList>({} as IList)
 // Computed
 const lists = computed<IList[]>(() => {
-  return resource?.value?.data
+  return resource?.value?.data as IList[]
 })
 // Functions
 const destroy = async (list: IList) => {
@@ -164,8 +175,17 @@ const destroy = async (list: IList) => {
     })
   }
 }
+const edit = (list: IList): void => {
+  selectedList.value = list
+  const el = document.getElementById('modal-list-edit')
+  const modal = $bootstrap.Modal.getOrCreateInstance(el)
+  modal.show()
+}
 const handleCreated = (): void => {
   onCreated()
+}
+const handleUpdated = (): void => {
+  onUpdated()
 }
 const onCreated = () => {
   const el = document.getElementById('modal-list-create')
@@ -178,6 +198,17 @@ const onCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
+const onUpdated = () => {
+  const el = document.getElementById('modal-list-edit')
+  const modal = $bootstrap.Modal.getOrCreateInstance(el)
+  const model = t('list')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_updated', { model })
+  })
+}
 const reset = (): void => {
   if (formListCreate.value) {
     formListCreate.value.reset()
@@ -186,6 +217,11 @@ const reset = (): void => {
 const store = (): void => {
   if (formListCreate.value) {
     formListCreate.value.store()
+  }
+}
+const update = (): void => {
+  if (formListEdit.value) {
+    formListEdit.value.update()
   }
 }
 onMounted(() => {

@@ -1,7 +1,7 @@
 // Interfaces
 export interface IApiResource {
   data: ICategory[] | IList[] | IUser[],
-  meta: IApiResourceMeta
+  meta?: IApiResourceMeta
 }
 export interface IApiResourceMeta {
   current_page: number,
@@ -30,6 +30,7 @@ export interface IList extends IBaseModel, ITimestamps {
   list_order: number | null,
   active: number | null,
   category_id: number | null,
+  category?: ICategory | null,
   users_confirmed_unblacklisted_count?: number,
   users_unconfirmed_unblacklisted_count?: number,
   users_blacklisted_count?: number
