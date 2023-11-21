@@ -22,7 +22,8 @@ export interface IBaseModel {
   id: number
 }
 export interface ICategory extends IBaseModel {
-  name: string
+  name: string,
+  lists_count?: number
 }
 export interface IList extends IBaseModel, ITimestamps {
   name: string,

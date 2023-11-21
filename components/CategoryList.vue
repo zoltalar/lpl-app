@@ -29,8 +29,11 @@
                     <th width="10%">
                       <sortable-column column="categories.id" v-model="sort">{{ $t('id') }}</sortable-column>
                     </th>
-                    <th width="45%">
+                    <th width="40%">
                       <sortable-column column="categories.name" v-model="sort">{{ $t('name') }}</sortable-column>
+                    </th>
+                    <th>
+                      {{ $t('list_count') }}
                     </th>
                     <th class="text-end">{{ $t('actions') }}</th>
                   </tr>
@@ -39,6 +42,7 @@
                   <tr v-for="category in categories">
                     <td>{{ category.id }}</td>
                     <td>{{ category.name }}</td>
+                    <td>{{ category.lists_count }}</td>
                     <td class="text-end">
                       <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>

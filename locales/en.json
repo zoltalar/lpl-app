@@ -33,6 +33,7 @@
     "id": "ID",
     "import": "Import",
     "list": "List",
+    "list_count": "List Count",
     "list_options": "List Options",
     "list_order": "List Order",
     "lists": "Lists",

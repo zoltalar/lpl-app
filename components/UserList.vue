@@ -117,7 +117,7 @@ const formUserCreate = ref<null | { reset: () => void, store: () => void }>(null
 const selectedUser = ref<IUser>({} as IUser)
 // Computed
 const users = computed<IUser[]>(() => {
-  return resource?.value?.data
+  return resource?.value?.data as IUser[]
 })
 // Functions
 const destroy = async (user: IUser) => {
