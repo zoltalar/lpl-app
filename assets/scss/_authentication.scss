@@ -1,0 +1,19 @@
+// --------------------------------------------------
+// Authentication
+// --------------------------------------------------
+
+.authentication {
+  --#{$prefix}body-bg: #f5f6f8;
+}
+
+.authentication-text {
+  margin: ($spacer * 1.5) auto;
+  width: 75%;
+
+  > p {
+    color: $gray-600;
+    font-size: .8125rem;
+    margin-bottom: 0;
+    text-align: center;
+  }
+}
