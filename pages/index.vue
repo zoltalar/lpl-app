@@ -1,23 +1,27 @@
 <template>
-  <app-logo />
-  <div class="authentication-text">
-    <p>{{ $t('messages.login_text') }}</p>  
+  <div class="card">
+    <div class="card-body p-4">
+      <app-logo />
+      <div class="authentication-text">
+        <p>{{ $t('messages.login_text') }}</p>        
+      </div>
+      <div class="alert alert-danger text-center" v-if="error !== ''">
+        {{ $t('messages.login_error_text') }}
+      </div>
+      <login-form 
+        @login="handleLogin"
+        @error="handleError"
+      />
+    </div>
   </div>
-  <form>
-    <div class="mb-3">
-      <label for="input-email" class="form-label">{{ $t('email') }}</label>
-      <input type="text" class="form-control form-control-lg" id="input-email">
-    </div>
-    <div class="mb-3">
-      <label for="input-password" class="form-label">{{ $t('password') }}</label>
-      <input type="password" class="form-control form-control-lg" id="input-password">
-    </div>
-    <div class="d-grid">
-      <button class="btn btn-primary btn-lg">{{ $t('login') }}</button>
-    </div>
-  </form>
+  <div class="authentication-subtext">
+    <p>
+      <nuxt-link to="/">{{ $t('forgot_password?') }}</nuxt-link>
+    </p>
+  </div>
 </template>
 <script setup lang="ts">
+// Utilities
 definePageMeta({
   layout: 'authentication'
 })
@@ -26,4 +30,15 @@ useHead({
     class: 'authentication',
   },
 })
+// Vars
+const error = ref<string>('')
+// Composables
+const { status } = useAuth()
+// Functions
+const handleError = (object: Record<string,string>) => {
+  error.value = object.message
+}
+const handleLogin = () => {
+  console.log(this)
+}
 </script>

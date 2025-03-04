@@ -39,7 +39,7 @@ export interface IList extends IBaseModel, ITimestamps {
 export interface IUser extends IBaseModel, ITimestamps {
   uuid: string,
   email: string,
-  password?: string | null,
+  password?: string,
   password_set: number,
   html_email: number,
   confirmed: number,

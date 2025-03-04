@@ -6,6 +6,21 @@
   --#{$prefix}body-bg: #f5f6f8;
 }
 
+.authentication-subtext {
+  margin: ($spacer * 1.5) auto;
+  text-align: center;
+
+  a {
+    color: $gray-600;
+    font-size: .8125rem;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+}
+
 .authentication-text {
   margin: ($spacer * 1.5) auto;
   width: 75%;
