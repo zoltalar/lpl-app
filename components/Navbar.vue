@@ -38,7 +38,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-user">
               <li><nuxt-link to="/users/settings" class="dropdown-item">{{ $t('settings') }}</nuxt-link></li>
-              <li><nuxt-link to="/users/logout" class="dropdown-item">{{ $t('logout') }}</nuxt-link></li>
+              <li><a href="/logout" class="dropdown-item" @click.prevent="logout">{{ $t('logout') }}</a></li>
             </ul>
           </li>
         </ul>
@@ -46,3 +46,12 @@
     </div>
   </nav>
 </template>
+<script setup lang="ts">
+// Composables
+const { signOut } = useAuth()
+// Functions
+const logout = async (): Promise<void> => {
+  await signOut({ redirect: false })
+  await navigateTo('/')
+}
+</script>

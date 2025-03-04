@@ -23,7 +23,8 @@
 <script setup lang="ts">
 // Utilities
 definePageMeta({
-  layout: 'authentication'
+  layout: 'authentication',
+  auth: false
 })
 useHead({
   bodyAttrs: {
@@ -34,11 +35,17 @@ useHead({
 const error = ref<string>('')
 // Composables
 const { status } = useAuth()
+// Watch
+watch(status, async () => {
+  if (status.value === 'authenticated') {
+    await navigateTo('/dashboard')
+  }
+}, { immediate: true })
 // Functions
 const handleError = (object: Record<string,string>) => {
   error.value = object.message
 }
-const handleLogin = () => {
-  console.log(this)
+const handleLogin = async (): Promise<void> => {
+  await navigateTo('/dashboard')
 }
 </script>
