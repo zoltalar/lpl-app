@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="login">
+  <form class="form-default" @submit.prevent="login">
     <div class="mb-3">
       <label for="input-email" class="form-label">
         {{ $t('email') }}
@@ -10,24 +10,34 @@
         class="form-control form-control-lg"
         :class="{'is-invalid': invalid}"
         id="input-email"
+        tabindex="1"
         v-model="form.email"
       />
     </div>
     <div class="mb-3">
+      <nuxt-link to="/" class="float-end" tabindex="4">{{ $t('forgot_password?') }}</nuxt-link>
       <label for="input-password" class="form-label">
         {{ $t('password') }}
         <required-input />
       </label>
-      <input
-        type="password"
-        class="form-control form-control-lg"
-        :class="{'is-invalid': invalid}"
-        id="input-password"
-        v-model="form.password"
-      />
+      <div class="input-group">
+        <input
+          :type="inputType"
+          class="form-control form-control-lg"
+          :class="{'is-invalid': invalid}"
+          id="input-password"
+          tabindex="2"
+          v-model="form.password"
+        />
+        <button type="button" class="btn btn-outline-secondary" tabindex="3" @click.prevent="toggleInput">
+          <i :class="inputIcon"></i>
+        </button>
+      </div>
     </div>
     <div class="d-grid">
-      <button type="submit" class="btn btn-primary btn-lg">{{ $t('login') }}</button>
+      <button type="submit" class="btn btn-primary btn-lg">
+        {{ $t('login') }}
+      </button>
     </div>
   </form>
 </template>
@@ -43,6 +53,7 @@ const busy = ref<boolean>(false)
 const invalid = ref<boolean>(false)
 // Composables
 const { signIn } = useAuth()
+const { inputType, inputIcon, toggleInput } = usePassword()
 // Functions
 const login = async (): Promise<void> => {
   busy.value = true

@@ -31,6 +31,19 @@
   }
 }
 
+.form-default {
+
+  a {
+    color: $gray-600;
+    font-size: .8125rem;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+}
+
 .form-search {
 
   .input-group {
