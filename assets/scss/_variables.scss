@@ -3,31 +3,34 @@
 // --------------------------------------------------
 
 // Fonts
-$font-family-base:              'Rubik', sans-serif !default;
-$font-size-base:                0.9375rem !default;
+$font-family-base: 'Rubik', sans-serif !default;
+$font-size-base: 0.9375rem !default;
 
 // Buttons
-$btn-font-size:                 $font-size-base !default;
+$btn-font-size: $font-size-base !default;
 
 // Cards
-$card-border-color:             transparent !default;
+$card-border-color: transparent !default;
+
+// Colors
+$light-blue: #4b8cca !default;
 
 // Dropdowns
-$dropdown-font-size:            $font-size-base !default;
+$dropdown-font-size: $font-size-base !default;
 
 // Forms
-$input-font-size:               $font-size-base !default;
+$input-font-size: $font-size-base !default;
 
 // Tables
-$table-border-color:            #f3f3f3 !default;
-$table-cell-padding-x:          .75rem !default;
-$table-cell-padding-y:          $table-cell-padding-x !default;
-$table-cell-vertical-align:     middle !default;
-$table-header-bg:               #f8f9fa !default;
-$table-header-font-size:        0.8125rem !default;
+$table-border-color: #f3f3f3 !default;
+$table-cell-padding-x: .75rem !default;
+$table-cell-padding-y: $table-cell-padding-x !default;
+$table-cell-vertical-align: middle !default;
+$table-header-bg: #f8f9fa !default;
+$table-header-font-size: 0.8125rem !default;
 
 // Typography
-$headings-font-weight:          500 !default;
+$headings-font-weight: 500 !default;
 
 // Top nav
-$top-nav-search-bg:             #464f5b !default;
+$top-nav-search-bg: #464f5b !default;

@@ -23,7 +23,14 @@
     text-align: center;
 
     > i {
-      font-size: 1.75rem;
+      background-color: $light-blue;
+      border-radius: 50%;
+      color: $white;
+      display: inline-block;
+      font-size: 1.5rem;
+      line-height: 2.25rem;
+      height: 2.25rem;
+      width: 2.25rem;
     }
   }
 }
