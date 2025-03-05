@@ -44,9 +44,14 @@
     font-size: 0.9375rem;
     margin-right: .5rem;
 
-    > img {
-      height: auto;
-      width: 2.375rem;
+    .logo {
+
+      h1 {
+
+        span {
+          display: none;
+        }
+      }
     }
   }    
 

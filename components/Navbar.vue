@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">            
-      <nuxt-link to="/dashboard" class="navbar-brand"><img src="@/assets/img/phplist-logo.png" :alt="$t('phplists')" /></nuxt-link>
+      <nuxt-link to="/dashboard" class="navbar-brand">
+        <app-logo />
+      </nuxt-link>
       <a class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#top-nav-menu" aria-controls="top-nav-menu" aria-expanded="false" :aria-label="$t('toggle_navigation')">
         <div class="lines">
           <span></span>
@@ -24,7 +26,7 @@
         </ul>
         <form class="app-search d-flex">
           <div class="input-group input-group-sm">
-            <input type="text" class="form-control" placeholder="Search...">
+            <input type="text" class="form-control" :placeholder="$t('search') + '...'">
             <button type="button" class="btn btn-secondary">
               <i class="mdi mdi-text-search" />
             </button>
@@ -33,7 +35,7 @@
         <ul class="navbar-nav ms-3">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="dropdown-user" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="@/assets/img/avatar.jpg" :alt="$t('user')" class="avatar rounded-circle me-2" />
+              <img src="/img/avatar.jpg" :alt="$t('user')" class="avatar rounded-circle me-2" />
               <span v-if="data">{{ data.first_name }}</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-user">
