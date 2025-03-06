@@ -10,12 +10,12 @@
             <li class="nav-item dropdown">
               <a id="top-nav-subscribers" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('subscribers') }}</a>
               <div class="dropdown-menu" aria-labelledby="top-nav-subscribers">
-                <nuxt-link to="/subscribers" class="dropdown-item">{{ $t('manage') }}</nuxt-link>
-                <nuxt-link to="/subscribers/import" class="dropdown-item">{{ $t('import') }}</nuxt-link>
+                <nuxt-link to="/" class="dropdown-item">{{ $t('manage') }}</nuxt-link>
+                <nuxt-link to="/" class="dropdown-item">{{ $t('import') }}</nuxt-link>
               </div>
             </li>
             <li class="nav-item">
-              <nuxt-link to="/lists" class="nav-link">{{ $t('lists') }}</nuxt-link>
+              <nuxt-link to="/" class="nav-link">{{ $t('lists') }}</nuxt-link>
             </li>
             <li class="nav-item">
               <nuxt-link to="/users" class="nav-link">{{ $t('users') }}</nuxt-link>

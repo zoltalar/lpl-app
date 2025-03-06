@@ -18,9 +18,9 @@
               {{ $t('create_new') }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-create">
-              <li><nuxt-link to="/campaigns/create" class="dropdown-item">{{ $t('campaign') }}</nuxt-link></li>
-              <li><nuxt-link to="/users/create" class="dropdown-item">{{ $t('subscriber') }}</nuxt-link></li>
-              <li><nuxt-link to="/attributes/create" class="dropdown-item">{{ $t('attribute') }}</nuxt-link></li>
+              <li><nuxt-link to="/" class="dropdown-item">{{ $t('campaign') }}</nuxt-link></li>
+              <li><nuxt-link to="/" class="dropdown-item">{{ $t('subscriber') }}</nuxt-link></li>
+              <li><nuxt-link to="/" class="dropdown-item">{{ $t('attribute') }}</nuxt-link></li>
             </ul>
           </li>
         </ul>
@@ -28,7 +28,7 @@
           <div class="input-group input-group-sm">
             <input type="text" class="form-control" :placeholder="$t('search') + '...'">
             <button type="button" class="btn btn-secondary">
-              <i class="mdi mdi-text-search" />
+              <i class="mdi mdi-text-search"></i>
             </button>
           </div>
         </form>
@@ -39,7 +39,7 @@
               <span v-if="data">{{ data.first_name }}</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-user">
-              <li><nuxt-link to="/users/settings" class="dropdown-item">{{ $t('settings') }}</nuxt-link></li>
+              <li><nuxt-link to="/" class="dropdown-item">{{ $t('settings') }}</nuxt-link></li>
               <li><a href="/logout" class="dropdown-item" @click.prevent="logout">{{ $t('logout') }}</a></li>
             </ul>
           </li>

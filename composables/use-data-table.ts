@@ -2,21 +2,24 @@ import { useI18n } from 'vue-i18n'
 import { useDataTableStore } from '~/store/data-table'
 import type { IApiResource, IApiResourceMeta } from '~/types'
 
-export default function useDataTable(props) {
+export default function useDataTable(props: any) {
+  // Composables
   const dataTableStore = useDataTableStore()
   const { t } = useI18n()
+  const { $_ } = useNuxtApp()
+  // Vars
   const resource = ref<IApiResource>({
     data: [],
     meta: {} as IApiResourceMeta
   })
   const search = ref<string>('')
+  const filters = ref<Record<string, any>>({})
   const sort = ref<string>('')
   const page = ref<number>(1)
   const limit = ref<number>(dataTableStore.getPerPage)
-  const filters = ref({})
   // Computed
   const meta = computed<IApiResourceMeta>(() => {
-    return resource.value.meta
+    return resource.value.meta as IApiResourceMeta
   })
   const info = computed<string>(() => {
     let text = ''
@@ -30,13 +33,26 @@ export default function useDataTable(props) {
     return text
   })
   // Functions
-  const query = () => {
-    return { 
-      search: search.value,
-      sort: sort.value,
-      page: page.value,
-      limit: limit.value
+  const query = (): Record<string, any> => {
+    const query: Record<string, any> = {}
+    if (filters.value) {
+      $_.forOwn(filters.value, (value: any, key: string): void => {
+        query['filter[' + key + ']'] = value
+      })
     }
+    if (search.value) {
+      query['search'] = search.value
+    }
+    if (sort.value) {
+      query['sort'] = sort.value
+    }
+    if (page.value) {
+      query['page'] = page.value
+    }
+    if (limit.value) {
+      query['limit'] = limit.value
+    }
+    return query
   }
   const refresh = async () => {
     const { data, meta } = await useApi(props.endpoint, {
@@ -46,28 +62,25 @@ export default function useDataTable(props) {
     resource.value.meta = meta
   }
   // Watch
-  watch(search, () => {
+  watch([search, limit], () => {
     page.value = 1
     refresh()
   })
-  watch(sort, () => {
-    refresh()
-  })
-  watch(page, () => {
-    refresh()
-  })
-  watch(limit, () => {
+  watch(filters, () => {
     page.value = 1
+    refresh()
+  }, { deep: true })
+  watch([sort, page], () => {
     refresh()
   })
   return {
     resource,
     search,
+    filters,
     sort,
     meta,
     page,
     limit,
-    filters,
     info,
     refresh
   }

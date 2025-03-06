@@ -146,21 +146,15 @@ const props = defineProps({
 })
 const { 
   resource, 
-  search, 
+  search,
+  filters,
   sort,
   meta,
   page, 
   limit,
   info,
-  refresh 
+  refresh
 } = useDataTable(props)
-const filters = reactive<Record<string,any>>({
-  id: '',
-  first_name: '',
-  last_name: '',
-  email: '',
-  active: ''
-})
 const toggleFilters = ref<boolean>(false)
 const formUserCreate = ref<null | { reset: () => void, store: () => void }>(null)
 const selectedUser = ref<IUser>({} as IUser)
