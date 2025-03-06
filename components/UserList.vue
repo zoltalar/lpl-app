@@ -19,53 +19,92 @@
                 </div>
               </div>
               <div class="col-md-5 col-lg-4">
-                <search-form class="mt-3 mt-sm-0" v-model="search" />
+                <search-form
+                  class="mt-3 mt-sm-0"
+                  v-model="search"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    :title="$t('toggle_filters')"
+                    :aria-label="$t('toggle_filters')"
+                    @click.prevent="toggleFilters = !toggleFilters"
+                  >
+                    <i class="mdi mdi-filter-menu-outline"></i>
+                  </button>
+                </search-form>
               </div>
             </div>
             <div class="table-responsive">
-              <table class="table table-hover table-list">
-                <thead>
-                  <tr>
-                    <th width="10%">
-                      <sortable-column column="users.id" v-model="sort">{{ $t('id') }}</sortable-column>
-                    </th>
-                    <th width="15%">
-                      <sortable-column column="users.first_name" v-model="sort">{{ $t('first_name') }}</sortable-column>
-                    </th>
-                    <th width="15%">
-                      <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
-                    </th>
-                    <th width="20%">
-                      <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
-                    </th>
-                    <th width="15%">
-                      <sortable-column column="users.active" v-model="sort">{{ $t('active') }}</sortable-column>
-                    </th>
-                    <th class="text-end">{{ $t('actions') }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="user in users">
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td><yes-no :expression="user.active" /></td>
-                    <td class="text-end">
-                      <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
-                        <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)"><i class="mdi mdi-eye-outline"></i></button>
-                        <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)"><i class="mdi mdi-close"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr v-if="users && users.length === 0">
-                    <td colspan="5">
-                      {{ $t('messages.no_users') }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <form class="form-default">
+                <table class="table table-hover table-list">
+                  <thead>
+                    <tr>
+                      <th width="10%">
+                        <sortable-column column="users.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="users.first_name" v-model="sort">{{ $t('first_name') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
+                      </th>
+                      <th width="20%">
+                        <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="users.active" v-model="sort">{{ $t('active') }}</sortable-column>
+                      </th>
+                      <th class="text-end">{{ $t('actions') }}</th>
+                    </tr>
+                    <tr v-if="toggleFilters">
+                      <th>
+                        <input type="text" class="form-control form-control-sm" v-model="filters.id" />
+                      </th>
+                      <th>
+                        <input type="text" class="form-control form-control-sm" v-model="filters.first_name" />
+                      </th>
+                      <th>
+                        <input type="text" class="form-control form-control-sm" v-model="filters.last_name" />
+                      </th>
+                      <th>
+                        <input type="text" class="form-control form-control-sm" v-model="filters.email" />
+                      </th>
+                      <th>
+                        <select class="form-select form-select-sm">
+                          <option></option>
+                          <option>Yes</option>
+                          <option>No</option>
+                        </select>
+                      </th>
+                      <th class="text-end">
+                        -
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="user in users">
+                      <td>{{ user.id }}</td>
+                      <td>{{ user.first_name }}</td>
+                      <td>{{ user.last_name }}</td>
+                      <td>{{ user.email }}</td>
+                      <td><yes-no :expression="user.active" /></td>
+                      <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)"><i class="mdi mdi-eye-outline"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)"><i class="mdi mdi-close"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-if="users && users.length === 0">
+                      <td colspan="5">
+                        {{ $t('messages.no_users') }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>              
             </div>
             <div class="row">
               <div class="col-lg-5">
@@ -94,14 +133,14 @@
       </template>
     </modal>
     <modal id="modal-subscriber-view" :title="$t('subsciber_details')" size="lg">
-      <user-view :user="selectedUser" />      
-    </modal>        
+      <user-view :user="selectedUser" />
+    </modal>
   </div>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { IUser } from '~/types'
-const { t } = useI18n()
+// Vars
 const props = defineProps({
   endpoint: { type: String }
 })
@@ -115,10 +154,20 @@ const {
   info,
   refresh 
 } = useDataTable(props)
-const { messages, addToast } = useToasts()
-const { $bootstrap } = useNuxtApp()
+const filters = reactive<Record<string,any>>({
+  id: '',
+  first_name: '',
+  last_name: '',
+  email: '',
+  active: ''
+})
+const toggleFilters = ref<boolean>(false)
 const formUserCreate = ref<null | { reset: () => void, store: () => void }>(null)
 const selectedUser = ref<IUser>({} as IUser)
+// Composables
+const { t } = useI18n()
+const { messages, addToast } = useToasts()
+const { $bootstrap } = useNuxtApp()
 // Computed
 const users = computed<IUser[]>(() => {
   return resource?.value?.data as IUser[]
@@ -126,7 +175,7 @@ const users = computed<IUser[]>(() => {
 // Functions
 const destroy = async (user: IUser) => {
   const name = user.email
-  const model = t('subscriber')
+  const model = t('user')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
     await useApi(`/admin/users/destroy/${user.id}`, {

@@ -9,20 +9,25 @@
       >
       <button
         type="button"
-        class="btn-close"
+        class="btn btn-secondary"
         :title="$t('clear_search')"
         :aria-label="$t('close')"
         @click.prevent="clear"
-        v-if="hasInput()"></button>
-      <button type="submit" class="btn btn-secondary">
-        <i class="mdi mdi-text-search" />
+        v-if="hasInput()"
+      >
+        <i class="mdi mdi-close"></i>
       </button>
+      <slot />
     </div>
   </form>
 </template>
 <script setup lang="ts">
-defineProps(['modelValue'])
-const emits = defineEmits(['update:modelValue'])
+// Vars
+interface Props {
+  modelValue?: string
+}
+defineProps<Props>()
+const emits = defineEmits(['update:modelValue', 'toggleFilters'])
 const search = ref<string>('')
 const typing = ref<boolean>(false)
 let timeout: any = null
