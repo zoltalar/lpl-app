@@ -8,6 +8,7 @@
       <div class="container">
         <slot />
       </div>
-    </div>            
+    </div>
+    <app-footer :progress="0" />
   </client-only>
 </template>

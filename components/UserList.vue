@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('subscribers') }}</h4>
+          <h4 class="page-title">{{ $t('users') }}</h4>
         </div>
       </div>
     </div>
@@ -23,20 +23,23 @@
               </div>
             </div>
             <div class="table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover table-list">
                 <thead>
                   <tr>
                     <th width="10%">
                       <sortable-column column="users.id" v-model="sort">{{ $t('id') }}</sortable-column>
                     </th>
-                    <th width="35%">
+                    <th width="15%">
+                      <sortable-column column="users.first_name" v-model="sort">{{ $t('first_name') }}</sortable-column>
+                    </th>
+                    <th width="15%">
+                      <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
+                    </th>
+                    <th width="20%">
                       <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
                     </th>
                     <th width="15%">
-                      <sortable-column column="users.confirmed" v-model="sort">{{ $t('confirmed') }}</sortable-column>
-                    </th>
-                    <th width="15%">
-                      <sortable-column column="users.blacklisted" v-model="sort">{{ $t('blacklisted') }}</sortable-column>
+                      <sortable-column column="users.active" v-model="sort">{{ $t('active') }}</sortable-column>
                     </th>
                     <th class="text-end">{{ $t('actions') }}</th>
                   </tr>
@@ -44,9 +47,10 @@
                 <tbody>
                   <tr v-for="user in users">
                     <td>{{ user.id }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
                     <td>{{ user.email }}</td>
-                    <td><yes-no :expression="user.confirmed" /></td>
-                    <td><yes-no :expression="user.blacklisted" /></td>
+                    <td><yes-no :expression="user.active" /></td>
                     <td class="text-end">
                       <div class="btn-group btn-group-sm">
                         <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
@@ -81,7 +85,7 @@
       </div>
     </div>
     <toasts :messages="messages" />
-    <modal id="modal-subscriber-create" :title="$t('create_subscriber')" size="md">
+    <modal id="modal-subscriber-create" :title="$t('create_user')" size="md">
       <user-create-form ref="formUserCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>

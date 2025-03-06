@@ -37,19 +37,12 @@ export interface IList extends IBaseModel, ITimestamps {
   users_blacklisted_count?: number
 }
 export interface IUser extends IBaseModel, ITimestamps {
-  uuid: string,
+  first_name: string,
+  last_name: string,
   email: string,
-  password?: string,
-  password_set: number,
-  html_email: number,
-  confirmed: number,
-  disabled: number,
-  blacklisted: number,
-  opted_in: number,
-  bounce_count: number,
-  unique_id: string,
-  subscribe_page: number | null,
-  rss_frequency: string | null,
+  phone: string,
+  password: string,
+  active: number | null
 }
 export interface ITimestamps {
   created_at: string | null,

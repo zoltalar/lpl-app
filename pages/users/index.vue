@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div class="page-title-box">
-      <h4 class="page-title">{{ $t('dashboard') }}</h4>
-    </div>
-  </div>
-  <pre>{{ token }}</pre>
+  <user-list endpoint="/admin/users/index" />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
@@ -14,7 +9,6 @@ definePageMeta({
 })
 // Composables
 const { t } = useI18n()
-const { token } = useAuth()
 const { preferredTheme } = useUi()
 // Utilities
 useHead({
@@ -26,6 +20,6 @@ useHead({
   }
 })
 useSeoMeta({
-  'title': t('messages.title_dashboard'),
+  'title': t('messages.title_users'),
 })
 </script>

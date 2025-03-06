@@ -2,9 +2,9 @@
   <form class="form-default" @submit.prevent="login">
     <div class="mb-3">
       <label for="input-email" class="form-label">
-        {{ $t('email') }}
-        <required-input />
+        {{ $t('email') }}        
       </label>
+      <required-input />
       <input
         type="text"
         class="form-control form-control-lg"
@@ -17,9 +17,9 @@
     <div class="mb-3">
       <nuxt-link to="/" class="float-end" tabindex="4">{{ $t('forgot_password?') }}</nuxt-link>
       <label for="input-password" class="form-label">
-        {{ $t('password') }}
-        <required-input />
+        {{ $t('password') }}        
       </label>
+      <required-input />
       <div class="input-group">
         <input
           :type="inputType"

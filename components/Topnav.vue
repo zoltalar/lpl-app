@@ -18,7 +18,7 @@
               <nuxt-link to="/lists" class="nav-link">{{ $t('lists') }}</nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link to="/categories" class="nav-link">{{ $t('categories') }}</nuxt-link>
+              <nuxt-link to="/users" class="nav-link">{{ $t('users') }}</nuxt-link>
             </li>
           </ul>
         </div>

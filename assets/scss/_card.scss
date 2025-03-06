@@ -3,6 +3,19 @@
 // --------------------------------------------------
 
 .card {
-  --#{$prefix}card-bg: #{$white};
-  --#{$prefix}card-box-shadow: var(--bs-box-shadow);
+  --#{$prefix}card-box-shadow: var(--#{$prefix}box-shadow);
+}
+
+@include color-mode(light) {
+
+  .card {
+    --#{$prefix}card-bg: #{$white};
+  }
+}
+
+@include color-mode(dark) {
+
+  .card {
+    --#{$prefix}card-bg: #33404a;
+  }
 }

@@ -2,11 +2,24 @@
 // Reboot
 // --------------------------------------------------
 
-:root, [data-bs-theme=light] {
-  --#{$prefix}body-bg: #f5f6f8;
-  --#{$prefix}box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);    
+:root {
+  --#{$prefix}box-shadow: 0 0 2.1875rem 0 rgba(154, 161, 171, 0.15);  
 }
 
 body {
   min-width: 20rem;
+}
+
+@include color-mode(light) {
+
+  body {
+    background-color: #f5f6f8;
+  }
+}
+
+@include color-mode(dark) {
+
+  body {
+    background-color: #303841;
+  }
 }

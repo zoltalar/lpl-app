@@ -10,7 +10,7 @@
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="user-general" role="tabpanel" aria-labelledby="tab-general">
-      <table class="table table-sm">
+      <table class="table table-sm table-view mb-0">
         <tbody>
           <tr>
             <td class="table-attribute">

@@ -4,13 +4,20 @@
 
 .table {
   --#{$prefix}table-bg: $white;
-  font-size: $font-size-base;
+  font-size: $font-size-base;  
 
   tr {
+
+    &.expired,
+    &.inactive {
+
+      td:not(.badge) {
+        color: $gray-500;
+        text-decoration: line-through;
+      }
+    }
       
     > th {
-      background-color: $table-header-bg;
-      color: $gray-600;
       font-size: $table-header-font-size;
       font-weight: normal;
       vertical-align: bottom;
@@ -18,6 +25,86 @@
   }
 }
 
+@include color-mode(light) {
+
+  .table {
+
+    tr {
+
+      > td {
+        color: $gray-800;
+      }
+
+      > th {
+        background-color: $table-header-bg;
+        color: $gray-600;
+      }
+    }
+  }
+}
+
+@include color-mode(dark) {
+
+  .table {
+
+    tr {
+
+      > td {
+        border-bottom-color: #35444d;
+        color: inherit;
+      }
+
+      > th {
+        background-color: #3e4954;
+        border-bottom-color: $gray-700;
+        color: $gray-500;
+      }
+    }
+  }
+}
+
 .table-attribute {
+  min-width: 10rem;
   width: 25%;
+}
+
+.table-list {
+  white-space: nowrap;
+}
+
+.table-view {
+
+  tr {
+
+    > td {
+      border-bottom-color: transparent;
+      vertical-align: top;
+    }
+  }
+}
+
+@include color-mode(light) {
+
+  .table-view {
+
+    tr {
+  
+      > td {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+}
+
+@include color-mode(dark) {
+
+  .table-view {
+
+    tr {
+  
+      > td {
+        border-bottom-color: transparent;
+      }
+    }
+  }
 }

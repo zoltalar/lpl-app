@@ -1,4 +1,4 @@
-export default function useForm() {
+export default function useForm(prefix?: string) {
   const errors = ref<Record<string, string>>({})
   // Functions
   const clearErrors = (): void => {
@@ -18,10 +18,19 @@ export default function useForm() {
     }
     return matrix
   }
+  const inputId = (field: string): string => {
+    const elements: string[] = ['input']
+    if (prefix) {
+      elements.push(prefix)
+    }
+    elements.push(field)
+    return elements.join('-')
+  }
   return {
     errors,
     error,
     clearErrors,
-    getErrors
+    getErrors,
+    inputId
   }
 }

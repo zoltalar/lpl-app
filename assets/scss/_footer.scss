@@ -1,0 +1,53 @@
+// --------------------------------------------------
+// Footer
+// --------------------------------------------------
+
+.footer {
+  border-top: solid 1px rgba(0, 0, 0, .05);
+  bottom: 0;
+  color: $gray-550;
+  font-size: .9rem;
+  left: 0;
+  padding: 1.25rem 0;
+  position: fixed;
+  right: 0;
+  z-index: $zindex-dropdown;
+
+  .progress {
+    height: .625rem;
+    margin: 1rem 0;
+  }
+
+  .theme-light {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .theme-dark {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+  
+  @include media-breakpoint-up(md) {
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+
+    .progress {
+      margin: .5rem 0 0;
+    }
+  }
+}
+
+@include color-mode(light) {
+  
+  .footer {
+    background-color: $white;
+  }
+}
+
+@include color-mode(dark) {
+
+  .footer {
+    background-color: #33404a;
+  }
+}

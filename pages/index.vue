@@ -12,20 +12,18 @@
   />
 </template>
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 // Utilities
 definePageMeta({
   layout: 'authentication',
   auth: false
 })
-useHead({
-  bodyAttrs: {
-    class: 'authentication',
-  },
-})
 // Vars
 const error = ref<string>('')
 // Composables
+const { t } = useI18n()
 const { status } = useAuth()
+const { preferredTheme } = useUi()
 // Watch
 watch(status, async () => {
   if (status.value === 'authenticated') {
@@ -39,4 +37,19 @@ const handleError = (object: Record<string,string>) => {
 const handleLogin = async (): Promise<void> => {
   await navigateTo('/dashboard')
 }
+// Utilities
+useHead({
+  htmlAttrs: {
+    'data-bs-theme': preferredTheme(),
+  },
+  bodyAttrs: {
+    class: 'authentication',
+  },
+  titleTemplate: (title) => {
+    return `${title} - ${t('mailsender')}`
+  }
+})
+useSeoMeta({
+  'title': t('messages.title_authentication'),
+})
 </script>

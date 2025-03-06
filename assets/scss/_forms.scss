@@ -13,10 +13,8 @@
   }
 
   .form-control {
-    background-color: $top-nav-search-bg;
     border: none;
     border-radius: 1.875rem 0 0 1.875rem;
-    color: $gray-500;
     height: 2.375rem;
     padding-left: 1.25rem;
 
@@ -24,9 +22,35 @@
       box-shadow: none;
       outline: none;
     }
+  }
+}
 
-    &::placeholder {
+@include color-mode(light) {
+
+  .app-search {
+
+    .form-control {
+      background-color: $top-nav-search-bg;
       color: $gray-500;
+
+      &::placeholder {
+        color: $gray-500;
+      }
+    }
+  }
+}
+
+@include color-mode(dark) {
+
+  .app-search {
+
+    .form-control {
+      background-color: $top-nav-search-bg;
+      color: $gray-500;
+
+      &::placeholder {
+        color: $gray-500;
+      }
     }
   }
 }
@@ -41,7 +65,44 @@
     &:focus {
       text-decoration: none;
     }
+  }  
+}
+
+@include color-mode(light) {
+
+  .form-default {
+
+    .form-control:not(:disabled,.is-invalid),
+    .form-select:not(:disabled,.is-invalid) {
+      background-color: $gray-150;
+    }
   }
+}
+
+@include color-mode(dark) {
+
+  .form-default {
+
+    .form-control:not(:disabled,.is-invalid),
+    .form-select:not(:disabled,.is-invalid) {
+      background-color: $gray-800;
+      border-color: $gray-700;
+      
+      &:focus {
+        border-color: $gray-700;
+        box-shadow: 
+          var(--#{$prefix}focus-ring-x, 0) 
+          var(--#{$prefix}focus-ring-y, 0)
+          var(--#{$prefix}focus-ring-blur, 0) 
+          var(--#{$prefix}focus-ring-width) 
+          $gray-700;
+      }
+    }
+  } 
+}
+
+.form-group {
+  margin-bottom: $spacer;
 }
 
 .form-search {
