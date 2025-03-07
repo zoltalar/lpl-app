@@ -59,22 +59,22 @@
                     </tr>
                     <tr v-if="toggleFilters">
                       <th>
-                        <delayed-input class="form-control-sm" v-model="filters.id" />
+                        <filter-input v-model="filters.id" />
                       </th>
                       <th>
-                        <delayed-input class="form-control-sm" v-model="filters.first_name" />
+                        <filter-input v-model="filters.first_name" />
                       </th>
                       <th>
-                        <delayed-input class="form-control-sm" v-model="filters.last_name" />
+                        <filter-input v-model="filters.last_name" />
                       </th>
                       <th>
-                        <delayed-input class="form-control-sm" v-model="filters.email" />
+                        <filter-input v-model="filters.email" />
                       </th>
                       <th>
-                        <select class="form-select form-select-sm">
+                        <select class="form-select form-select-sm" v-model="filters.active">
                           <option></option>
-                          <option>Yes</option>
-                          <option>No</option>
+                          <option :value="1">{{ $t('yes') }}</option>
+                          <option :value="0">{{ $t('no') }}</option>
                         </select>
                       </th>
                       <th class="text-end">
@@ -98,7 +98,7 @@
                       </td>
                     </tr>
                     <tr v-if="users && users.length === 0">
-                      <td colspan="5">
+                      <td colspan="6">
                         {{ $t('messages.no_users') }}
                       </td>
                     </tr>
