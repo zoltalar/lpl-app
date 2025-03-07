@@ -59,16 +59,16 @@
                     </tr>
                     <tr v-if="toggleFilters">
                       <th>
-                        <input type="text" class="form-control form-control-sm" v-model="filters.id" />
+                        <delayed-input class="form-control-sm" v-model="filters.id" />
                       </th>
                       <th>
-                        <input type="text" class="form-control form-control-sm" v-model="filters.first_name" />
+                        <delayed-input class="form-control-sm" v-model="filters.first_name" />
                       </th>
                       <th>
-                        <input type="text" class="form-control form-control-sm" v-model="filters.last_name" />
+                        <delayed-input class="form-control-sm" v-model="filters.last_name" />
                       </th>
                       <th>
-                        <input type="text" class="form-control form-control-sm" v-model="filters.email" />
+                        <delayed-input class="form-control-sm" v-model="filters.email" />
                       </th>
                       <th>
                         <select class="form-select form-select-sm">

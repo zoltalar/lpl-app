@@ -1,12 +1,7 @@
 <template>
   <form class="form-default form-search" @submit.prevent>
     <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        @keydown="typing = true"
-        v-model="search"
-      >
+      <delayed-input v-model="search" />
       <button
         type="button"
         class="btn btn-secondary"
@@ -27,20 +22,11 @@ interface Props {
   modelValue?: string
 }
 defineProps<Props>()
-const emits = defineEmits(['update:modelValue', 'toggleFilters'])
+const emits = defineEmits(['update:modelValue'])
 const search = ref<string>('')
-const typing = ref<boolean>(false)
-let timeout: any = null
 // Watch
 watch(search, () => {
-  if (timeout) {
-    clearTimeout(timeout)
-    timeout = null
-  }
-  timeout = setTimeout(() => {
-    typing.value = false
-    emits('update:modelValue', search.value)
-  }, 400)
+  emits('update:modelValue', search.value)
 })
 // Functions
 const clear = (): void => {

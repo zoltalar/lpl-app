@@ -1,6 +1,6 @@
 <template>
   <form class="form-default" @submit.prevent="login">
-    <div class="mb-3">
+    <div class="form-group">
       <label for="input-email" class="form-label">
         {{ $t('email') }}        
       </label>
@@ -14,7 +14,7 @@
         v-model="form.email"
       />
     </div>
-    <div class="mb-3">
+    <div class="form-group">
       <nuxt-link to="/" class="float-end" tabindex="4">{{ $t('forgot_password?') }}</nuxt-link>
       <label for="input-password" class="form-label">
         {{ $t('password') }}        

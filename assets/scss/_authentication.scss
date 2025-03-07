@@ -2,6 +2,14 @@
 // Authentication
 // --------------------------------------------------
 
+.authentication {
+
+  .card {
+    margin: 0 auto;
+    max-width: 24rem;
+  }
+}
+
 .authentication-text {
   margin: ($spacer * 1.5) auto;
   width: 75%;
