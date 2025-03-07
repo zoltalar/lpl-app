@@ -17,6 +17,9 @@
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                 </div>
+                <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
+                  <span class="visually-hidden">{{ $t('loading') }}...</span>
+                </div>
               </div>
               <div class="col-md-5 col-lg-4">
                 <search-form
@@ -49,7 +52,7 @@
                       <th width="15%">
                         <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
                       </th>
-                      <th width="20%">
+                      <th width="25%">
                         <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
                       </th>
                       <th width="15%">
@@ -144,13 +147,14 @@ import type { IUser } from '~/types'
 const props = defineProps({
   endpoint: { type: String }
 })
-const { 
-  resource, 
+const {
+  busy,
+  resource,
   search,
   filters,
   sort,
   meta,
-  page, 
+  page,
   limit,
   info,
   refresh

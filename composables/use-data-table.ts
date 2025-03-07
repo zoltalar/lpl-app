@@ -8,6 +8,7 @@ export default function useDataTable(props: any) {
   const { t } = useI18n()
   const { $_ } = useNuxtApp()
   // Vars
+  const busy = ref<boolean>(false)
   const resource = ref<IApiResource>({
     data: [],
     meta: {} as IApiResourceMeta
@@ -55,9 +56,11 @@ export default function useDataTable(props: any) {
     return query
   }
   const refresh = async () => {
+    busy.value = true
     const { data, meta } = await useApi(props.endpoint, {
       params: query()
     })
+    busy.value = false
     resource.value.data = data
     resource.value.meta = meta
   }
@@ -74,6 +77,7 @@ export default function useDataTable(props: any) {
     refresh()
   })
   return {
+    busy,
     resource,
     search,
     filters,
