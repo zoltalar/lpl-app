@@ -36,6 +36,14 @@ export interface IList extends IBaseModel, ITimestamps {
   users_unconfirmed_unblacklisted_count?: number,
   users_blacklisted_count?: number
 }
+export interface IPermission extends IBaseModel, ITimestamps {
+  name: string,
+  guard_name: string
+}
+export interface IRole extends IBaseModel, ITimestamps {
+  name: string,
+  guard_name: string
+}
 export interface IUser extends IBaseModel, ITimestamps {
   first_name: string,
   last_name: string,

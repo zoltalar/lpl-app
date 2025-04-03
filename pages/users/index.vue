@@ -8,6 +8,8 @@ definePageMeta({
   layout: 'default'
 })
 // Composables
+const { fetchData } = useApp()
+await useAsyncData('app-data', () => fetchData())
 const { t } = useI18n()
 const { preferredTheme } = useUi()
 // Utilities

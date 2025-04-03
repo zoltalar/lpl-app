@@ -94,10 +94,60 @@
       </div>
       <div id="text-active" class="form-text">{{ $t('messages.form_text_user_active') }}</div>
     </div>
+    <div class="form-group">
+      <h6>
+        {{ $t('roles') }}
+        <required-input />
+      </h6>
+      <div class="form-check" v-for="role in roles">
+        <input
+          type="checkbox"
+          :id="inputId(role.name)"
+          class="form-check-input"
+          :value="role.name"
+          v-model="userRoles"
+        />
+        <label :for="inputId(role.name)" class="form-check-label">{{ $t(role.name) }}</label>
+      </div>
+      <div class="invalid-feedback d-block" v-if="error('roles') !== null">
+        {{ error('roles') }}
+      </div>
+    </div>
+    <div class="form-group mb-0">
+      <h6>
+        {{ $t('permissions') }}
+        <required-input v-if="requiresPermissions" />
+      </h6>
+      <div class="form-text mb-2" v-html="$t('messages.form_text_user_permissions')"></div>
+      <div class="checkboxes-permissions" v-if="groupedPermissions && Object.keys(groupedPermissions).length > 0">
+        <div class="form-group" v-for="(groups, key) in groupedPermissions">
+          <a href="/users" class="d-inline-block small text-secondary mb-1" :title="$t('toggle_group')" @click.prevent="toggleGroup(key.toString())">
+            {{ $t(key.toString()) }}
+            <i class="mdi mdi-checkbox-multiple-marked-circle"></i>
+          </a>
+          <template v-for="permission in groups">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                :id="inputId(permission.name)"
+                class="form-check-input"
+                :value="permission.name"
+                :disabled="!requiresPermissions"
+                v-model="userPermissions"
+              />
+              <label :for="inputId(permission.name)" class="form-check-label">{{ $t(action(permission)) }}</label>
+            </div>
+          </template>
+        </div>
+        <div class="invalid-feedback d-block" v-if="error('permissions') !== null">
+          {{ error('permissions') }}
+        </div>
+      </div>      
+    </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IUser } from '~/types'
+import type { IUser } from '@/types'
 // Vars
 const emits = defineEmits(['created'])
 const fields = {
@@ -117,13 +167,27 @@ const {
   getErrors,
   inputId
 } = useForm('user-create')
+const { 
+  userRoles,
+  userPermissions,
+  requiresPermissions,
+  toggleGroup
+} = useFormUser()
 const { inputType, inputIcon, toggleInput } = usePassword()
+const { grouped: groupedPermissions, action } = usePermission()
+const { roles } = useRole()
 const { $_ } = useNuxtApp()
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
   $_.forOwn(form, (value: any, key: string): void => {
     formData.append(key, value)
+  })
+  $_.forEach(userRoles.value, (name: string): void => {
+    formData.append('roles[]', name)
+  })
+  $_.forEach(userPermissions.value, (name: string): void => {
+    formData.append('permissions[]', name)
   })
   return formData
 }
@@ -146,10 +210,9 @@ const store = async () => {
   })
 }
 const reset = () => {
-  const keys = Object.keys(form)
-  keys.forEach((key: string) => {
-    form[key] = fields[key]
-  })
+  Object.assign(form, fields)
+  userRoles.value = ['user']
+  userPermissions.value = []
   clearErrors()
 }
 defineExpose({ reset, store })

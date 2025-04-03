@@ -1,6 +1,6 @@
 import { useI18n } from 'vue-i18n'
-import { useDataTableStore } from '~/store/data-table'
-import type { IApiResource, IApiResourceMeta } from '~/types'
+import { useDataTableStore } from '@/store/data-table'
+import type { IApiResource, IApiResourceMeta } from '@/types'
 
 export default function useDataTable(props: any) {
   // Composables

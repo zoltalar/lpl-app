@@ -12,3 +12,6 @@
     <app-footer :progress="0" />
   </client-only>
 </template>
+<script setup lang="ts">
+// Composables
+</script>

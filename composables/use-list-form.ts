@@ -1,5 +1,5 @@
-import { useCategoryStore } from '~/store/category'
-import type { ICategory, IList } from '~/types'
+import { useCategoryStore } from '@/store/category'
+import type { ICategory, IList } from '@/types'
 export default function useListForm() {
   const fields = {
     name: '',
