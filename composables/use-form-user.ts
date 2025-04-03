@@ -7,6 +7,7 @@ export default function useFormUser() {
   // Composables
   const { languages } = useLanguage()
   const { permissions, section } = usePermission()
+  const { dateFormats, timeFormats } = useUser()
   // Computed
   const requiresPermissions = computed<boolean>(() => {
     return userRoles.value.length === 1 && userRoles.value.includes('user')
@@ -30,6 +31,8 @@ export default function useFormUser() {
     userRoles,
     userPermissions,
     languages,
+    dateFormats,
+    timeFormats,
     requiresPermissions,
     toggleGroup
   }

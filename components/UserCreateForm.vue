@@ -60,14 +60,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="input-password" class="form-label">{{ $t('password') }}</label>
+      <label :for="inputId('password')" class="form-label">{{ $t('password') }}</label>
       <required-input />
       <div class="input-group">
         <input
           :type="inputType"
           class="form-control"
           :class="{'is-invalid': error('password') !== null}"
-          id="input-password"
+          :id="inputId('password')"
           maxlength="40"
           v-model="form.password"
         />
@@ -80,14 +80,33 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="input-language-id" class="form-label">{{ $t('language') }}</label>
-      <required-input />
-      <select class="form-select" :disabled="languages.length === 0" v-model="form.language_id">
+      <label :for="inputId('language-id')" class="form-label">{{ $t('language') }}</label>
+      <select :id="inputId('language-id')" class="form-select" :disabled="languages.length === 0" v-model="form.language_id">
         <option :value="null"></option>
         <option :value="language.id" v-for="language in languages">{{ language.name }}</option>
       </select>
       <div class="invalid-feedback d-block" v-if="error('language_id') !== null">
         {{ error('language_id') }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label :for="inputId('date-format')" class="form-label">{{ $t('date_format') }}</label>
+      <select :id="inputId('date-format')" class="form-select" :aria-label="$t('select_date_format')" v-model="form.date_format">
+        <option :value="null"></option>
+        <option :value="format" v-for="(format) in dateFormats">{{ useDateFormat(new Date(), format).value }}</option>
+      </select>
+      <div class="invalid-feedback d-block" v-if="error('date_format') !== null">
+        {{ error('date_format') }}
+      </div>
+    </div>
+    <div class="form-group">
+      <label :for="inputId('time-format')" class="form-label">{{ $t('time_format') }}</label>
+      <select :id="inputId('time-format')" class="form-select" :aria-label="$t('select_time_format')" v-model="form.time_format">
+        <option :value="null"></option>
+        <option :value="format" v-for="(format) in timeFormats">{{ useDateFormat(new Date(), format).value }}</option>
+      </select>
+      <div class="invalid-feedback d-block" v-if="error('time_format') !== null">
+        {{ error('time_format') }}
       </div>
     </div>
     <div class="form-group">
@@ -158,6 +177,7 @@
   </form>
 </template>
 <script setup lang="ts">
+import { useDateFormat } from '@vueuse/core'
 import type { IUser } from '@/types'
 // Vars
 const emits = defineEmits(['created'])
@@ -167,6 +187,9 @@ const fields = {
   email: '',
   phone: '',
   password: '',
+  language_id: null,
+  date_format: null,
+  time_format: null,
   active: 1
 }
 const form: Partial<IUser> = reactive({...fields})
@@ -182,6 +205,8 @@ const {
   userRoles,
   userPermissions,
   languages,
+  dateFormats,
+  timeFormats,
   requiresPermissions,
   toggleGroup
 } = useFormUser()

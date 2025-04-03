@@ -1,4 +1,4 @@
-<template>
+<template v-if="user">
   <div class="alert alert-danger" role="alert" v-if="user.active !== 1">
     {{ $t('messages.user_inactive') }}
   </div>
@@ -76,6 +76,28 @@
           </tr>
           <tr>
             <td class="table-attribute">
+              {{ $t('date_format') }}
+            </td>
+            <td>
+              <span v-if="user.date_format">
+                {{ useDateFormat(new Date(), user.date_format) }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
+              {{ $t('time_format') }}
+            </td>
+            <td>
+              <span v-if="user.time_format">
+                {{ useDateFormat(new Date(), user.time_format) }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
               {{ $t('active') }}
             </td>
             <td>
@@ -87,7 +109,10 @@
               {{ $t('created_at') }}
             </td>
             <td>
-              {{ user.created_at }}
+              <span v-if="user.created_at">
+                {{ useDateFormat(user.created_at, dateTimeFormat(user)) }}
+              </span>
+              <span v-else> - </span>
             </td>
           </tr>
           <tr>
@@ -95,7 +120,10 @@
               {{ $t('updated_at') }}
             </td>
             <td>
-              {{ user.updated_at }}
+              <span v-if="user.updated_at">
+                {{ useDateFormat(user.updated_at, dateTimeFormat(user)) }}
+              </span>
+              <span v-else> - </span>
             </td>
           </tr>
         </tbody>
@@ -116,15 +144,18 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { IList } from '~/types'
+import { useDateFormat } from '@vueuse/core'
+import type { IUser } from '@/types'
 const props = defineProps({
   user: {
     type: Object,
     required: true
   }
 })
+// Composables
+const { dateTimeFormat } = useUser()
 // Computed
-const lists = computed<IList[]>(() => {
-  return props.user.lists
+const user = computed<IUser>(() => {
+  return props.user as IUser
 })
 </script>
