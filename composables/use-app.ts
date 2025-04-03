@@ -1,3 +1,4 @@
+import { useLanguageStore } from '@/store/language'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
 
@@ -5,12 +6,19 @@ export default function useApp() {
   // Vars
   const progress = ref<number>(0)
   // Composables
+  const languageStore = useLanguageStore()
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 50
+    const increment = 33.33
+    if (languageStore.getCollection.length === 0) {
+      const languages = await languageStore.fetchCollection()
+      languageStore.setCollection(languages)
+      responses.push(languages)
+      progress.value += increment
+    }
     if (permissionStore.getCollection.length === 0) {
       const permissions = await permissionStore.fetchCollection()
       permissionStore.setCollection(permissions)

@@ -5,6 +5,7 @@ export default function useFormUser() {
   const userRoles = ref<string[]>(['user'])
   const userPermissions = ref<string[]>([])
   // Composables
+  const { languages } = useLanguage()
   const { permissions, section } = usePermission()
   // Computed
   const requiresPermissions = computed<boolean>(() => {
@@ -28,6 +29,7 @@ export default function useFormUser() {
   return {
     userRoles,
     userPermissions,
+    languages,
     requiresPermissions,
     toggleGroup
   }

@@ -13,8 +13,8 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create">{{ $t('create') }}</button>
+                <div class="btn-group" role="group" :aria-label="$t('user_options')">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-user-create">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
@@ -127,7 +127,7 @@
       </div>
     </div>
     <toasts :messages="messages" />
-    <modal id="modal-subscriber-create" :title="$t('create_user')" size="md">
+    <modal id="modal-user-create" :title="$t('create_user')" size="md">
       <user-create-form ref="formUserCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
@@ -135,7 +135,7 @@
         <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
       </template>
     </modal>
-    <modal id="modal-subscriber-view" :title="$t('subsciber_details')" size="lg">
+    <modal id="modal-user-view" :title="$t('user_details')" size="lg">
       <user-view :user="selectedUser" />
     </modal>
   </div>
@@ -194,9 +194,9 @@ const handleCreated = (): void => {
   onCreated()
 }
 const onCreated = () => {
-  const el = document.getElementById('modal-subscriber-create')
+  const el = document.getElementById('modal-user-create')
   const modal = $bootstrap.Modal.getOrCreateInstance(el)
-  const model = t('subscriber')
+  const model = t('user')
   modal.hide()
   refresh()
   addToast({ 
@@ -211,7 +211,7 @@ const reset = (): void => {
 }
 const show = (user: IUser): void => {
   selectedUser.value = user
-  const el = document.getElementById('modal-subscriber-view')
+  const el = document.getElementById('modal-user-view')
   const modal = new $bootstrap.Modal(el)
   modal.show()
 }

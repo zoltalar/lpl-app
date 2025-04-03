@@ -25,6 +25,10 @@ export interface ICategory extends IBaseModel {
   name: string,
   lists_count?: number
 }
+export interface ILanguage extends IBaseModel {
+  name: string,
+  code: string
+}
 export interface IList extends IBaseModel, ITimestamps {
   name: string,
   description: string | null,
@@ -50,7 +54,10 @@ export interface IUser extends IBaseModel, ITimestamps {
   email: string,
   phone: string,
   password: string,
-  active: number | null
+  active: number | null,
+  language_id: number | null,
+  roles?: IRole[] | null,
+  permissions?: IPermission[] | null
 }
 export interface ITimestamps {
   created_at: string | null,

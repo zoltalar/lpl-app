@@ -80,6 +80,17 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="input-language-id" class="form-label">{{ $t('language') }}</label>
+      <required-input />
+      <select class="form-select" :disabled="languages.length === 0" v-model="form.language_id">
+        <option :value="null"></option>
+        <option :value="language.id" v-for="language in languages">{{ language.name }}</option>
+      </select>
+      <div class="invalid-feedback d-block" v-if="error('language_id') !== null">
+        {{ error('language_id') }}
+      </div>
+    </div>
+    <div class="form-group">
       <div class="form-check form-switch">
         <input
           type="checkbox"
@@ -170,6 +181,7 @@ const {
 const { 
   userRoles,
   userPermissions,
+  languages,
   requiresPermissions,
   toggleGroup
 } = useFormUser()
