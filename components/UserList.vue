@@ -94,7 +94,7 @@
                       <td><yes-no :expression="user.active" /></td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(user)"><i class="mdi mdi-pencil"></i></button>
                           <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)"><i class="mdi mdi-eye-outline"></i></button>
                           <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)"><i class="mdi mdi-close"></i></button>
                         </div>
@@ -135,6 +135,13 @@
         <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
       </template>
     </modal>
+    <modal id="modal-user-edit" :title="$t('edit_user')" size="md">
+      <user-edit-form :user="selectedUser" ref="formUserEdit" @updated="handleUpdated" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+      </template>
+    </modal>
     <modal id="modal-user-view" :title="$t('user_details')" size="lg">
       <user-view :user="selectedUser" />
     </modal>
@@ -161,6 +168,7 @@ const {
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
 const formUserCreate = ref<null | { reset: () => void, store: () => void }>(null)
+const formUserEdit = ref<null | { update: () => void }>(null)
 const selectedUser = ref<IUser>({} as IUser)
 // Composables
 const { t } = useI18n()
@@ -190,18 +198,35 @@ const destroy = async (user: IUser) => {
     })
   }
 }
+const edit = (user: IUser): void => {
+  selectedUser.value = user
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
+  modal.show()
+}
 const handleCreated = (): void => {
   onCreated()
 }
+const handleUpdated = (): void => {
+  onUpdated()
+}
 const onCreated = () => {
-  const el = document.getElementById('modal-user-create')
-  const modal = $bootstrap.Modal.getOrCreateInstance(el)
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-create')
   const model = t('user')
   modal.hide()
   refresh()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
+  })
+}
+const onUpdated = () => {
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
+  const model = t('user')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_updated', { model })
   })
 }
 const reset = (): void => {
@@ -211,13 +236,17 @@ const reset = (): void => {
 }
 const show = (user: IUser): void => {
   selectedUser.value = user
-  const el = document.getElementById('modal-user-view')
-  const modal = new $bootstrap.Modal(el)
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-view')
   modal.show()
 }
 const store = (): void => {
   if (formUserCreate.value) {
     formUserCreate.value.store()
+  }
+}
+const update = (): void => {
+  if (formUserEdit.value) {
+    formUserEdit.value.update()
   }
 }
 onMounted(() => {

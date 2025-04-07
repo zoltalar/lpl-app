@@ -61,7 +61,6 @@
     </div>
     <div class="form-group">
       <label :for="inputId('password')" class="form-label">{{ $t('password') }}</label>
-      <required-input />
       <div class="input-group">
         <input
           :type="inputType"
@@ -178,9 +177,13 @@
 </template>
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core'
-import type { IUser } from '@/types'
+import type { IPermission, IRole, IUser } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+interface Props {
+  user?: IUser | null
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['updated'])
 const fields = {
   first_name: '',
   last_name: '',
@@ -200,7 +203,7 @@ const {
   error,
   getErrors,
   inputId
-} = useForm('user-create')
+} = useForm('user-edit')
 const { 
   userRoles,
   userPermissions,
@@ -214,9 +217,32 @@ const { inputType, inputIcon, toggleInput } = usePassword()
 const { grouped: groupedPermissions, action } = usePermission()
 const { roles } = useRole()
 const { $_ } = useNuxtApp()
+// Computed
+const user = computed<IUser>(() => {
+  return props.user as IUser
+})
+// Watch
+watch(user, () => {
+  if (user.value) {
+    Object.assign(form, user.value)
+    if (user.value.roles) {
+      userRoles.value = []
+      user.value.roles.forEach((role: IRole) => {
+        userRoles.value.push(role.name)
+      })
+    }
+    if (user.value.permissions) {
+      userPermissions.value = []
+      user.value.permissions.forEach((permission: IPermission) => {
+        userPermissions.value.push(permission.name)
+      })
+    }
+  }
+}, { immediate: true })
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
+  formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
@@ -230,17 +256,16 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const store = async () => {
-  const user: FormData = normalize()
-  await useApi('/admin/users/store', {
+const update = async () => {
+  const userData: FormData = normalize()
+  await useApi(`/admin/users/update/${user.value.id}`, {
     method: 'post',
-    body: user,
+    body: userData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -248,11 +273,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  Object.assign(form, fields)
-  userRoles.value = ['user']
-  userPermissions.value = []
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>

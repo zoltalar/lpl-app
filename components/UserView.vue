@@ -1,5 +1,5 @@
 <template v-if="user">
-  <div class="alert alert-danger" role="alert" v-if="user.active !== 1">
+  <div class="alert alert-danger text-center" role="alert" v-if="user.active !== 1">
     {{ $t('messages.user_inactive') }}
   </div>
   <tabs>
