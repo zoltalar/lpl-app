@@ -184,7 +184,7 @@ const destroy = async (user: IUser) => {
   const model = t('user')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
-    await useApi(`/admin/users/destroy/${user.id}`, {
+    await useApi(`/admin/users/${user.id}`, {
       method: 'delete',
       onResponse({ request, response, options }) {
         if (response.status === 204) {
@@ -192,6 +192,12 @@ const destroy = async (user: IUser) => {
           addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
+          })
+        } else {
+          addToast({
+            header: t('failure'),
+            body: t('messages.model_name_destroy_error', { model, name }),
+            type: 'danger'
           })
         }
       },

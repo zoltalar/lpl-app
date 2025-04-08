@@ -58,6 +58,7 @@ export interface IUser extends IBaseModel, ITimestamps {
   language_id: number | null,
   date_format: string | null,
   time_format: string | null,
+  language?: ILanguage | null,
   roles?: IRole[] | null,
   permissions?: IPermission[] | null
 }
@@ -68,7 +69,8 @@ export interface ITimestamps {
 // Types
 export type TToastMessage = {
   header: string,
-  body: string
+  body: string,
+  type?: 'default' | 'danger'
 }
 export type TUserMeta = {
   time_formats: string[],
