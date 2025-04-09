@@ -1,9 +1,10 @@
 import { usePermissionStore } from '@/store/permission'
-import type { IPermission } from '@/types'
+import type { IPermission, IUser } from '@/types'
 
 export default function usePermission() {
   // Composables
   const permissionStore = usePermissionStore()
+  const { data: currentUser } = useAuth()
   const { $_ } = useNuxtApp()
   // Computed
   const grouped = computed(() => {
@@ -25,6 +26,15 @@ export default function usePermission() {
     }
     return ''
   }
+  const can = (name: string): boolean => {
+    const user = toRaw(currentUser.value) as IUser
+    if (user && user.permissions) {
+      return user.permissions.find((permission: IPermission): boolean => {
+        return permission.name === name
+      }) !== undefined
+    }
+    return false
+  }
   const section = (name: string): string => {
     const elements = name.split('-')
     elements.pop()
@@ -34,6 +44,7 @@ export default function usePermission() {
     grouped,
     permissions,
     action,
+    can,
     section
   }
 }

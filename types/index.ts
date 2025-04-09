@@ -21,6 +21,13 @@ export interface IApiResourceMetaLink {
 export interface IBaseModel {
   id: number
 }
+export interface IAttachment extends IBaseModel, ITimestamps, IUserstamps {
+  name: string,
+  description: string | null,
+  file: string,
+  mime: string | null,
+  size: number | null
+}
 export interface ICategory extends IBaseModel {
   name: string,
   lists_count?: number
@@ -48,9 +55,7 @@ export interface IRole extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
 }
-export interface IUser extends IBaseModel, ITimestamps {
-  first_name: string,
-  last_name: string,
+export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,
   phone: string,
   password: string,
@@ -62,9 +67,19 @@ export interface IUser extends IBaseModel, ITimestamps {
   roles?: IRole[] | null,
   permissions?: IPermission[] | null
 }
+export interface INamable {
+  first_name: string,
+  last_name: string
+}
 export interface ITimestamps {
   created_at: string | null,
   updated_at: string | null
+}
+export interface IUserstamps {
+  creator_id: number | null,
+  updater_id: number | null,
+  creator?: IUser | null,
+  updater?: IUser | null,
 }
 // Types
 export type TToastMessage = {

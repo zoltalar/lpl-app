@@ -36,7 +36,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="dropdown-user" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="/img/avatar.jpg" :alt="$t('user')" class="avatar rounded-circle me-2" />
-              <span v-if="data">{{ data.first_name }}</span>
+              <span v-if="currentUser">{{ currentUser.first_name }}</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-user">
               <li><nuxt-link to="/" class="dropdown-item">{{ $t('settings') }}</nuxt-link></li>
@@ -49,8 +49,13 @@
   </nav>
 </template>
 <script setup lang="ts">
+import type { IUser } from '@/types'
 // Composables
 const { data, signOut } = useAuth()
+// Computed
+const currentUser = computed<IUser>(() => {
+  return toRaw(data.value) as IUser
+})
 // Functions
 const logout = async (): Promise<void> => {
   await signOut({ redirect: false })

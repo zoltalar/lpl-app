@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('users') }}</h4>
+          <h4 class="page-title">{{ $t('attachments') }}</h4>
         </div>
       </div>
     </div>
@@ -13,8 +13,8 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" :aria-label="$t('user_options')">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-user-create" v-if="hasRole('admin') || can('user-create')">{{ $t('create') }}</button>
+                <div class="btn-group" role="group" :aria-label="$t('attachment_options')">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-attachment-create" v-if="hasRole('admin') || can('attachment-create')">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
@@ -44,19 +44,13 @@
                   <thead>
                     <tr>
                       <th width="10%">
-                        <sortable-column column="users.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                        <sortable-column column="attachments.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                      </th>
+                      <th width="50%">
+                        <sortable-column column="attachments.name" v-model="sort">{{ $t('name') }}</sortable-column>
                       </th>
                       <th width="15%">
-                        <sortable-column column="users.first_name" v-model="sort">{{ $t('first_name') }}</sortable-column>
-                      </th>
-                      <th width="15%">
-                        <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
-                      </th>
-                      <th width="25%">
-                        <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
-                      </th>
-                      <th width="15%">
-                        <sortable-column column="users.active" v-model="sort">{{ $t('active') }}</sortable-column>
+                        <sortable-column column="attachments.size" v-model="sort">{{ $t('size') }}</sortable-column>
                       </th>
                       <th class="text-end">{{ $t('actions') }}</th>
                     </tr>
@@ -65,20 +59,10 @@
                         <filter-input v-model="filters.id" />
                       </th>
                       <th>
-                        <filter-input v-model="filters.first_name" />
+                        <filter-input v-model="filters.name" />
                       </th>
                       <th>
-                        <filter-input v-model="filters.last_name" />
-                      </th>
-                      <th>
-                        <filter-input v-model="filters.email" />
-                      </th>
-                      <th>
-                        <select class="form-select form-select-sm" v-model="filters.active">
-                          <option></option>
-                          <option :value="1">{{ $t('yes') }}</option>
-                          <option :value="0">{{ $t('no') }}</option>
-                        </select>
+                        -
                       </th>
                       <th class="text-end">
                         -
@@ -86,23 +70,26 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users">
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.first_name }}</td>
-                      <td>{{ user.last_name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td><yes-no :expression="user.active" /></td>
+                    <tr v-for="attachment in attachments">
+                      <td>{{ attachment.id }}</td>
+                      <td>{{ attachment.name }}</td>
+                      <td>
+                        <span v-if="attachment.size">
+                          {{ fileSize(attachment.size) }} kB
+                        </span>
+                        <span v-else> - </span>
+                      </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(user)" v-if="hasRole('admin') || can('user-edit')"><i class="mdi mdi-pencil"></i></button>
-                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)" v-if="hasRole('admin') || can('user-view')"><i class="mdi mdi-eye-outline"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)" v-if="hasRole('admin') || can('user-delete')"><i class="mdi mdi-close"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(attachment)" v-if="hasRole('admin') || can('attachment-edit')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(attachment)" v-if="hasRole('admin') || can('attachment-view')"><i class="mdi mdi-eye-outline"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(attachment)" v-if="hasRole('admin') || can('attachment-delete')"><i class="mdi mdi-close"></i></button>
                         </div>
                       </td>
                     </tr>
-                    <tr v-if="users && users.length === 0">
-                      <td colspan="6">
-                        {{ $t('messages.no_users') }}
+                    <tr v-if="attachments && attachments.length === 0">
+                      <td colspan="4">
+                        {{ $t('messages.no_attachments') }}
                       </td>
                     </tr>
                   </tbody>
@@ -128,13 +115,13 @@
     </div>
     <toasts :messages="messages" />
     <modal
-      id="modal-user-create"
-      :title="$t('create_user')"
+      id="modal-attachment-create"
+      :title="$t('create_attachment')"
       size="md"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <user-create-form ref="formUserCreate" @created="handleCreated" />
+      <attachment-create-form ref="formAttachmentCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
@@ -142,30 +129,30 @@
       </template>
     </modal>
     <modal
-      id="modal-user-edit"
-      :title="$t('edit_user')"
+      id="modal-attachment-edit"
+      :title="$t('edit_attachment')"
       size="md"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <user-edit-form :user="selectedUser" ref="formUserEdit" @updated="handleUpdated" />
+      <attachment-edit-form :attachment="selectedAttachment" ref="formAttachmentEdit" @updated="handleUpdated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
       </template>
     </modal>
     <modal
-      id="modal-user-view"
-      :title="$t('user_details')"
+      id="modal-attachment-view"
+      :title="$t('attachment_details')"
       size="lg"
     >
-      <user-view :user="selectedUser" />
+      <attachment-view :attachment="selectedAttachment" />
     </modal>
   </div>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { IUser } from '@/types'
+import type { IAttachment } from '@/types'
 // Vars
 const props = defineProps({
   endpoint: { type: String }
@@ -183,26 +170,27 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
-const formUserCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formUserCreate')
-const formUserEdit = useTemplateRef<{ update: () => void }>('formUserEdit')
-const selectedUser = ref<IUser>({} as IUser)
+const formAttachmentCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formAttachmentCreate')
+const formAttachmentEdit = useTemplateRef<{ update: () => void }>('formAttachmentEdit')
+const selectedAttachment = ref<IAttachment>({} as IAttachment)
 // Composables
 const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
+const { fileSize } = useFile()
 const { $bootstrap } = useNuxtApp()
 // Computed
-const users = computed<IUser[]>(() => {
-  return resource?.value?.data as IUser[]
+const attachments = computed<IAttachment[]>(() => {
+  return resource?.value?.data as IAttachment[]
 })
 // Functions
-const destroy = async (user: IUser) => {
-  const name = user.email
-  const model = t('user')
+const destroy = async (attachment: IAttachment) => {
+  const name = attachment.name
+  const model = t('attachment')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
-    await useApi(`/admin/users/${user.id}`, {
+    await useApi(`/admin/attachments/${attachment.id}`, {
       method: 'delete',
       onResponse({ request, response, options }) {
         if (response.status === 204) {
@@ -222,9 +210,9 @@ const destroy = async (user: IUser) => {
     })
   }
 }
-const edit = (user: IUser): void => {
-  selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
+const edit = (attachment: IAttachment): void => {
+  selectedAttachment.value = attachment
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
   modal.show()
 }
 const handleCreated = (): void => {
@@ -234,8 +222,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-create')
-  const model = t('user')
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-create')
+  const model = t('attachment')
   modal.hide()
   refresh()
   addToast({ 
@@ -244,8 +232,8 @@ const onCreated = () => {
   })
 }
 const onUpdated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
-  const model = t('user')
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
+  const model = t('attachment')
   modal.hide()
   refresh()
   addToast({ 
@@ -254,18 +242,18 @@ const onUpdated = () => {
   })
 }
 const reset = (): void => {
-  formUserCreate.value?.reset()
+  formAttachmentCreate.value?.reset()
 }
-const show = (user: IUser): void => {
-  selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-view')
+const show = (attachment: IAttachment): void => {
+  selectedAttachment.value = attachment
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-view')
   modal.show()
 }
 const store = (): void => {
-  formUserCreate.value?.store()
+  formAttachmentCreate.value?.store()
 }
 const update = (): void => {
-  formUserEdit.value?.update()
+  formAttachmentEdit.value?.update()
 }
 onMounted(() => {
   refresh()

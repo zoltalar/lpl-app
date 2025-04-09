@@ -17,18 +17,14 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps({
-  title: { 
-    type: String,
-    default: ''
-  },
-  size: {
-    type: String,
-    default: 'sm',
-    validator(value: string): boolean {
-      return ['sm', 'md', 'lg', 'xl'].includes(value)
-    }
-  }
+// Vars
+interface Props {
+  title: string,
+  size: 'sm' | 'md' | 'lg' | 'xl'
+}
+const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  size: 'sm'
 })
 const css = (): Record<string, boolean> => {
   let classes: Record<string, boolean> = {}

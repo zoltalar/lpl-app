@@ -17,7 +17,10 @@
             <li class="nav-item">
               <nuxt-link to="/" class="nav-link">{{ $t('lists') }}</nuxt-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="hasRole('admin') || can('attachment-view')">
+              <nuxt-link to="/attachments" class="nav-link">{{ $t('attachments') }}</nuxt-link>
+            </li>
+            <li class="nav-item" v-if="hasRole('admin') || can('user-view')">
               <nuxt-link to="/users" class="nav-link">{{ $t('users') }}</nuxt-link>
             </li>
           </ul>
@@ -26,3 +29,8 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+// Composables
+const { has: hasRole } = useRole()
+const { can } = usePermission()
+</script>
