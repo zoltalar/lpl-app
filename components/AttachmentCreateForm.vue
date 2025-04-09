@@ -64,7 +64,14 @@ const {
   getErrors,
   inputId
 } = useForm('attachment-create')
+const { fileName } = useFile()
 const { $_ } = useNuxtApp()
+// Watch
+watch(file, () => {
+  if (file.value instanceof File && form.name === '') {
+    form.name = fileName(file.value.name)
+  }
+})
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
