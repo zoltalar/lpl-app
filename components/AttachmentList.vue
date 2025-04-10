@@ -83,6 +83,7 @@
                         <div class="btn-group btn-group-sm">
                           <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(attachment)" v-if="hasRole('admin') || can('attachment-edit')"><i class="mdi mdi-pencil"></i></button>
                           <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(attachment)" v-if="hasRole('admin') || can('attachment-view')"><i class="mdi mdi-eye-outline"></i></button>
+                          <attachment-download :attachment="attachment" :title="$t('download')" class="btn btn-light" v-if="hasRole('admin') || can('attachment-view')"><i class="mdi mdi-download"></i></attachment-download>
                           <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(attachment)" v-if="hasRole('admin') || can('attachment-delete')"><i class="mdi mdi-close"></i></button>
                         </div>
                       </td>

@@ -61,7 +61,7 @@
             </td>
             <td>
               <span v-if="attachment.creator">
-                {{ fullName(attachment.creator) }}
+                {{ fullName(attachment.creator, true) }}
               </span>
               <span v-else> - </span>
             </td>
@@ -72,7 +72,7 @@
             </td>
             <td>
               <span v-if="attachment.updater">
-                {{ fullName(attachment.updater) }}
+                {{ fullName(attachment.updater, true) }}
               </span>
               <span v-else> - </span>
             </td>
