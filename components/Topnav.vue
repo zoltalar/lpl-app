@@ -17,11 +17,12 @@
             <li class="nav-item">
               <nuxt-link to="/" class="nav-link">{{ $t('lists') }}</nuxt-link>
             </li>
-            <li class="nav-item" v-if="hasRole('admin') || can('attachment-view')">
-              <nuxt-link to="/attachments" class="nav-link">{{ $t('attachments') }}</nuxt-link>
-            </li>
-            <li class="nav-item" v-if="hasRole('admin') || can('user-view')">
-              <nuxt-link to="/users" class="nav-link">{{ $t('users') }}</nuxt-link>
+            <li class="nav-item dropdown">
+              <a id="top-nav-system" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('system') }}</a>
+              <div class="dropdown-menu" aria-labelledby="top-nav-system">
+                <nuxt-link to="/attachments" class="dropdown-item" v-if="hasRole('admin') || can('attachment-view')">{{ $t('attachments') }}</nuxt-link>
+                <nuxt-link to="/users" class="dropdown-item" v-if="hasRole('admin') || can('user-view')">{{ $t('users') }}</nuxt-link>
+              </div>
             </li>
           </ul>
         </div>
