@@ -85,12 +85,11 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core'
 import type { IAttachment, IUser } from '@/types'
-const props = defineProps({
-  attachment: {
-    type: Object,
-    required: true
-  }
-})
+// Vars
+interface Props {
+  attachment?: IAttachment | null
+}
+const props = defineProps<Props>()
 // Composables
 const { data } = useAuth()
 const { dateTimeFormat, fullName } = useUser()
