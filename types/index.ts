@@ -30,7 +30,7 @@ export interface IAttachment extends IBaseModel, ITimestamps, IUserstamps {
 }
 export interface IAttribute extends IBaseModel, ITimestamps, IUserstamps {
   slug: string,
-  input_type: number,
+  input_type: number | null,
   labels: IAttributeLabel[] | null,
   default_values: IAttributeDefaultValue[] | null,
   maxlength: number,
@@ -116,6 +116,9 @@ export type TToastMessage = {
   header: string,
   body: string,
   type?: 'default' | 'danger'
+}
+export type TAttributeMeta = {
+  input_types: Record<number, string>
 }
 export type TUserMeta = {
   time_formats: string[],

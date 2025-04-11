@@ -1,3 +1,4 @@
+import { useAttributeStore } from '@/store/attribute'
 import { useLanguageStore } from '@/store/language'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
@@ -8,6 +9,7 @@ export default function useApp() {
   const progress = ref<number>(0)
   // Composables
   const { $_ } = useNuxtApp()
+  const attributeStore = useAttributeStore()
   const languageStore = useLanguageStore()
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
@@ -15,7 +17,13 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 25
+    const increment = 20
+    if ($_.isEmpty(attributeStore.getMeta)) {
+      const meta = await attributeStore.fetchMeta()
+      attributeStore.setMeta(meta)
+      responses.push(meta)
+      progress.value += increment
+    }
     if (languageStore.getCollection.length === 0) {
       const languages = await languageStore.fetchCollection()
       languageStore.setCollection(languages)

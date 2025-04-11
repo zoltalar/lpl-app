@@ -133,7 +133,7 @@
     <modal
       id="modal-attribute-create"
       :title="$t('create_attribute')"
-      size="md"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >

@@ -8,7 +8,18 @@ export default function useLanguage() {
   const languages = computed<ILanguage[]>(() => {
     return languageStore.getCollection
   })
+  // Functions
+  const name = (code: string): string => {
+    const language = languages.value.find((language: ILanguage) => {
+      return language.code === code
+    })
+    if (language) {
+      return language.name
+    }
+    return ''
+  }
   return {
-    languages
+    languages,
+    name
   }
 }
