@@ -28,6 +28,36 @@ export interface IAttachment extends IBaseModel, ITimestamps, IUserstamps {
   mime: string | null,
   size: number | null
 }
+export interface IAttribute extends IBaseModel, ITimestamps, IUserstamps {
+  slug: string,
+  input_type: number,
+  labels: IAttributeLabel[] | null,
+  default_values: IAttributeDefaultValue[] | null,
+  maxlength: number,
+  placeholders: IAttributePlaceholder[] | null,
+  options: IAttributeOption[] | null,
+  input_texts: IAttributeInputText[] | null,
+  required: number | null,
+  active: number | null
+}
+export interface IAttributeJson {
+  code: string
+}
+export interface IAttributeDefaultValue extends IAttributeJson {
+  value: string
+}
+export interface IAttributeInputText extends IAttributeJson {
+  text: string
+}
+export interface IAttributeLabel extends IAttributeJson {
+  label: string
+}
+export interface IAttributeOption extends IAttributeJson {
+  option: string
+}
+export interface IAttributePlaceholder extends IAttributeJson {
+  placeholder: string
+}
 export interface ICategory extends IBaseModel {
   name: string,
   lists_count?: number

@@ -14,6 +14,9 @@
                 <nuxt-link to="/" class="dropdown-item">{{ $t('import') }}</nuxt-link>
               </div>
             </li>
+            <li class="nav-item" v-if="hasRole('admin') || can('attribute-view')">
+              <nuxt-link to="/attributes" class="nav-link">{{ $t('attributes') }}</nuxt-link>
+            </li>
             <li class="nav-item">
               <nuxt-link to="/" class="nav-link">{{ $t('lists') }}</nuxt-link>
             </li>
