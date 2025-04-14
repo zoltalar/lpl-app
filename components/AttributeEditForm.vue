@@ -1,5 +1,5 @@
 <template>
-  <form class="form-default" @submit.prevent="store">
+  <form class="form-default" @submit.prevent="update">
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
@@ -25,20 +25,14 @@
       <div class="col-lg-6">
         <div class="form-group">
           <label :for="inputId('input-type')" class="form-label">{{ $t('input_type') }}</label>
-          <required-input />
-          <select
-            class="form-select"
-            :class="{'is-invalid': error('input_type') !== null}"
+          <input
+            type="text"
+            class="form-control"
             :id="inputId('input-type')"
-            :aria-label="$t('select_input_type')"
-            v-model="form.input_type"
-          >
-            <option :value="null"></option>
-            <option :value="type" v-for="(name, type) in inputTypes">{{ name }}</option>
-          </select>
-          <div class="invalid-feedback d-block" v-if="error('input_type') !== null">
-            {{ error('input_type') }}
-          </div>
+            maxlength="255"
+            :value="inputTypeName(Number(form.input_type))"
+            readonly
+          />
         </div>
       </div>
       <div class="col-lg-6" v-for="(label, i) in labels">
@@ -176,6 +170,7 @@
 </template>
 <script setup lang="ts">
 import type {
+  IAttribute,
   IAttributeInputText,
   IAttributeLabel,
   IAttributeOption,
@@ -183,17 +178,19 @@ import type {
   ILanguage
 } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+interface Props {
+  attribute?: IAttribute | null
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['updated'])
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
-} = useForm('attribute-create')
+} = useForm('attribute-edit')
 const {
-  fields,
   form,
   labels,
   placeholders,
@@ -205,22 +202,62 @@ const {
   optionable,
   placeholderable
 } = useFormAttribute()
-const { inputTypes } = useAttribute()
+const { inputTypeName } = useAttribute()
 const { $_ } = useNuxtApp()
+// Computed
+const attribute = computed<IAttribute>(() => {
+  return props.attribute as IAttribute
+})
 // Watch
-watch(languages, () => {
-  if (languages.value) {
+watch(attribute, () => {
+  if (attribute.value) {
+    Object.assign(form, attribute.value)
+    // Labels
+    labels.value = []
     languages.value.forEach((language: ILanguage) => {
-      labels.value.push({ code: language.code, label: '' })
-      placeholders.value.push({ code: language.code, placeholder: '' })
-      options.value.push({ code: language.code, option: '' })
-      inputTexts.value.push({ code: language.code, text: '' })
+      if (attribute.value.labels) {
+        const label = attribute.value.labels.find((label: IAttributeLabel) => {
+          return label.code === language.code
+        })
+        labels.value.push({ code: language.code, label: label?.label ?? '' })
+      }
+    })
+    // Placeholders
+    placeholders.value = []
+    languages.value.forEach((language: ILanguage) => {
+      if (attribute.value.placeholders) {
+        const placeholder = attribute.value.placeholders.find((placeholder: IAttributePlaceholder) => {
+          return placeholder.code === language.code
+        })
+        placeholders.value.push({ code: language.code, placeholder: placeholder?.placeholder ?? '' })
+      }
+    })
+    // Options
+    options.value = []
+    languages.value.forEach((language: ILanguage) => {
+      if (attribute.value.options) {
+        const option = attribute.value.options.find((option: IAttributeOption) => {
+          return option.code === language.code
+        })
+        options.value.push({ code: language.code, option: option?.option ?? '' })
+      }
+    })
+    // Input Texts
+    inputTexts.value = []
+    languages.value.forEach((language: ILanguage) => {
+      if (attribute.value.input_texts) {
+        const text = attribute.value.input_texts.find((text: IAttributeInputText) => {
+          return text.code === language.code
+        })
+        inputTexts.value.push({ code: language.code, text: text?.text ?? '' })
+      }
     })
   }
 }, { immediate: true })
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
+  formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
@@ -252,17 +289,16 @@ const normalize = (): FormData => {
   }
   return formData
 }
-const store = async () => {
-  const attribute: FormData = normalize()
-  await useApi('/admin/attributes/store', {
+const update = async () => {
+  const attributeData: FormData = normalize()
+  await useApi(`/admin/attributes/update/${attribute.value.id}`, {
     method: 'post',
-    body: attribute,
+    body: attributeData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -270,9 +306,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  Object.assign(form, fields)
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>

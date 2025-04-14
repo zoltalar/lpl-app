@@ -147,7 +147,7 @@
     <modal
       id="modal-attribute-edit"
       :title="$t('edit_attribute')"
-      size="md"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
@@ -247,7 +247,7 @@ const onCreated = () => {
   })
 }
 const onUpdated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attribute-edit')
   const model = t('attribute')
   modal.hide()
   refresh()

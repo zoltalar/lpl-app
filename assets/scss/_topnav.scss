@@ -13,11 +13,22 @@
   .navbar-nav {
     padding: 1rem 0;
 
-    .nav-link {
+    .nav-link {      
       padding: .75rem 0;
 
-      &.router-link-active  {
+      &.router-link-active {        
         color: $primary;
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+
+      .nav-link {
+        height: calc(100% - 2px);
+
+        &.router-link-active {
+          border-bottom: solid $primary;
+        }
       }
     }
   }
