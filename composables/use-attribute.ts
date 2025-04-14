@@ -6,7 +6,12 @@ export default function useAttribute() {
   const inputTypes = computed<Record<number,string>>(() => {
     return attributeStore.getMeta.input_types
   })
+  // Function
+  const inputTypeName = (inputType: number): string => {
+    return inputTypes.value[inputType] ?? ''
+  }
   return {
-    inputTypes
+    inputTypes,
+    inputTypeName
   }
 }
