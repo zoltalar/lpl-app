@@ -1,5 +1,6 @@
 import { useUserStore } from '@/store/user'
 import type { INamable, IUser } from '@/types'
+
 export default function useUser() {
   // Composables
   const userStore = useUserStore()

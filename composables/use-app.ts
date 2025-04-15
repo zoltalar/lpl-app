@@ -2,6 +2,7 @@ import { useAttributeStore } from '@/store/attribute'
 import { useLanguageStore } from '@/store/language'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
+import { useSubscribePageStore } from '@/store/subscribe-page' 
 import { useUserStore } from '@/store/user'
 
 export default function useApp() {
@@ -13,11 +14,12 @@ export default function useApp() {
   const languageStore = useLanguageStore()
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
+  const subscribePageStore = useSubscribePageStore()
   const userStore = useUserStore()
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 20
+    const increment = 16.67
     if ($_.isEmpty(attributeStore.getMeta)) {
       const meta = await attributeStore.fetchMeta()
       attributeStore.setMeta(meta)
@@ -40,6 +42,12 @@ export default function useApp() {
       const roles = await roleStore.fetchCollection()
       roleStore.setCollection(roles)
       responses.push(roles)
+      progress.value += increment
+    }
+    if ($_.isEmpty(subscribePageStore.getMeta)) {
+      const meta = await subscribePageStore.fetchMeta()
+      subscribePageStore.setMeta(meta)
+      responses.push(meta)
       progress.value += increment
     }
     if ($_.isEmpty(userStore.getMeta)) {

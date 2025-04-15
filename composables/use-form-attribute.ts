@@ -3,9 +3,9 @@ import type {
   IAttributeInputText,
   IAttributeLabel,
   IAttributeOption,
-  IAttributePlaceholder,
-  ILanguage
+  IAttributePlaceholder  
 } from '@/types'
+
 export default function useFormAttribute() {
   // Vars
   const fields = {

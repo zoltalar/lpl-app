@@ -85,6 +85,16 @@ export interface IRole extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
 }
+export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
+  name: string,
+  language_id: number | null,
+  intro: string | null,
+  thank_you: string | null,
+  button: string | null,
+  email_format: string | null,
+  confirm_email: number | null,
+  active: number | null
+}
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,
   phone: string,
@@ -119,6 +129,9 @@ export type TToastMessage = {
 }
 export type TAttributeMeta = {
   input_types: Record<number, string>
+}
+export type TSubscribePageMeta = {
+  email_formats: Record<string, string>
 }
 export type TUserMeta = {
   time_formats: string[],
