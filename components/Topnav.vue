@@ -24,6 +24,7 @@
               <a id="top-nav-system" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('system') }}</a>
               <div class="dropdown-menu" aria-labelledby="top-nav-system">
                 <nuxt-link to="/attachments" class="dropdown-item" v-if="hasRole('admin') || can('attachment-view')">{{ $t('attachments') }}</nuxt-link>
+                <nuxt-link to="/subscribe-pages" class="dropdown-item" v-if="hasRole('admin') || can('subscribe-page-view')">{{ $t('subscribe_pages') }}</nuxt-link>
                 <nuxt-link to="/users" class="dropdown-item" v-if="hasRole('admin') || can('user-view')">{{ $t('users') }}</nuxt-link>
               </div>
             </li>
