@@ -202,7 +202,7 @@ const attributes = computed<IAttribute[]>(() => {
 // Functions
 const destroy = async (attribute: IAttribute) => {
   const name = attribute.slug
-  const model = t('attachment')
+  const model = t('attribute')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
     await useApi(`/admin/attributes/${attribute.id}`, {
