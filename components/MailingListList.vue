@@ -85,7 +85,11 @@
                   <tbody>
                     <tr v-for="list in lists">
                       <td>{{ list.id }}</td>
-                      <td>{{ list.name }}</td>
+                      <td>
+                        <span class="text-truncate d-block" :title="list.name" style="width: 300px;">
+                          {{ list.name }}
+                        </span>
+                      </td>
                       <td>
                         <yes-no :expression="list.active" />
                       </td>
@@ -118,8 +122,9 @@
                       <td>{{ list.list_order }}</td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(list)"><i class="mdi mdi-pencil"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(list)"><i class="mdi mdi-close"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(list)" v-if="hasRole('admin') || can('mailing-list-edit')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(list)" v-if="hasRole('admin') || can('mailing-list-view')"><i class="mdi mdi-eye-outline"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(list)" v-if="hasRole('admin') || can('mailing-list-delete')"><i class="mdi mdi-close"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -150,7 +155,11 @@
       </div>
     </div>
     <toasts :messages="messages" />
-    <modal id="modal-mailing-list-create" :title="$t('create_mailing_list')" size="md">
+    <modal
+      id="modal-mailing-list-create"
+      :title="$t('create_mailing_list')"
+      size="md"
+    >
       <mailing-list-create-form ref="formMailingListCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
@@ -158,12 +167,23 @@
         <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
       </template>
     </modal>
-    <modal id="modal-mailing-list-edit" :title="$t('edit_mailing_list')" size="md">
+    <modal
+      id="modal-mailing-list-edit"
+      :title="$t('edit_mailing_list')"
+      size="md"
+    >
       <mailing-list-edit-form :list="selectedList" ref="formMailingListEdit" @updated="handleUpdated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
       </template>
+    </modal>
+    <modal
+      id="modal-mailing-list-view"
+      :title="$t('mailing_list_details')"
+      size="lg"
+    >
+      <mailing-list-view :list="selectedList" />
     </modal> 
   </div>
 </template>

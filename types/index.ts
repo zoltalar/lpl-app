@@ -66,7 +66,7 @@ export interface ILanguage extends IBaseModel {
   name: string,
   code: string
 }
-export interface IMailingList extends IBaseModel, ITimestamps {
+export interface IMailingList extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
   description: string | null,
   list_order: number | null,

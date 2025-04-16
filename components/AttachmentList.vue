@@ -72,7 +72,11 @@
                   <tbody>
                     <tr v-for="attachment in attachments">
                       <td>{{ attachment.id }}</td>
-                      <td>{{ attachment.name }}</td>
+                      <td>
+                        <span class="text-truncate d-block" :title="attachment.name" style="width: 500px;">
+                          {{ attachment.name }}
+                        </span>
+                      </td>
                       <td>
                         <span v-if="attachment.size">
                           {{ fileSize(attachment.size) }} kB

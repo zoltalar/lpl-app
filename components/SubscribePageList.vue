@@ -76,7 +76,11 @@
                   <tbody>
                     <tr v-for="page in pages">
                       <td>{{ page.id }}</td>
-                      <td>{{ page.name }}</td>
+                      <td>
+                        <span class="text-truncate d-block" :title="page.name" style="width: 400px;">
+                          {{ page.name }}
+                        </span>
+                      </td>
                       <td>
                         <yes-no :expression="page.active" />
                       </td>
