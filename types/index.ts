@@ -1,6 +1,6 @@
 // Interfaces
 export interface IApiResource {
-  data: IAttachment[] | IAttribute[] | ICategory[] | IList[] | IUser[],
+  data: IAttachment[] | IAttribute[] | ICategory[] | IMailingList[] | ISubscribePage[] | IUser[],
   meta?: IApiResourceMeta
 }
 export interface IApiResourceMeta {
@@ -66,13 +66,12 @@ export interface ILanguage extends IBaseModel {
   name: string,
   code: string
 }
-export interface IList extends IBaseModel, ITimestamps {
+export interface IMailingList extends IBaseModel, ITimestamps {
   name: string,
   description: string | null,
   list_order: number | null,
+  type: string | null,
   active: number | null,
-  category_id: number | null,
-  category?: ICategory | null,
   users_confirmed_unblacklisted_count?: number,
   users_unconfirmed_unblacklisted_count?: number,
   users_blacklisted_count?: number
@@ -130,6 +129,9 @@ export type TToastMessage = {
 }
 export type TAttributeMeta = {
   input_types: Record<number, string>
+}
+export type TMailingListMeta = {
+  types: Record<string, string>
 }
 export type TSubscribePageMeta = {
   email_formats: Record<string, string>

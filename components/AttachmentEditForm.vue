@@ -23,7 +23,7 @@
         :id="inputId('description')"
         rows="7"
         v-model="form.description"
-      />
+      ></textarea>
       <div class="invalid-feedback d-block" v-if="error('description') !== null">
         {{ error('description') }}
       </div>

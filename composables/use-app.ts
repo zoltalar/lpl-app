@@ -1,5 +1,6 @@
 import { useAttributeStore } from '@/store/attribute'
 import { useLanguageStore } from '@/store/language'
+import { useMailingListStore } from '@/store/mailing-list'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
 import { useSubscribePageStore } from '@/store/subscribe-page' 
@@ -12,6 +13,7 @@ export default function useApp() {
   const { $_ } = useNuxtApp()
   const attributeStore = useAttributeStore()
   const languageStore = useLanguageStore()
+  const mailinglistStore = useMailingListStore()
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
   const subscribePageStore = useSubscribePageStore()
@@ -19,7 +21,7 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 16.67
+    const increment = 14.28
     if ($_.isEmpty(attributeStore.getMeta)) {
       const meta = await attributeStore.fetchMeta()
       attributeStore.setMeta(meta)
@@ -30,6 +32,12 @@ export default function useApp() {
       const languages = await languageStore.fetchCollection()
       languageStore.setCollection(languages)
       responses.push(languages)
+      progress.value += increment
+    }
+    if ($_.isEmpty(mailinglistStore.getMeta)) {
+      const meta = await mailinglistStore.fetchMeta()
+      mailinglistStore.setMeta(meta)
+      responses.push(meta)
       progress.value += increment
     }
     if (permissionStore.getCollection.length === 0) {

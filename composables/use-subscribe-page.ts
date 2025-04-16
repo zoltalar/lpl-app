@@ -1,5 +1,4 @@
 import { useSubscribePageStore } from '@/store/subscribe-page'
-import type { TSubscribePageMeta } from '@/types'
 
 export default function useSubscribePage() {
   // Composables

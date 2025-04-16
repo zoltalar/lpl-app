@@ -44,7 +44,7 @@
             :id="inputId('intro')"
             rows="7"
             v-model="form.intro"
-          />
+          ></textarea>
           <div class="invalid-feedback d-block" v-if="error('intro') !== null">
             {{ error('intro') }}
           </div>
@@ -59,7 +59,7 @@
             :id="inputId('thank_you')"
             rows="7"
             v-model="form.thank_you"
-          />
+          ></textarea>
           <div class="invalid-feedback d-block" v-if="error('thank_you') !== null">
             {{ error('thank_you') }}
           </div>

@@ -29,33 +29,64 @@
       </div>
     </div>
     <div class="form-group">
-      <label :for="inputId('file')" class="form-label">{{ $t('file') }}</label>
-      <required-input />
+      <label :for="inputId('list-order')" class="form-label">{{ $t('list_order') }}</label>
       <input
-        type="file"
-        :id="inputId('file')"
+        type="number"
         class="form-control"
-        :class="{'is-invalid': error('file') !== null}"
-        ref="inputFile"
-        @change="onFileChange"
+        :class="{'is-invalid': error('list_order') !== null}"
+        :id="inputId('list-order')"
+        v-model="form.list_order"
       />
-      <div class="invalid-feedback d-block" v-if="error('file') !== null">
-        {{ error('file') }}
+      <div class="invalid-feedback d-block" v-if="error('list_order') !== null">
+        {{ error('list_order') }}
       </div>
+    </div>
+    <div class="form-group">
+      <label :for="inputId('type')" class="form-label">{{ $t('type') }}</label>
+      <required-input />
+      <select
+        class="form-select"
+        :class="{'is-invalid': error('type') !== null}"
+        :id="inputId('type')"
+        :aria-label="$t('select_type')"
+        v-model="form.type"
+      >
+        <option :value="null"></option>
+        <option :value="type" v-for="(name, type) in types">{{ name }}</option>
+      </select>
+      <div class="invalid-feedback d-block" v-if="error('type') !== null">
+        {{ error('type') }}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-check form-switch">
+        <input
+          type="checkbox"
+          :id="inputId('active')"
+          class="form-check-input"
+          aria-describedby="text-active"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.active"
+        />
+        <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
+      </div>
+      <div id="text-active" class="form-text">{{ $t('messages.form_text_mailing_list_active') }}</div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment } from '@/types'
+import type { IMailingList } from '@/types'
 // Vars
 const emits = defineEmits(['created'])
 const fields = {
   name: '',
-  description: ''
+  description: '',
+  list_order: 0,
+  type: null,
+  active: 1
 }
-const form: Partial<IAttachment> = reactive({...fields})
-const file = ref<File|null>(null)
-const inputFile = useTemplateRef<HTMLInputElement>('inputFile')
+const form: Partial<IMailingList> = reactive({...fields})
 // Composables
 const {
   errors,
@@ -63,15 +94,9 @@ const {
   error,
   getErrors,
   inputId
-} = useForm('attachment-create')
-const { fileName } = useFile()
+} = useForm('mailing-list-create')
+const { types } = useFormMailingList()
 const { $_ } = useNuxtApp()
-// Watch
-watch(file, () => {
-  if (file.value instanceof File && form.name === '') {
-    form.name = fileName(file.value.name)
-  }
-})
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
@@ -80,22 +105,13 @@ const normalize = (): FormData => {
       formData.append(key, value)
     }
   })
-  if (file.value) {
-    formData.append('file', file.value)
-  }
   return formData
 }
-const onFileChange = (event: Event): void => {
-  const el = event.target as HTMLInputElement
-  if (el.files) {
-    file.value = el.files[0]
-  }
-}
 const store = async () => {
-  const attachment: FormData = normalize()
-  await useApi('/admin/attachments/store', {
+  const list: FormData = normalize()
+  await useApi('/admin/mailing-lists/store', {
     method: 'post',
-    body: attachment,
+    body: list,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
@@ -111,10 +127,6 @@ const store = async () => {
 }
 const reset = () => {
   Object.assign(form, fields)
-  file.value = null
-  if (inputFile.value) {
-    inputFile.value.value = ''
-  }
   clearErrors()
 }
 defineExpose({ reset, store })

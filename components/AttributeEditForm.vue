@@ -112,7 +112,8 @@
             :id="inputId('option-' + option.code)"
             rows="5"
             :disabled="!optionable"
-            v-model="options[i].option"></textarea>
+            v-model="options[i].option"
+          ></textarea>
           <div class="invalid-feedback d-block" v-if="error('options.' + i + '.option') !== null">
             {{ error('options.' + i + '.option') }}
           </div>

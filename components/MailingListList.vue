@@ -1,0 +1,278 @@
+<template>
+  <div>
+    <div class="row">
+      <div class="col-12">
+        <div class="page-title-box">
+          <h4 class="page-title">{{ $t('mailing_lists') }}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row toolbar">
+              <div class="col-md-7 col-lg-8">
+                <div class="btn-group" role="group" :aria-label="$t('mailing_list_options')">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-mailing-list-create" v-if="hasRole('admin') || can('subscribe-page-create')">{{ $t('create') }}</button>
+                  <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
+                </div>
+              </div>
+              <div class="col-md-5 col-lg-4">
+                <search-form
+                  class="mt-3 mt-sm-0"
+                  v-model="search"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    :title="$t('toggle_filters')"
+                    :aria-label="$t('toggle_filters')"
+                    @click.prevent="toggleFilters = !toggleFilters"
+                  >
+                    <i class="mdi mdi-filter-menu-outline"></i>
+                  </button>
+                </search-form>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <form class="form-default">
+                <table class="table table-hover table-list">
+                  <thead>
+                    <tr>
+                      <th width="10%">
+                        <sortable-column column="mailing_lists.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                      </th>
+                      <th width="30%">
+                        <sortable-column column="mailing_lists.name" v-model="sort">{{ $t('name') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="mailing_lists.active" v-model="sort">{{ $t('active') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        {{ $t('members') }}
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="mailing_lists.list_order" v-model="sort">{{ $t('list_order') }}</sortable-column>
+                      </th>
+                      <th class="text-end">{{ $t('actions') }}</th>
+                    </tr>
+                    <tr v-if="toggleFilters">
+                      <th>
+                        <filter-input v-model="filters.id" />
+                      </th>
+                      <th>
+                        <filter-input v-model="filters.name" />
+                      </th>
+                      <th>
+                        <select class="form-select form-select-sm" v-model="filters.active">
+                          <option></option>
+                          <option :value="1">{{ $t('yes') }}</option>
+                          <option :value="0">{{ $t('no') }}</option>
+                        </select>
+                      </th>
+                      <th>
+                        -
+                      </th>
+                      <th>
+                        -
+                      </th>
+                      <th class="text-end">
+                        -
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="list in lists">
+                      <td>{{ list.id }}</td>
+                      <td>{{ list.name }}</td>
+                      <td>
+                        <yes-no :expression="list.active" />
+                      </td>
+                      <td>
+                        <span
+                          class="text-success cursor-help"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          :data-bs-title="$t('messages.users_confirmed_unblacklisted_count')"
+                        >
+                          {{ list.users_confirmed_unblacklisted_count ?? 0 }}
+                        </span>
+                        (<span
+                          class="text-warning cursor-help"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          :data-bs-title="$t('messages.users_unconfirmed_unblacklisted_count')"
+                        >
+                          {{ list.users_unconfirmed_unblacklisted_count ?? 0 }}
+                        </span>, 
+                        <span
+                          class="text-danger cursor-help"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          :data-bs-title="$t('messages.users_blacklisted_count')"
+                        >
+                          {{ list.users_blacklisted_count ?? 0 }}
+                        </span>)
+                      </td>
+                      <td>{{ list.list_order }}</td>
+                      <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(list)"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(list)"><i class="mdi mdi-close"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-if="lists && lists.length === 0">
+                      <td colspan="6">
+                        {{ $t('messages.no_mailing_lists') }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+            <div class="row">
+              <div class="col-lg-5">
+                <pagination :meta="meta" class="mt-3" v-model="page" />
+              </div>
+              <div class="col-lg-3">
+                <page-size class="mt-0 mt-lg-3 mb-3" v-model="limit" />
+              </div>
+              <div class="col-sm-4">
+                <div class="mt-0 mt-lg-4 text-start text-lg-end">
+                  {{ info }}
+                </div>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+    <toasts :messages="messages" />
+    <modal id="modal-mailing-list-create" :title="$t('create_mailing_list')" size="md">
+      <mailing-list-create-form ref="formMailingListCreate" @created="handleCreated" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="store">{{ $t('save') }}</button>
+      </template>
+    </modal>
+    <modal id="modal-mailing-list-edit" :title="$t('edit_mailing_list')" size="md">
+      <mailing-list-edit-form :list="selectedList" ref="formMailingListEdit" @updated="handleUpdated" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+      </template>
+    </modal> 
+  </div>
+</template>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import type { IMailingList } from '@/types'
+// Vars
+const props = defineProps({
+  endpoint: { type: String }
+})
+const {
+  busy,
+  resource,
+  search,
+  filters,
+  sort,
+  meta,
+  page,
+  limit,
+  info,
+  refresh
+} = useDataTable(props)
+const toggleFilters = ref<boolean>(false)
+const formMailingListCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formMailingListCreate')
+const formMailingListEdit = useTemplateRef<{ update: () => void }>('formMailingListEdit')
+const selectedList = ref<IMailingList>({} as IMailingList)
+// Composables
+const { t } = useI18n()
+const { messages, addToast } = useToasts()
+const { has: hasRole } = useRole()
+const { can } = usePermission()
+const { $bootstrap } = useNuxtApp()
+// Computed
+const lists = computed<IMailingList[]>(() => {
+  return resource?.value?.data as IMailingList[]
+})
+// Functions
+const destroy = async (list: IMailingList) => {
+  const name = list.name
+  const model = t('mailing_list')
+  const message = t('messages.confirm_destroy_name', { name })
+  if (confirm(message)) {
+    await useApi(`/admin/mailing-lists/${list.id}`, {
+      method: 'delete',
+      onResponse({ request, response, options }) {
+        if (response.status === 204) {
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.model_destroyed', { model })
+          })
+        } else {
+          addToast({
+            header: t('error'),
+            body: t('messages.model_name_destroy_error', { model, name }),
+            type: 'danger'
+          })
+        }
+      },
+    })
+  }
+}
+const edit = (list: IMailingList): void => {
+  selectedList.value = list
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')
+  modal.show()
+}
+const handleCreated = (): void => {
+  onCreated()
+}
+const handleUpdated = (): void => {
+  onUpdated()
+}
+const onCreated = () => {
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-create')
+  const model = t('mailing_list')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_created', { model })
+  })
+}
+const onUpdated = () => {
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')
+  const model = t('mailing_list')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_updated', { model })
+  })
+}
+const reset = (): void => {
+  formMailingListCreate.value?.reset()
+}
+const show = (list: IMailingList): void => {
+  selectedList.value = list
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-view')
+  modal.show()
+}
+const store = (): void => {
+  formMailingListCreate.value?.store()
+}
+const update = (): void => {
+  formMailingListEdit.value?.update()
+}
+onMounted(() => {
+  refresh()
+  new $bootstrap.Tooltip(document.body, { selector: "[data-bs-toggle='tooltip']" })
+})
+</script>

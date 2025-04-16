@@ -17,8 +17,8 @@
             <li class="nav-item" v-if="hasRole('admin') || can('attribute-view')">
               <nuxt-link to="/attributes" class="nav-link">{{ $t('attributes') }}</nuxt-link>
             </li>
-            <li class="nav-item">
-              <nuxt-link to="/" class="nav-link">{{ $t('lists') }}</nuxt-link>
+            <li class="nav-item" v-if="hasRole('admin') || can('mailing-list-view')">
+              <nuxt-link to="/mailing-lists" class="nav-link">{{ $t('mailing_lists') }}</nuxt-link>
             </li>
             <li class="nav-item dropdown">
               <a id="top-nav-system" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('system') }}</a>

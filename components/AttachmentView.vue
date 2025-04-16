@@ -27,6 +27,17 @@
           </tr>
           <tr>
             <td class="table-attribute">
+              {{ $t('description') }}
+            </td>
+            <td>
+              <span v-if="attachment.description">
+                {{ attachment.description }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
               {{ $t('file') }}
             </td>
             <td>
