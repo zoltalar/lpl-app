@@ -93,7 +93,8 @@ export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   button: string | null,
   email_format: string | null,
   confirm_email: number | null,
-  active: number | null
+  active: number | null,
+  language?: ILanguage | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,
