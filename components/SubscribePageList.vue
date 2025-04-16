@@ -132,7 +132,7 @@
     <modal
       id="modal-subscribe-page-edit"
       :title="$t('edit_subscribe_page')"
-      size="md"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >

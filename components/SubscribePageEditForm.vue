@@ -1,5 +1,5 @@
 <template>
-  <form class="form-default" @submit.prevent="store">
+  <form class="form-default" @submit.prevent="update">
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
@@ -121,31 +121,45 @@
 <script setup lang="ts">
 import type { ISubscribePage } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+interface Props {
+  page?: ISubscribePage | null
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['updated'])
 const fields = {
   name: '',
   language_id: null,
   intro: '',
   thank_you: '',
   button: '',
-  email_format: 'radio_html',
+  email_format: null,
   confirm_email: 0,
-  active: 1
+  active: 0
 }
 const form: Partial<ISubscribePage> = reactive({...fields})
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
-} = useForm('subscribe-page-create')
+} = useForm('subscribe-page-edit')
 const { languages, emailFormats } = useFormSubscribePage()
 const { $_ } = useNuxtApp()
+// Computed
+const page = computed<ISubscribePage>(() => {
+  return props.page as ISubscribePage
+})
+// Watch
+watch(page, () => {
+  if (page.value) {
+    Object.assign(form, page.value)
+  }
+}, { immediate: true })
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
+  formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
@@ -153,17 +167,16 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const store = async () => {
-  const page: FormData = normalize()
-  await useApi('/admin/subscribe-pages/store', {
+const update = async () => {
+  const pageData: FormData = normalize()
+  await useApi(`/admin/subscribe-pages/update/${page.value.id}`, {
     method: 'post',
-    body: page,
+    body: pageData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -171,9 +184,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  Object.assign(form, fields)
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>
