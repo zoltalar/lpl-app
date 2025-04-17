@@ -115,6 +115,33 @@
           </div>
         </div>
       </div>
+      <div class="col-lg-12">
+        <div class="form-group mb-0">
+          <h6>
+            <span>{{ $t('offer_mailing_lists') }}</span>
+            <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
+            </button>
+          </h6>
+          <div class="form-text mb-2" v-html="$t('messages.form_text_subscribe_page_mailing_lists')"></div>
+          <div class="checkboxes-mailing-lists" v-if="lists.length > 0">
+            <template v-for="list in lists">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="inputId('mailing-list-' + list.id)"
+                  class="form-check-input"
+                  :value="list.id"
+                  v-model="pageLists"
+                />
+                <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
+                  {{ list.name }}
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -141,7 +168,14 @@ const {
   getErrors,
   inputId
 } = useForm('subscribe-page-create')
-const { languages, emailFormats } = useFormSubscribePage()
+const {
+  pageLists,
+  languages,
+  emailFormats,
+  busyRefreshLists,
+  lists,
+  refreshLists
+} = useFormSubscribePage()
 const { $_ } = useNuxtApp()
 // Functions
 const normalize = (): FormData => {
@@ -150,6 +184,9 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
+  })
+  $_.forEach(pageLists.value, (id: any): void => {
+    formData.append('lists[]', id.toString())
   })
   return formData
 }

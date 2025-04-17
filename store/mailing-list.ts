@@ -17,6 +17,9 @@ export const useMailingListStore = defineStore({
     async fetchMeta(): Promise<TMailingListMeta> {
       return await useApi('/admin/mailing-lists/meta')
     },
+    async refreshCollection(): Promise<void> {
+      this.setCollection(await this.fetchCollection())
+    },
     setCollection(collection: IMailingList[]) {
       this.collection = collection
     },

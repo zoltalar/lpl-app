@@ -1,6 +1,7 @@
 <template v-if="page">
   <tabs>
     <tab :title="$t('general')" target="#subscribe-page-general" active />
+    <tab :title="$t('mailing_lists')" target="#subscribe-page-mailing-lists" />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="subscribe-page-general" role="tabpanel" aria-labelledby="tab-general">
@@ -134,6 +135,12 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="tab-pane fade" id="subscribe-page-mailing-lists" role="tabpanel" aria-labelledby="tab-roles">
+      <ul class="mb-0" v-if="page.mailing_lists && page.mailing_lists.length > 0">
+        <li v-for="list in page.mailing_lists ">{{ list.name }}</li>
+      </ul>
+      <p class="text-center mt-3 mb-0" v-else>{{ $t('messages.subscribe_page_no_mailing_lists') }}</p>
     </div>
   </div>
 </template>

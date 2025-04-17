@@ -74,7 +74,7 @@ export interface IMailingList extends IBaseModel, ITimestamps, IUserstamps {
   active: number | null,
   users_confirmed_unblacklisted_count?: number,
   users_unconfirmed_unblacklisted_count?: number,
-  users_blacklisted_count?: number
+  users_blacklisted_count?: number  
 }
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
@@ -93,7 +93,8 @@ export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   email_format: string | null,
   confirm_email: number | null,
   active: number | null,
-  language?: ILanguage | null
+  language?: ILanguage | null,
+  mailing_lists?: IMailingList[] | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,
