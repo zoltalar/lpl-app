@@ -47,6 +47,7 @@
     "edit_attribute": "Edit Attribute",
     "edit_mailing_list": "Edit Mailing List",
     "edit_subscribe_page": "Edit Subscribe Page",
+    "edit_subscriber": "Edit Subscriber",
     "edit_user": "Edit User",
     "email": "Email",
     "email_format": "Email Format",
@@ -181,13 +182,13 @@
         "title_subscribe_pages": "Subscribe Pages",
         "title_subscribers": "Subscribers",
         "title_users": "Users",
+        "subscribers_blacklisted_count": "Blacklisted subscribers",
+        "subscribers_confirmed_unblacklisted_count": "Confirmed and not blacklisted subscribers",
+        "subscribers_unconfirmed_unblacklisted_count": "Unconfirmed and not blacklisted subscribers",
         "user_blacklisted": "Subscriber is blacklisted. No emails will be sent to this email address.",
         "user_inactive": "User is inactive.",
         "user_no_lists": "This subscriber does not belong to any list.",
         "user_no_permissions": "This user does not have any permissions.",
-        "user_no_roles": "This user does not have any roles.",
-        "users_blacklisted_count": "Blacklisted subscribers",
-        "users_confirmed_unblacklisted_count": "Confirmed and not blacklisted subscribers",
-        "users_unconfirmed_unblacklisted_count": "Unconfirmed and not blacklisted subscribers"
+        "user_no_roles": "This user does not have any roles."
     }
 }

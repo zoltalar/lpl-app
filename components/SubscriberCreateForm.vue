@@ -79,7 +79,7 @@
       </div>
       <div id="text-blacklisted" class="form-text" v-html="$t('messages.form_text_user_blacklisted')"></div>
     </div>
-    <div class="form-group mb-0">
+    <div class="form-group">
       <div class="form-check form-switch">
         <input
           type="checkbox"
@@ -93,6 +93,31 @@
         <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
       </div>
       <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
+    </div>
+    <div class="form-group mb-0">
+      <h6 class="mb-2">
+        <span>{{ $t('mailing_lists') }}</span>
+        <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
+          <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
+        </button>
+      </h6>
+      <div class="checkboxes-mailing-lists" v-if="lists.length > 0">
+        <template v-for="list in lists">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              :id="inputId('mailing-list-' + list.id)"
+              class="form-check-input"
+              :value="list.id"
+              :disabled="busyRefreshLists"
+              v-model="subscriberLists"
+            />
+            <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
+              {{ list.name }}
+            </label>
+          </div>
+        </template>
+      </div>
     </div>
   </form>
 </template>
@@ -117,7 +142,15 @@ const {
   getErrors,
   inputId
 } = useForm('subscriber-create')
-const { inputType, inputIcon, toggleInput } = usePassword()
+const {
+  subscriberLists,
+  busyRefreshLists,
+  lists,
+  inputType,
+  inputIcon,
+  refreshLists,
+  toggleInput
+} = useFormSubscriber()
 const { $_ } = useNuxtApp()
 // Functions
 const normalize = (): FormData => {
@@ -126,6 +159,9 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
+  })
+  $_.forEach(subscriberLists.value, (id: any): void => {
+    formData.append('lists[]', id.toString())
   })
   return formData
 }

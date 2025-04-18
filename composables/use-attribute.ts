@@ -1,6 +1,8 @@
 import { useAttributeStore } from '@/store/attribute'
 
 export default function useAttribute() {
+  // Vars
+  const busy = ref<boolean>(false)
   // Composables
   const attributeStore = useAttributeStore()
   // Computed
@@ -11,8 +13,17 @@ export default function useAttribute() {
   const inputTypeName = (inputType: number): string => {
     return inputTypes.value[inputType] ?? ''
   }
+  const refresh = async (): Promise<void> => {
+    busy.value = true
+    await attributeStore.refreshCollection()
+    setTimeout(() => {
+      busy.value = false
+    }, 1000)
+  }
   return {
+    busy,
     inputTypes,
-    inputTypeName
+    inputTypeName,
+    refresh
   }
 }

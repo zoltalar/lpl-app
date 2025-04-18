@@ -26,6 +26,11 @@ export default function useApp() {
       attributeStore.setMeta(meta)
       responses.push(meta)
     }
+    if (attributeStore.getCollection.length === 0) {
+      const attributes = await attributeStore.fetchCollection()
+      attributeStore.setCollection(attributes)
+      responses.push(attributes)
+    }
     if (languageStore.getCollection.length === 0) {
       const languages = await languageStore.fetchCollection()
       languageStore.setCollection(languages)

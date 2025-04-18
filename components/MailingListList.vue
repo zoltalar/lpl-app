@@ -101,25 +101,25 @@
                           class="text-success cursor-help"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          :data-bs-title="$t('messages.users_confirmed_unblacklisted_count')"
+                          :data-bs-title="$t('messages.subscribers_confirmed_unblacklisted_count')"
                         >
-                          {{ list.users_confirmed_unblacklisted_count ?? 0 }}
+                          {{ list.subscribers_confirmed_unblacklisted_count ?? 0 }}
                         </span>
                         (<span
                           class="text-warning cursor-help"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          :data-bs-title="$t('messages.users_unconfirmed_unblacklisted_count')"
+                          :data-bs-title="$t('messages.subscribers_unconfirmed_unblacklisted_count')"
                         >
-                          {{ list.users_unconfirmed_unblacklisted_count ?? 0 }}
+                          {{ list.subscribers_unconfirmed_unblacklisted_count ?? 0 }}
                         </span>, 
                         <span
                           class="text-danger cursor-help"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          :data-bs-title="$t('messages.users_blacklisted_count')"
+                          :data-bs-title="$t('messages.subscribers_blacklisted_count')"
                         >
-                          {{ list.users_blacklisted_count ?? 0 }}
+                          {{ list.subscribers_blacklisted_count ?? 0 }}
                         </span>)
                       </td>
                       <td>{{ list.list_order }}</td>

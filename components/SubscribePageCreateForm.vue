@@ -101,7 +101,7 @@
         </div>
       </div>
       <div class="col-lg-12">
-        <div class="form-group mb-0">
+        <div class="form-group">
           <div class="form-check form-switch">
             <input
               type="checkbox"

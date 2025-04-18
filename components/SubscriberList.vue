@@ -13,7 +13,7 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" :aria-label="$t('user_options')">
+                <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</button>
                 </div>
