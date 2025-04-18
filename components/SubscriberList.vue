@@ -91,7 +91,7 @@
                       <td>{{ subscriber.id }}</td>
                       <td>{{ subscriber.email }}</td>
                       <td>
-                        <yes-no :expression="subscriber.blacklisted" />
+                        <yes-no :expression="subscriber.blacklisted" :inverse="true" />
                       </td>
                       <td>
                         <yes-no :expression="subscriber.active" />
@@ -134,7 +134,7 @@
     <modal
       id="modal-subscriber-create"
       :title="$t('create_subscriber')"
-      size="lg"
+      size="md"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >

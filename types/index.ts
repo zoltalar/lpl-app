@@ -107,13 +107,15 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   email: string,
   domain?: string | null,
   password: string | null,
+  password_set?: number,
   html_email: number | null,
   confirmed: number | null,
   blacklisted: number | null,
   bounce_count: number | null,
   active: number | null,
   unique_id: string | null,
-  rss_frequency: string | null
+  rss_frequency: string | null,
+  mailing_lists?: IMailingList[] | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,

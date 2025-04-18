@@ -1,15 +1,15 @@
 <template>
-  <div class="alert alert-danger" role="alert" v-if="user.blacklisted === 1">
-    {{ $t('messages.user_blacklisted') }}
+  <div class="alert alert-danger" role="alert" v-if="subscriber.blacklisted === 1">
+    {{ $t('messages.subscriber_blacklisted') }}
   </div>
   <tabs>
-    <tab :title="$t('general')" target="#user-general" active />
-    <tab :title="$t('lists')" target="#user-lists" />
-    <tab :title="$t('campaigns')" target="#user-campaigns" />
-    <tab :title="$t('bounces')" target="#user-bounces" />
+    <tab :title="$t('general')" target="#subscriber-general" active />
+    <tab :title="$t('lists')" target="#subscriber-lists" />
+    <tab :title="$t('campaigns')" target="#subscriber-campaigns" />
+    <tab :title="$t('bounces')" target="#subscriber-bounces" />
   </tabs>
   <div class="tab-content py-3">
-    <div class="tab-pane fade show active" id="user-general" role="tabpanel" aria-labelledby="tab-general">
+    <div class="tab-pane fade show active" id="subscriber-general" role="tabpanel" aria-labelledby="tab-general">
       <table class="table table-sm table-view mb-0">
         <tbody>
           <tr>
@@ -17,15 +17,7 @@
               {{ $t('id') }}
             </td>
             <td>
-              {{ user.id }}
-            </td>
-          </tr>
-          <tr>
-            <td class="table-attribute">
-              {{ $t('uuid') }}
-            </td>
-            <td>
-              <code>{{ user.uuid }}</code>
+              {{ subscriber.id }}
             </td>
           </tr>
           <tr>
@@ -33,7 +25,7 @@
               {{ $t('email') }}
             </td>
             <td>
-              {{ user.email }}
+              {{ subscriber.email }}
             </td>
           </tr>
           <tr>
@@ -41,7 +33,7 @@
               {{ $t('password_set?') }}
             </td>
             <td>
-              <yes-no :expression="user.password_set" />
+              <yes-no :expression="subscriber.password_set" :inverse="true" />
             </td>
           </tr>
           <tr>
@@ -49,7 +41,7 @@
               {{ $t('html_email') }}
             </td>
             <td>
-              <yes-no :expression="user.html_email" />
+              <yes-no :expression="subscriber.html_email" />
             </td>
           </tr>
           <tr>
@@ -57,15 +49,7 @@
               {{ $t('confirmed') }}
             </td>
             <td>
-              <yes-no :expression="user.confirmed" />
-            </td>
-          </tr>
-          <tr>
-            <td class="table-attribute">
-              {{ $t('disabled') }}
-            </td>
-            <td>
-              <yes-no :expression="user.disabled" />
+              <yes-no :expression="subscriber.confirmed" />
             </td>
           </tr>
           <tr>
@@ -73,15 +57,15 @@
               {{ $t('blacklisted') }}
             </td>
             <td>
-              <yes-no :expression="user.blacklisted" />
+              <yes-no :expression="subscriber.blacklisted" :inverse="true" />
             </td>
           </tr>
           <tr>
             <td class="table-attribute">
-              {{ $t('opted_in') }}
+              {{ $t('active') }}
             </td>
             <td>
-              <yes-no :expression="user.opted_in" />
+              <yes-no :expression="subscriber.active" />
             </td>
           </tr>
           <tr>
@@ -89,7 +73,7 @@
               {{ $t('bounce_count') }}
             </td>
             <td>
-              {{ user.bounce_count }}
+              {{ subscriber.bounce_count }}
             </td>
           </tr>
           <tr>
@@ -97,7 +81,7 @@
               {{ $t('unique_id') }}
             </td>
             <td>
-              <code>{{ user.unique_id }}</code>
+              <code>{{ subscriber.unique_id }}</code>
             </td>
           </tr>
           <tr>
@@ -105,7 +89,10 @@
               {{ $t('created_at') }}
             </td>
             <td>
-              {{ user.created_at }}
+              <span v-if="subscriber.created_at">
+                {{ useDateFormat(subscriber.created_at, dateTimeFormat(currentUser)) }}
+              </span>
+              <span v-else> - </span>
             </td>
           </tr>
           <tr>
@@ -113,36 +100,61 @@
               {{ $t('updated_at') }}
             </td>
             <td>
-              {{ user.updated_at }}
+              <span v-if="subscriber.updated_at">
+                {{ useDateFormat(subscriber.updated_at, dateTimeFormat(currentUser)) }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
+              {{ $t('created_by') }}
+            </td>
+            <td>
+              <span v-if="subscriber.creator">
+                {{ fullName(subscriber.creator, true) }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
+              {{ $t('updated_by') }}
+            </td>
+            <td>
+              <span v-if="subscriber.updater">
+                {{ fullName(subscriber.updater, true) }}
+              </span>
+              <span v-else> - </span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="tab-pane fade" id="user-lists" role="tabpanel" aria-labelledby="tab-lists">
-      <ul class="mb-0" v-if="lists && lists.length > 0">
-        <li v-for="list in lists">{{ list.name }}</li>
+    <div class="tab-pane fade" id="subscriber-lists" role="tabpanel" aria-labelledby="tab-lists">
+      <ul class="mb-0" v-if="subscriber.mailing_lists && subscriber.mailing_lists.length > 0">
+        <li v-for="list in subscriber.mailing_lists">{{ list.name }}</li>
       </ul>
-      <p class="mb-0" v-else>{{ $t('messages.user_no_lists') }}</p>
-    </div>
-    <div class="tab-pane fade" id="user-campaigns" role="tabpanel" aria-labelledby="tab-campaigns">
-      <p>Test 3</p>
-    </div>
-    <div class="tab-pane fade" id="user-bounces" role="tabpanel" aria-labelledby="tab-bounces">
-      <p>Test 4</p>
+      <p class="mb-0" v-else>{{ $t('messages.subscriber_no_lists') }}</p>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import type { IList } from '~/types'
-const props = defineProps({
-  user: {
-    type: Object,
-    required: true
-  }
-})
+import { useDateFormat } from '@vueuse/core'
+import type { ISubscriber, IUser } from '@/types'
+// Vars
+interface Props {
+  subscriber?: ISubscriber | null
+}
+const props = defineProps<Props>()
+// Composables
+const { data } = useAuth()
+const { dateTimeFormat, fullName } = useUser()
 // Computed
-const lists = computed<IList[]>(() => {
-  return props.user.lists
+const subscriber = computed<ISubscriber>(() => {
+  return props.subscriber as ISubscriber
+})
+const currentUser = computed<IUser>(() => {
+  return data.value as IUser
 })
 </script>

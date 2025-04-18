@@ -1,52 +1,104 @@
 <template>
   <form novalidate @submit.prevent="store">
-    <div class="mb-3">
-      <label for="input-email" class="form-label">{{ $t('email') }}</label>
+    <div class="form-group">
+      <label :for="inputId('email')" class="form-label">{{ $t('email') }}</label>
       <required-input />
-      <input type="email" class="form-control" id="input-email" maxlength="255" v-model="form.email">
+      <input
+        type="email"
+        class="form-control"
+        :class="{'is-invalid': error('email') !== null}"
+        :id="inputId('email')"
+        maxlength="255"
+        v-model="form.email"
+      />
       <div class="invalid-feedback d-block" v-if="error('email') !== null">
         {{ error('email') }}
       </div>
     </div>
-    <div class="mb-3">
-      <label for="input-password" class="form-label">{{ $t('password') }}</label>
-      <input type="password" class="form-control" id="input-password" maxlength="40" v-model="form.password">
+    <div class="form-group">
+      <label :for="inputId('password')" class="form-label">{{ $t('password') }}</label>
+      <div class="input-group">
+        <input
+          :type="inputType"
+          class="form-control"
+          :class="{'is-invalid': error('password') !== null}"
+          :id="inputId('password')"
+          maxlength="40"
+          v-model="form.password"
+        />
+        <button type="button" class="btn btn-outline-secondary" @click.prevent="toggleInput">
+          <i :class="inputIcon"></i>
+        </button>
+      </div>
       <div class="invalid-feedback d-block" v-if="error('password') !== null">
         {{ error('password') }}
       </div>
     </div>
-    <div class="mb-3">
+    <div class="form-group">
       <div class="form-check form-switch">
-        <input type="checkbox" id="input-html-email" class="form-check-input" aria-describedby="text-html-email" :true-value="1" :false-value="0" v-model="form.html_email">
-        <label for="input-html-email" class="form-check-label">{{ $t('html_email') }}</label>
+        <input
+          type="checkbox"
+          :id="inputId('html-email')"
+          class="form-check-input"
+          aria-describedby="text-html-email"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.html_email"
+        />
+        <label :for="inputId('html-email')" class="form-check-label">{{ $t('html_email') }}</label>
       </div>
-      <div id="text-html-email" class="form-text">{{ $t('messages.form_text_user_html_email') }}</div>
+      <div id="text-html-email" class="form-text" v-html="$t('messages.form_text_user_html_email')"></div>
     </div>
-    <div class="mb-3">
+    <div class="form-group">
       <div class="form-check form-switch">
-        <input type="checkbox" id="input-confirmed" class="form-check-input" aria-describedby="text-confirmed" :true-value="1" :false-value="0" v-model="form.confirmed">
-        <label for="input-confirmed" class="form-check-label">{{ $t('confirmed') }}</label>
+        <input
+          type="checkbox"
+          :id="inputId('confirmed')"
+          class="form-check-input"
+          aria-describedby="text-confirmed"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.confirmed"
+        />
+        <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirmed') }}</label>
       </div>
-      <div id="text-confirmed" class="form-text">{{ $t('messages.form_text_user_confirmed') }}</div>
+      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_user_confirmed')"></div>
     </div>        
-    <div class="mb-3">
+    <div class="form-group">
       <div class="form-check form-switch">
-        <input type="checkbox" id="input-blacklisted" class="form-check-input" aria-describedby="text-blacklisted" :true-value="1" :false-value="0" v-model="form.blacklisted">
-        <label for="input-blacklisted" class="form-check-label">{{ $t('blacklisted') }}</label>
+        <input
+          type="checkbox"
+          :id="inputId('blacklisted')"
+          class="form-check-input"
+          aria-describedby="text-blacklisted"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.blacklisted"
+        />
+        <label :for="inputId('blacklisted')" class="form-check-label">{{ $t('blacklisted') }}</label>
       </div>
-      <div id="text-blacklisted" class="form-text">{{ $t('messages.form_text_user_blacklisted') }}</div>
+      <div id="text-blacklisted" class="form-text" v-html="$t('messages.form_text_user_blacklisted')"></div>
     </div>
-    <div class="mb-3">
+    <div class="form-group mb-0">
       <div class="form-check form-switch">
-        <input type="checkbox" id="input-disabled" class="form-check-input" aria-describedby="text-disabled" :true-value="1" :false-value="0" v-model="form.disabled">
-        <label for="input-disabled" class="form-check-label">{{ $t('disabled') }}</label>
+        <input
+          type="checkbox"
+          :id="inputId('active')"
+          class="form-check-input"
+          aria-describedby="text-active"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.active"
+        />
+        <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
       </div>
-      <div id="text-disabled" class="form-text">{{ $t('messages.form_text_user_disabled') }}</div>
+      <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IUser } from '~/types'
+import type { ISubscriber } from '@/types'
+// Vars
 const emits = defineEmits(['created'])
 const fields = {
   email: '',
@@ -54,15 +106,34 @@ const fields = {
   html_email: 1,
   confirmed: 0,
   blacklisted: 0,
-  disabled: 0
+  active: 1
 }
-const form: Partial<IUser> = reactive({...fields})
-const { errors, clearErrors, error, getErrors } = useForm()
+const form: Partial<ISubscriber> = reactive({...fields})
+// Composables
+const {
+  errors,
+  clearErrors,
+  error,
+  getErrors,
+  inputId
+} = useForm('subscriber-create')
+const { inputType, inputIcon, toggleInput } = usePassword()
+const { $_ } = useNuxtApp()
 // Functions
+const normalize = (): FormData => {
+  const formData: FormData = new FormData()
+  $_.forOwn(form, (value: any, key: string): void => {
+    if ( ! $_.isNil(value)) {
+      formData.append(key, value)
+    }
+  })
+  return formData
+}
 const store = async () => {
-  await useApi('/admin/users/store', {
+  const subscriber: FormData = normalize()
+  await useApi('/admin/subscribers/store', {
     method: 'post',
-    body: { ...form },
+    body: subscriber,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
@@ -77,10 +148,7 @@ const store = async () => {
   })
 }
 const reset = () => {
-  const keys = Object.keys(form)
-  keys.forEach((key: string) => {
-    form[key] = fields[key]
-  })
+  Object.assign(form, fields)
   clearErrors()
 }
 defineExpose({ reset, store })
