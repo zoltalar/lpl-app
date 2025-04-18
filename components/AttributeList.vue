@@ -15,7 +15,7 @@
               <div class="col-md-7 col-lg-8">
                 <div class="btn-group" role="group" :aria-label="$t('attribute_options')">
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-attribute-create" v-if="hasRole('admin') || can('attribute-create')">{{ $t('create') }}</button>
-                  <button type="button" class="btn btn-secondary" @click.prevent="refresh">{{ $t('refresh') }}</button>
+                  <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('attribute-view')">{{ $t('refresh') }}</button>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -28,7 +28,8 @@
                 >
                   <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn"
+                    :class="{'btn-secondary': !toggleFilters, 'btn-primary': toggleFilters}"
                     :title="$t('toggle_filters')"
                     :aria-label="$t('toggle_filters')"
                     @click.prevent="toggleFilters = !toggleFilters"
@@ -57,31 +58,33 @@
                       </th>
                       <th class="text-end">{{ $t('actions') }}</th>
                     </tr>
-                    <tr v-if="toggleFilters">
-                      <th>
-                        <filter-input v-model="filters.id" />
-                      </th>
-                      <th>
-                        <filter-input v-model="filters.slug" />
-                      </th>
-                      <th>
-                        <select class="form-select form-select-sm" v-model="filters.required">
-                          <option></option>
-                          <option :value="1">{{ $t('yes') }}</option>
-                          <option :value="0">{{ $t('no') }}</option>
-                        </select>
-                      </th>
-                      <th>
-                        <select class="form-select form-select-sm" v-model="filters.active">
-                          <option></option>
-                          <option :value="1">{{ $t('yes') }}</option>
-                          <option :value="0">{{ $t('no') }}</option>
-                        </select>
-                      </th>
-                      <th class="text-end">
-                        -
-                      </th>
-                    </tr>
+                    <transition name="fade">
+                      <tr v-if="toggleFilters">
+                        <th>
+                          <filter-input v-model="filters.id" />
+                        </th>
+                        <th>
+                          <filter-input v-model="filters.slug" />
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" v-model="filters.required">
+                            <option></option>
+                            <option :value="1">{{ $t('yes') }}</option>
+                            <option :value="0">{{ $t('no') }}</option>
+                          </select>
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" v-model="filters.active">
+                            <option></option>
+                            <option :value="1">{{ $t('yes') }}</option>
+                            <option :value="0">{{ $t('no') }}</option>
+                          </select>
+                        </th>
+                        <th class="text-end">
+                          -
+                        </th>
+                      </tr>
+                    </transition>                    
                   </thead>
                   <tbody>
                     <tr v-for="attribute in attributes">

@@ -7,12 +7,8 @@
             <li class="nav-item">
               <nuxt-link to="/dashboard" class="nav-link" role="button">{{ $t('dashboard') }}</nuxt-link>
             </li>
-            <li class="nav-item dropdown">
-              <a id="top-nav-subscribers" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('subscribers') }}</a>
-              <div class="dropdown-menu" aria-labelledby="top-nav-subscribers">
-                <nuxt-link to="/" class="dropdown-item">{{ $t('manage') }}</nuxt-link>
-                <nuxt-link to="/" class="dropdown-item">{{ $t('import') }}</nuxt-link>
-              </div>
+            <li class="nav-item" v-if="hasRole('admin') || can('subscriber-view')">
+              <nuxt-link to="/subscribers" class="nav-link">{{ $t('subscribers') }}</nuxt-link>
             </li>
             <li class="nav-item" v-if="hasRole('admin') || can('attribute-view')">
               <nuxt-link to="/attributes" class="nav-link">{{ $t('attributes') }}</nuxt-link>

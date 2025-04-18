@@ -1,6 +1,13 @@
 // Interfaces
 export interface IApiResource {
-  data: IAttachment[] | IAttribute[] | ICategory[] | IMailingList[] | ISubscribePage[] | IUser[],
+  data: 
+    IAttachment[] | 
+    IAttribute[] | 
+    ICategory[] | 
+    IMailingList[] | 
+    ISubscribePage[] |
+    ISubscriber[] | 
+    IUser[],
   meta?: IApiResourceMeta
 }
 export interface IApiResourceMeta {
@@ -95,6 +102,18 @@ export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   active: number | null,
   language?: ILanguage | null,
   mailing_lists?: IMailingList[] | null
+}
+export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
+  email: string,
+  domain?: string | null,
+  password: string | null,
+  html_email: number | null,
+  confirmed: number | null,
+  blacklisted: number | null,
+  bounce_count: number | null,
+  active: number | null,
+  unique_id: string | null,
+  rss_frequency: string | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,

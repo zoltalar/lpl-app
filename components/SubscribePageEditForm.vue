@@ -132,6 +132,7 @@
                   :id="inputId('mailing-list-' + list.id)"
                   class="form-check-input"
                   :value="list.id"
+                  :disabled="busyRefreshLists"
                   v-model="pageLists"
                 />
                 <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">

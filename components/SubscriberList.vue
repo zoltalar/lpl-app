@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('users') }}</h4>
+          <h4 class="page-title">{{ $t('subscribers') }}</h4>
         </div>
       </div>
     </div>
@@ -14,8 +14,8 @@
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
                 <div class="btn-group" role="group" :aria-label="$t('user_options')">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-user-create" v-if="hasRole('admin') || can('user-create')">{{ $t('create') }}</button>
-                  <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('user-view')">{{ $t('refresh') }}</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</button>
+                  <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</button>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -45,19 +45,16 @@
                   <thead>
                     <tr>
                       <th width="10%">
-                        <sortable-column column="users.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                        <sortable-column column="subscribers.id" v-model="sort">{{ $t('id') }}</sortable-column>
+                      </th>
+                      <th width="35%">
+                        <sortable-column column="subscribers.email" v-model="sort">{{ $t('email') }}</sortable-column>
                       </th>
                       <th width="15%">
-                        <sortable-column column="users.first_name" v-model="sort">{{ $t('first_name') }}</sortable-column>
+                        <sortable-column column="subscribers.blacklisted" v-model="sort">{{ $t('blacklisted') }}</sortable-column>
                       </th>
                       <th width="15%">
-                        <sortable-column column="users.last_name" v-model="sort">{{ $t('last_name') }}</sortable-column>
-                      </th>
-                      <th width="25%">
-                        <sortable-column column="users.email" v-model="sort">{{ $t('email') }}</sortable-column>
-                      </th>
-                      <th width="15%">
-                        <sortable-column column="users.active" v-model="sort">{{ $t('active') }}</sortable-column>
+                        <sortable-column column="subscribers.active" v-model="sort">{{ $t('active') }}</sortable-column>
                       </th>
                       <th class="text-end">{{ $t('actions') }}</th>
                     </tr>
@@ -67,13 +64,14 @@
                           <filter-input v-model="filters.id" />
                         </th>
                         <th>
-                          <filter-input v-model="filters.first_name" />
-                        </th>
-                        <th>
-                          <filter-input v-model="filters.last_name" />
-                        </th>
-                        <th>
                           <filter-input v-model="filters.email" />
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" v-model="filters.blacklisted">
+                            <option></option>
+                            <option :value="1">{{ $t('yes') }}</option>
+                            <option :value="0">{{ $t('no') }}</option>
+                          </select>
                         </th>
                         <th>
                           <select class="form-select form-select-sm" v-model="filters.active">
@@ -89,23 +87,26 @@
                     </transition>                    
                   </thead>
                   <tbody>
-                    <tr v-for="user in users">
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.first_name }}</td>
-                      <td>{{ user.last_name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td><yes-no :expression="user.active" /></td>
+                    <tr v-for="subscriber in subscribers">
+                      <td>{{ subscriber.id }}</td>
+                      <td>{{ subscriber.email }}</td>
+                      <td>
+                        <yes-no :expression="subscriber.blacklisted" />
+                      </td>
+                      <td>
+                        <yes-no :expression="subscriber.active" />
+                      </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(user)" v-if="hasRole('admin') || can('user-edit')"><i class="mdi mdi-pencil"></i></button>
-                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(user)" v-if="hasRole('admin') || can('user-view')"><i class="mdi mdi-eye-outline"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(user)" v-if="hasRole('admin') || can('user-delete')"><i class="mdi mdi-close"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(subscriber)" v-if="hasRole('admin') || can('subscriber-edit')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(subscriber)" v-if="hasRole('admin') || can('subscriber-view')"><i class="mdi mdi-eye-outline"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(subscriber)" v-if="hasRole('admin') || can('subscriber-delete')"><i class="mdi mdi-close"></i></button>
                         </div>
                       </td>
                     </tr>
-                    <tr v-if="users && users.length === 0">
-                      <td colspan="6">
-                        {{ $t('messages.no_users') }}
+                    <tr v-if="subscribers && subscribers.length === 0">
+                      <td colspan="5">
+                        {{ $t('messages.no_subscribers') }}
                       </td>
                     </tr>
                   </tbody>
@@ -131,13 +132,13 @@
     </div>
     <toasts :messages="messages" />
     <modal
-      id="modal-user-create"
-      :title="$t('create_user')"
-      size="md"
+      id="modal-subscriber-create"
+      :title="$t('create_subscriber')"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <user-create-form ref="formUserCreate" @created="handleCreated" />
+      <subscriber-create-form ref="formSubscriberCreate" @created="handleCreated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
@@ -145,30 +146,30 @@
       </template>
     </modal>
     <modal
-      id="modal-user-edit"
-      :title="$t('edit_user')"
+      id="modal-subscriber-edit"
+      :title="$t('edit_subscriber')"
       size="md"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <user-edit-form :user="selectedUser" ref="formUserEdit" @updated="handleUpdated" />
+      <subscriber-edit-form :subscriber="selectedSubscriber" ref="formSubscriberEdit" @updated="handleUpdated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
       </template>
     </modal>
     <modal
-      id="modal-user-view"
-      :title="$t('user_details')"
+      id="modal-subscriber-view"
+      :title="$t('subscriber_details')"
       size="lg"
     >
-      <user-view :user="selectedUser" />
+      <subscriber-view :subscriber="selectedSubscriber" />
     </modal>
   </div>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { IUser } from '@/types'
+import type { ISubscriber } from '@/types'
 // Vars
 const props = defineProps({
   endpoint: { type: String }
@@ -186,9 +187,9 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
-const formUserCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formUserCreate')
-const formUserEdit = useTemplateRef<{ update: () => void }>('formUserEdit')
-const selectedUser = ref<IUser>({} as IUser)
+const formSubscriberCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formSubscriberCreate')
+const formSubscriberEdit = useTemplateRef<{ update: () => void }>('formSubscriberEdit')
+const selectedSubscriber = ref<ISubscriber>({} as ISubscriber)
 // Composables
 const { t } = useI18n()
 const { messages, addToast } = useToasts()
@@ -196,16 +197,16 @@ const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { $bootstrap } = useNuxtApp()
 // Computed
-const users = computed<IUser[]>(() => {
-  return resource?.value?.data as IUser[]
+const subscribers = computed<ISubscriber[]>(() => {
+  return resource?.value?.data as ISubscriber[]
 })
 // Functions
-const destroy = async (user: IUser) => {
-  const name = user.email
-  const model = t('user')
+const destroy = async (subscriber: ISubscriber) => {
+  const name = subscriber.email
+  const model = t('subscriber')
   const message = t('messages.confirm_destroy_name', { name })
   if (confirm(message)) {
-    await useApi(`/admin/users/${user.id}`, {
+    await useApi(`/admin/subscribers/${subscriber.id}`, {
       method: 'delete',
       onResponse({ request, response, options }) {
         if (response.status === 204) {
@@ -225,9 +226,9 @@ const destroy = async (user: IUser) => {
     })
   }
 }
-const edit = (user: IUser): void => {
-  selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
+const edit = (subscriber: ISubscriber): void => {
+  selectedSubscriber.value = subscriber
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')
   modal.show()
 }
 const handleCreated = (): void => {
@@ -237,8 +238,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-create')
-  const model = t('user')
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-create')
+  const model = t('subscriber')
   modal.hide()
   refresh()
   addToast({ 
@@ -247,8 +248,8 @@ const onCreated = () => {
   })
 }
 const onUpdated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
-  const model = t('user')
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')
+  const model = t('subscriber')
   modal.hide()
   refresh()
   addToast({ 
@@ -257,18 +258,18 @@ const onUpdated = () => {
   })
 }
 const reset = (): void => {
-  formUserCreate.value?.reset()
+  formSubscriberCreate.value?.reset()
 }
-const show = (user: IUser): void => {
-  selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-view')
+const show = (subscriber: ISubscriber): void => {
+  selectedSubscriber.value = subscriber
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-view')
   modal.show()
 }
 const store = (): void => {
-  formUserCreate.value?.store()
+  formSubscriberCreate.value?.store()
 }
 const update = (): void => {
-  formUserEdit.value?.update()
+  formSubscriberEdit.value?.update()
 }
 onMounted(() => {
   refresh()
