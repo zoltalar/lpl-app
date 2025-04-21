@@ -4,6 +4,7 @@
   </div>
   <tabs>
     <tab :title="$t('general')" target="#subscriber-general" active />
+    <tab :title="$t('attributes')" target="#subscriber-attributes" />
     <tab :title="$t('lists')" target="#subscriber-lists" />
     <tab :title="$t('campaigns')" target="#subscriber-campaigns" />
     <tab :title="$t('bounces')" target="#subscriber-bounces" />
@@ -131,6 +132,32 @@
         </tbody>
       </table>
     </div>
+    <div class="tab-pane fade" id="subscriber-attributes" role="tabpanel" aria-labelledby="tab-attributes">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <template v-if="subscriber.attributes && subscriber.attributes.length > 0">
+              <tr v-for="attribute in subscriber.attributes">
+                <td class="table-attribute">
+                  {{ attributeLabel(attribute) }}
+                </td>
+                <td>
+                  <span v-if="attribute.pivot && attribute.pivot.value">
+                    {{ attribute.pivot.value }}
+                  </span>
+                  <span v-else> - </span>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <div class="text-center">
+                <p class="mt-3 mb-0">{{ $t('no_attributes') }}</p>
+              </div>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <div class="tab-pane fade" id="subscriber-lists" role="tabpanel" aria-labelledby="tab-lists">
       <ul class="mb-0" v-if="subscriber.mailing_lists && subscriber.mailing_lists.length > 0">
         <li v-for="list in subscriber.mailing_lists">{{ list.name }}</li>
@@ -149,6 +176,7 @@ interface Props {
 const props = defineProps<Props>()
 // Composables
 const { data } = useAuth()
+const { label: attributeLabel } = useAttribute()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const subscriber = computed<ISubscriber>(() => {

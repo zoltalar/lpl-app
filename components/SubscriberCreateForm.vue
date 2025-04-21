@@ -33,7 +33,7 @@
       <div class="invalid-feedback d-block" v-if="error('password') !== null">
         {{ error('password') }}
       </div>
-    </div>
+    </div>    
     <div class="form-group">
       <div class="form-check form-switch">
         <input
@@ -95,6 +95,32 @@
       <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
     </div>
     <div class="form-group mb-0">
+      <h6>
+        <span>{{ $t('attributes') }}</span>
+        <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshAttributes">
+          <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}"></i>
+        </button>
+      </h6>
+    </div>
+    <template v-for="attribute in attributes">
+      <div class="form-group">
+        <attribute-label
+          :attribute="attribute"
+          prefix="subscriber-create"
+        />
+        <attribute-input
+          :attribute="attribute"
+          prefix="subscriber-create"
+          :errored="error('attributes.' + attribute.slug) !== null"
+          :disabled="busyRefreshAttributes"
+          v-model="subscriberAttributes[attribute.slug]"
+        />
+        <div class="invalid-feedback d-block" v-if="error('attributes.' + attribute.slug) !== null">
+          {{ error('attributes.' + attribute.slug) }}
+        </div>
+      </div>
+    </template>
+    <div class="form-group mb-0">
       <h6 class="mb-0">
         <span>{{ $t('mailing_lists') }}</span>
         <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
@@ -147,11 +173,16 @@ const {
   inputId
 } = useForm('subscriber-create')
 const {
+  attributes,
+  subscriberAttributes,
   subscriberLists,
+  busyRefreshAttributes,
   busyRefreshLists,
   lists,
   inputType,
   inputIcon,
+  normalizeAttributeValue,
+  refreshAttributes,
   refreshLists,
   toggleInput,
   listType
@@ -165,6 +196,11 @@ const normalize = (): FormData => {
       formData.append(key, value)
     }
   })
+  if (! $_.isEmpty(subscriberAttributes.value)) {
+    $_.forOwn(subscriberAttributes.value, (value: any, key: string) => {
+      formData.append('attributes[' + key + ']', normalizeAttributeValue(value))
+    })
+  }
   $_.forEach(subscriberLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())
   })

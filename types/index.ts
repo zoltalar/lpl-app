@@ -45,7 +45,11 @@ export interface IAttribute extends IBaseModel, ITimestamps, IUserstamps {
   options: IAttributeOption[] | null,
   input_texts: IAttributeInputText[] | null,
   required: number | null,
-  active: number | null
+  active: number | null,
+  pivot?: IAttributePivot | null
+}
+export interface IAttributePivot {
+  value: string
 }
 export interface IAttributeJson {
   code: string
@@ -116,6 +120,7 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   active: number | null,
   unique_id: string | null,
   rss_frequency: string | null,
+  attributes?: IAttribute[] | null,
   mailing_lists?: IMailingList[] | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
