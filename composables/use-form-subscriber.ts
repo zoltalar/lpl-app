@@ -2,7 +2,12 @@ export default function useFormSubscriber() {
   // Vars
   const subscriberLists = ref<number[]>([])
   // Composables
-  const { busy: busyRefreshLists, lists, refresh: refreshLists } = useMailingList()
+  const {
+    busy: busyRefreshLists,
+    lists,
+    refresh: refreshLists,
+    type: listType
+  } = useMailingList()
   const { inputType, inputIcon, toggleInput } = usePassword()
   return {
     // Vars
@@ -13,6 +18,7 @@ export default function useFormSubscriber() {
     inputIcon,
     // Functions
     refreshLists,
-    toggleInput
+    toggleInput,
+    listType
   }
 }

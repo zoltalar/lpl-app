@@ -95,12 +95,13 @@
       <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
     </div>
     <div class="form-group mb-0">
-      <h6 class="mb-2">
+      <h6 class="mb-0">
         <span>{{ $t('mailing_lists') }}</span>
         <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
           <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
         </button>
       </h6>
+      <div class="form-text mb-2" v-html="$t('messages.form_text_subscriber_mailing_lists')"></div>
       <div class="checkboxes-mailing-lists" v-if="lists.length > 0">
         <template v-for="list in lists">
           <div class="form-check">
@@ -114,6 +115,9 @@
             />
             <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
               {{ list.name }}
+              <small class="text-secondary ms-1">
+                <span v-if="list.type">{{ listType(list.type) }}</span>; {{ list.subscribers_count }} {{ $t('subscriber_s') }}
+              </small>
             </label>
           </div>
         </template>
@@ -149,7 +153,8 @@ const {
   inputType,
   inputIcon,
   refreshLists,
-  toggleInput
+  toggleInput,
+  listType
 } = useFormSubscriber()
 const { $_ } = useNuxtApp()
 // Functions
