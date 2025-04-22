@@ -11,6 +11,16 @@
       v-model="attributeValue"
       v-if="inputType === 1"
     />
+    <input
+      type="number"
+      class="form-control"
+      :id="inputId"
+      :placeholder="placeholder"
+      :required="required"
+      :disabled="props.disabled"
+      v-model="attributeValue"
+      v-else-if="inputType === 2"
+    />
   </div>
 </template>
 <script setup lang="ts">

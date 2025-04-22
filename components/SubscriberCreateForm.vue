@@ -97,7 +97,7 @@
     <div class="form-group mb-0">
       <h6>
         <span>{{ $t('attributes') }}</span>
-        <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshAttributes">
+        <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshAttributes">
           <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}"></i>
         </button>
       </h6>
@@ -123,7 +123,7 @@
     <div class="form-group mb-0">
       <h6 class="mb-0">
         <span>{{ $t('mailing_lists') }}</span>
-        <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
+        <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
           <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
         </button>
       </h6>

@@ -119,7 +119,7 @@
         <div class="form-group mb-0">
           <h6>
             <span>{{ $t('offer_mailing_lists') }}</span>
-            <button type="button" class="btn btn-secondary btn-sm ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
+            <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
               <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
             </button>
           </h6>
