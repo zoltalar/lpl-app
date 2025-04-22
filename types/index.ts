@@ -161,6 +161,10 @@ export type TAttributeMeta = {
 export type TMailingListMeta = {
   types: Record<string, string>
 }
+export type TSelectOption = {
+  value: string | number | null,
+  text: string
+}
 export type TSubscribePageMeta = {
   email_formats: Record<string, string>
 }

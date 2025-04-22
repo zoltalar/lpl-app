@@ -1,4 +1,4 @@
-import type { IMailingList } from '@/types'
+import type { IAttribute, IMailingList } from '@/types'
 
 export default function useFormSubscriber() {
   // Vars
@@ -6,7 +6,7 @@ export default function useFormSubscriber() {
   const subscriberLists = ref<number[]>([])
   // Composables
   const {
-    attributes,
+    attributes: unsortedAttributes,
     busy: busyRefreshAttributes,
     normalizeValue: normalizeAttributeValue,
     refresh: refreshAttributes
@@ -18,7 +18,11 @@ export default function useFormSubscriber() {
     type: listType
   } = useMailingList()
   const { inputType, inputIcon, toggleInput } = usePassword()
+  const { $_ } = useNuxtApp()
   // Computed
+  const attributes = computed<IAttribute[]>(() => {
+    return $_.sortBy(unsortedAttributes.value, ['id'])
+  })
   const lists = computed<IMailingList[]>(() => {
     return unfilteredLists.value.filter((list: IMailingList) => {
       return list.type === 'public'

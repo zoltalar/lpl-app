@@ -3,6 +3,7 @@ import { useAttributeStore } from '@/store/attribute'
 import type {
   IAttribute,
   IAttributeLabel,
+  IAttributeOption,
   IAttributePlaceholder
 } from '@/types'
 
@@ -58,10 +59,16 @@ export default function useAttribute() {
     return Number(attribute.maxlength)
   }
   const normalizeValue = (value: any): any | null => {
-    if ($_.isObject(value) && 'value' in value) {
-      return value['value']
+    return $_.isString(value) || $_.isNumber(value) ? value : null
+  }
+  const option = (attribute: IAttribute): string => {
+    if (attribute.options) {
+      const option = attribute.options.find((option: IAttributeOption) => {
+        return option.code === locale.value
+      })
+      return option?.option ?? ''
     }
-    return $_.isString(value) ? value : null
+    return ''
   }
   const placeholder = (attribute: IAttribute): string => {
     if (attribute.placeholders) {
@@ -89,6 +96,7 @@ export default function useAttribute() {
     label,
     maxlength,
     normalizeValue,
+    option,
     placeholder,
     refresh,
     required

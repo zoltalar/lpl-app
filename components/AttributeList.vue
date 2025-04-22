@@ -51,6 +51,9 @@
                         <sortable-column column="attributes.slug" v-model="sort">{{ $t('slug') }}</sortable-column>
                       </th>
                       <th width="15%">
+                        <sortable-column column="attributes.input_type" v-model="sort">{{ $t('input_type') }}</sortable-column>
+                      </th>
+                      <th width="15%">
                         <sortable-column column="attributes.required" v-model="sort">{{ $t('required') }}</sortable-column>
                       </th>
                       <th width="15%">
@@ -65,6 +68,12 @@
                         </th>
                         <th>
                           <filter-input v-model="filters.slug" />
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" v-model="filters.input_type">
+                            <option></option>
+                            <option :value="type" v-for="(name, type) in inputTypes">{{ name }}</option>
+                          </select>
                         </th>
                         <th>
                           <select class="form-select form-select-sm" v-model="filters.required">
@@ -93,6 +102,12 @@
                         <code>{{ attribute.slug }}</code>
                       </td>
                       <td>
+                        <span v-if="attribute.input_type">
+                          {{ inputTypeName(attribute.input_type) }}
+                        </span>
+                        <span v-else> - </span>
+                      </td>
+                      <td>
                         <yes-no :expression="attribute.required" />
                       </td>
                       <td>
@@ -107,7 +122,7 @@
                       </td>
                     </tr>
                     <tr v-if="attributes && attributes.length === 0">
-                      <td colspan="5">
+                      <td colspan="6">
                         {{ $t('messages.no_attributes') }}
                       </td>
                     </tr>
@@ -197,6 +212,7 @@ const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
+const { inputTypes, inputTypeName } = useAttribute()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const attributes = computed<IAttribute[]>(() => {

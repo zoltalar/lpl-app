@@ -162,7 +162,9 @@
       <ul class="mb-0" v-if="subscriber.mailing_lists && subscriber.mailing_lists.length > 0">
         <li v-for="list in subscriber.mailing_lists">{{ list.name }}</li>
       </ul>
-      <p class="mb-0" v-else>{{ $t('messages.subscriber_no_lists') }}</p>
+      <div class="text-center" v-else>
+        <p class="mt-3 mb-0">{{ $t('no_mailing_lists') }}</p>
+      </div>
     </div>
   </div>
 </template>
