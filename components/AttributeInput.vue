@@ -40,7 +40,9 @@
       v-model="attributeValue"
       v-else-if="inputType === 4"
     >
-      <option :value="option.value" v-for="option in selectOptions">{{ option.text }}</option>
+      <optgroup :label="optgroupLabel" v-for="(options, optgroupLabel) in selectOptions">
+        <option :value="option" v-for="option in options">{{ option }}</option>
+      </optgroup>
     </select>
     <div v-else-if="inputType === 5">
       <div class="form-check" v-for="(option, i) in options">
@@ -70,7 +72,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { IAttribute, TSelectOption } from '@/types'
+import type { IAttribute, ICountry, IState } from '@/types'
 // Vars
 interface Props {
   attribute?: IAttribute | null,
@@ -86,14 +88,17 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(['update:modelValue'])
 // Composables
 const {
+  dynamicOption,
   inputId: attributeInputId,
   inputName: attributeInputName,
   inputType: attributeInputType,
+  label: attributeLabel,
   maxlength: attributeMaxlength,
   option: attributeOption,
   placeholder: attributePlaceholder,
   required: attributeRequired
 } = useAttribute()
+const { countries: ungroupedCountries } = useCountry()
 const { phrases } = useString()
 // Computed
 const attribute = computed<IAttribute>(() => {
@@ -110,6 +115,18 @@ const attributeValue = computed({
     emits('update:modelValue', value)
   }
 })
+const countries = computed<Record<string, string[]>>(() => {
+  let countries: Record<string, string[]> = {}
+  ungroupedCountries.value.forEach((country: ICountry) => {
+    if (! countries[country.name]) {
+      countries[country.name] = []
+    }
+    country.states?.forEach((state: IState) => {
+      countries[country.name].push(state.name)
+    })
+  })
+  return countries
+})
 const inputId = computed<string>(() => {
   return attributeInputId(attribute.value, props.prefix)
 })
@@ -118,6 +135,9 @@ const inputName = computed<string>(() => {
 })
 const inputType = computed<number>(() => {
   return attributeInputType(attribute.value)
+})
+const label = computed<string>(() => {
+  return attributeLabel(attribute.value)
 })
 const maxlength = computed<number>(() => {
   return attributeMaxlength(attribute.value)
@@ -140,21 +160,24 @@ const placeholder = computed<string>(() => {
 const required = computed<boolean>(() => {
   return attributeRequired(attribute.value)
 })
-const selectOptions = computed<TSelectOption[]>(() => {
-  const options: TSelectOption[] = []
-  if (placeholder.value) {
-    options.push({
-      value: '',
-      text: placeholder.value
-    })
-  }
-  if (option.value) {
-    phrases(option.value).forEach((phrase: any) => {
-      options.push({
-        value: phrase,
-        text: phrase
+const selectOptions = computed<Record<string, string[]>>(() => {
+  let options: Record<string, string[]> = {}
+  if (dynamicOption(option.value)) {
+    switch(option.value) {
+      case '[STATES]':
+        options = countries.value
+        break
+    }
+  } else {
+    options[label.value] = []
+    if (placeholder.value) {
+      options[label.value].push(placeholder.value)
+    }
+    if (option.value) {
+      phrases(option.value).forEach((phrase: any) => {
+        options[label.value].push(phrase.toString())
       })
-    })
+    }
   }
   return options
 })

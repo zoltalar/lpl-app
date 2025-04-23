@@ -21,7 +21,10 @@ export default function useAttribute() {
   const inputTypes = computed<Record<number,string>>(() => {
     return attributeStore.getMeta.input_types
   })
-  // Function
+  // Functions
+  const dynamicOption = (option: string): boolean => {
+    return ['[STATES]'].includes(option)
+  }
   const inputId = (attribute: IAttribute, prefix?: string | null): string => {
     const elements = ['input']
     if (prefix) {
@@ -89,6 +92,7 @@ export default function useAttribute() {
     attributes,
     inputTypes,
     // Functions
+    dynamicOption,
     inputId,
     inputName,
     inputType,

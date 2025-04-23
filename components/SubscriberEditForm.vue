@@ -1,5 +1,5 @@
 <template>
-  <form novalidate @submit.prevent="store">
+  <form novalidate @submit.prevent="update">
     <div class="form-group">
       <label :for="inputId('email')" class="form-label">{{ $t('email') }}</label>
       <required-input />
@@ -17,6 +17,11 @@
     </div>
     <div class="form-group">
       <label :for="inputId('password')" class="form-label">{{ $t('password') }}</label>
+      <span
+        class="badge text-bg-primary ms-2"
+        :title="$t('password_is_set')"
+        v-if="subscriber.password_set === 1"
+      >{{ $t('set') }}</span>
       <div class="input-group">
         <input
           :type="inputType"
@@ -106,11 +111,11 @@
       <div class="form-group">
         <attribute-label
           :attribute="attribute"
-          prefix="subscriber-create"
+          prefix="subscriber-edit"
         />
         <attribute-input
           :attribute="attribute"
-          prefix="subscriber-create"
+          prefix="subscriber-edit"
           :errored="error('attributes.' + attribute.slug) !== null"
           :disabled="busyRefreshAttributes"
           v-model="subscriberAttributes[attribute.slug]"
@@ -152,9 +157,13 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { ISubscriber } from '@/types'
+import type { IAttribute, IMailingList, ISubscriber } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+interface Props {
+  subscriber?: ISubscriber | null
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['updated'])
 const fields = {
   email: '',
   password: '',
@@ -167,11 +176,10 @@ const form: Partial<ISubscriber> = reactive({...fields})
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
-} = useForm('subscriber-create')
+} = useForm('subscriber-edit')
 const {
   attributes,
   subscriberAttributes,
@@ -188,9 +196,32 @@ const {
   listType
 } = useFormSubscriber()
 const { $_ } = useNuxtApp()
+// Computed
+const subscriber = computed<ISubscriber>(() => {
+  return props.subscriber as ISubscriber
+})
+// Watch
+watch(subscriber, () => {
+  if (subscriber.value) {
+    Object.assign(form, subscriber.value)
+    subscriberAttributes.value = {}
+    if (subscriber.value.attributes) {
+      subscriber.value.attributes.forEach((attribute: IAttribute) => {
+        subscriberAttributes.value[attribute.slug] = attribute.pivot?.value
+      })
+    }
+    subscriberLists.value = []
+    if (subscriber.value.mailing_lists) {
+      subscriber.value.mailing_lists.forEach((list: IMailingList) => {
+        subscriberLists.value.push(list.id)
+      })
+    }
+  }
+}, { immediate: true })
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
+  formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
@@ -206,17 +237,16 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const store = async () => {
-  const subscriber: FormData = normalize()
-  await useApi('/admin/subscribers/store', {
+const update = async () => {
+  const subscriberData: FormData = normalize()
+  await useApi(`/admin/subscribers/update/${subscriber.value.id}`, {
     method: 'post',
-    body: subscriber,
+    body: subscriberData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -224,11 +254,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  Object.assign(form, fields)
-  subscriberAttributes.value = {}
-  subscriberLists.value = []
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>

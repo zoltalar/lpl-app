@@ -3,7 +3,8 @@ export interface IApiResource {
   data: 
     IAttachment[] | 
     IAttribute[] | 
-    ICategory[] | 
+    ICategory[] |
+    ICountry[] |
     IMailingList[] | 
     ISubscribePage[] |
     ISubscriber[] | 
@@ -73,6 +74,11 @@ export interface ICategory extends IBaseModel {
   name: string,
   lists_count?: number
 }
+export interface ICountry extends IBaseModel {
+  name: string,
+  list_order?: number | null,
+  states?: IState[] | null,
+}
 export interface ILanguage extends IBaseModel {
   name: string,
   code: string
@@ -95,6 +101,11 @@ export interface IPermission extends IBaseModel, ITimestamps {
 export interface IRole extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
+}
+export interface IState extends IBaseModel {
+  country_id: number | null,
+  name: string,
+  abbreviation: string | null
 }
 export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
