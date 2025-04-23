@@ -166,7 +166,7 @@
         "login_text": "Enter your email address and password to access admin panel.",
         "model_created": "{model} has been created successfully.",
         "model_destroyed": "{model} has been deleted successfully.",
-        "model_name_destroy_error": "{model} '{name}' cannot be deleted",
+        "model_name_destroy_error": "{model} '{name}' cannot be deleted.",
         "model_updated": "{model} has been updated successfully.",
         "no_attachments": "There are no attachments to display.",
         "no_attributes": "There are no attributes to display.",

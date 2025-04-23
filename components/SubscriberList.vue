@@ -47,8 +47,11 @@
                       <th width="10%">
                         <sortable-column column="subscribers.id" v-model="sort">{{ $t('id') }}</sortable-column>
                       </th>
-                      <th width="35%">
+                      <th width="30%">
                         <sortable-column column="subscribers.email" v-model="sort">{{ $t('email') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="subscribers.confirmed" v-model="sort">{{ $t('confirmed') }}</sortable-column>
                       </th>
                       <th width="15%">
                         <sortable-column column="subscribers.blacklisted" v-model="sort">{{ $t('blacklisted') }}</sortable-column>
@@ -65,6 +68,13 @@
                         </th>
                         <th>
                           <filter-input v-model="filters.email" />
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" v-model="filters.confirmed">
+                            <option></option>
+                            <option :value="1">{{ $t('yes') }}</option>
+                            <option :value="0">{{ $t('no') }}</option>
+                          </select>
                         </th>
                         <th>
                           <select class="form-select form-select-sm" v-model="filters.blacklisted">
@@ -91,6 +101,9 @@
                       <td>{{ subscriber.id }}</td>
                       <td>{{ subscriber.email }}</td>
                       <td>
+                        <yes-no :expression="subscriber.confirmed" />
+                      </td>
+                      <td>
                         <yes-no :expression="subscriber.blacklisted" :inverse="true" />
                       </td>
                       <td>
@@ -105,7 +118,7 @@
                       </td>
                     </tr>
                     <tr v-if="subscribers && subscribers.length === 0">
-                      <td colspan="5">
+                      <td colspan="6">
                         {{ $t('messages.no_subscribers') }}
                       </td>
                     </tr>

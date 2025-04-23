@@ -5,7 +5,7 @@
   <tabs>
     <tab :title="$t('general')" target="#subscriber-general" active />
     <tab :title="$t('attributes')" target="#subscriber-attributes" />
-    <tab :title="$t('lists')" target="#subscriber-lists" />
+    <tab :title="$t('mailing_lists')" target="#subscriber-lists" />
     <tab :title="$t('campaigns')" target="#subscriber-campaigns" />
     <tab :title="$t('bounces')" target="#subscriber-bounces" />
   </tabs>
