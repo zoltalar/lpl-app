@@ -15,7 +15,8 @@ export default function useFormSubscribePage() {
   const {
     busy: busyRefreshLists,
     lists: unfilteredLists,
-    refresh: refreshLists
+    refresh: refreshLists,
+    type: listType
   } = useMailingList()
   const { emailFormats } = useSubscribePage()
   const { $_ } = useNuxtApp()
@@ -41,6 +42,7 @@ export default function useFormSubscribePage() {
     lists,
     // Functions
     attributeLabel,
+    listType,
     refreshAttributes,
     refreshLists
   }

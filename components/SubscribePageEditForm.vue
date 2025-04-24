@@ -56,7 +56,7 @@
           <textarea
             class="form-control"
             :class="{'is-invalid': error('thank_you') !== null}"
-            :id="inputId('thank_you')"
+            :id="inputId('thank-you')"
             rows="7"
             v-model="form.thank_you"
           ></textarea>
@@ -165,6 +165,9 @@
                 />
                 <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
                   {{ list.name }}
+                  <small class="text-secondary ms-1">
+                    <span v-if="list.type">{{ listType(list.type) }}</span>; {{ list.subscribers_count }} {{ $t('subscriber_s') }}
+                  </small>
                 </label>
               </div>
             </template>
@@ -210,6 +213,7 @@ const {
   busyRefreshLists,
   lists,
   attributeLabel,
+  listType,
   refreshAttributes,
   refreshLists
 } = useFormSubscribePage()

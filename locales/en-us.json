@@ -89,6 +89,8 @@
     "no": "No",
     "no_attributes": "No Attributes",
     "no_mailing_lists": "No Mailing Lists",
+    "no_permissions": "No Permissions",
+    "no_roles": "No Roles",
     "offer_mailing_lists": "Offer Mailing Lists",
     "opted_in": "Opted In",
     "options": "Options",

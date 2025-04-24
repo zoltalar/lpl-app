@@ -133,13 +133,13 @@
       <ul class="mb-0" v-if="user.roles && user.roles.length > 0">
         <li v-for="role in user.roles">{{ $t(role.name) }}</li>
       </ul>
-      <p class="text-center mt-3 mb-0" v-else>{{ $t('messages.user_no_roles') }}</p>
+      <p class="text-center mt-3 mb-0" v-else>{{ $t('no_roles') }}</p>
     </div>
     <div class="tab-pane fade" id="user-permissions" role="tabpanel" aria-labelledby="tab-permissions">
       <ul class="mb-0" v-if="user.permissions && user.permissions.length > 0">
         <li v-for="permission in user.permissions">{{ permission.name }}</li>
       </ul>
-      <p class="text-center mt-3 mb-0" v-else>{{ $t('messages.user_no_permissions') }}</p>
+      <p class="text-center mt-3 mb-0" v-else>{{ $t('no_permissions') }}</p>
     </div>
   </div>
 </template>

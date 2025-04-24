@@ -56,7 +56,7 @@
           <textarea
             class="form-control"
             :class="{'is-invalid': error('thank_you') !== null}"
-            :id="inputId('thank_you')"
+            :id="inputId('thank-you')"
             rows="7"
             v-model="form.thank_you"
           ></textarea>
@@ -116,6 +116,34 @@
         </div>
       </div>
       <div class="col-lg-12">
+        <div class="form-group">
+          <h6>
+            <span>{{ $t('attributes') }}</span>
+            <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshAttributes">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}"></i>
+            </button>
+          </h6>
+          <div class="form-text mb-2" v-html="$t('messages.form_text_subscribe_page_attributes')"></div>
+          <div class="checkboxes-attributes" v-if="attributes.length > 0">
+            <template v-for="attribute in attributes">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="inputId('attribute-' + attribute.id)"
+                  class="form-check-input"
+                  :value="attribute.id"
+                  :disabled="busyRefreshAttributes"
+                  v-model="pageAttributes"
+                />
+                <label :for="inputId('attribute-' + attribute.id)" class="form-check-label">
+                  {{ attributeLabel(attribute) }}
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
         <div class="form-group mb-0">
           <h6>
             <span>{{ $t('offer_mailing_lists') }}</span>
@@ -137,6 +165,9 @@
                 />
                 <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
                   {{ list.name }}
+                  <small class="text-secondary ms-1">
+                    <span v-if="list.type">{{ listType(list.type) }}</span>; {{ list.subscribers_count }} {{ $t('subscriber_s') }}
+                  </small>
                 </label>
               </div>
             </template>
@@ -170,11 +201,17 @@ const {
   inputId
 } = useForm('subscribe-page-create')
 const {
+  pageAttributes,
   pageLists,
+  attributes,
   languages,
   emailFormats,
+  busyRefreshAttributes,
   busyRefreshLists,
   lists,
+  attributeLabel,
+  listType,
+  refreshAttributes,
   refreshLists
 } = useFormSubscribePage()
 const { $_ } = useNuxtApp()
@@ -185,6 +222,9 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
+  })
+  $_.forEach(pageAttributes.value, (id: any): void => {
+    formData.append('attributes[]', id.toString())
   })
   $_.forEach(pageLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())
@@ -211,6 +251,8 @@ const store = async () => {
 }
 const reset = () => {
   Object.assign(form, fields)
+  pageAttributes.value = []
+  pageLists.value = []
   clearErrors()
 }
 defineExpose({ reset, store })
