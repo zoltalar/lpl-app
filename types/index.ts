@@ -136,6 +136,10 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   attributes?: IAttribute[] | null,
   mailing_lists?: IMailingList[] | null
 }
+export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
+  name: string,
+  content: string
+}
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,
   phone: string,

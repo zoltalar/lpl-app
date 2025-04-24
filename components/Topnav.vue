@@ -7,6 +7,9 @@
             <li class="nav-item">
               <nuxt-link to="/dashboard" class="nav-link" role="button">{{ $t('dashboard') }}</nuxt-link>
             </li>
+            <li class="nav-item" v-if="hasRole('admin') || can('template-view')">
+              <nuxt-link to="/templates" class="nav-link">{{ $t('templates') }}</nuxt-link>
+            </li>
             <li class="nav-item" v-if="hasRole('admin') || can('subscriber-view')">
               <nuxt-link to="/subscribers" class="nav-link">{{ $t('subscribers') }}</nuxt-link>
             </li>
