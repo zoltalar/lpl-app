@@ -212,7 +212,11 @@ const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
-const { inputTypes, inputTypeName } = useAttribute()
+const {
+  inputTypes,
+  inputTypeName,
+  refresh: refreshAttributes
+} = useAttribute()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const attributes = computed<IAttribute[]>(() => {
@@ -229,6 +233,7 @@ const destroy = async (attribute: IAttribute) => {
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
+          refreshAttributes()
           addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
@@ -260,6 +265,7 @@ const onCreated = () => {
   const model = t('attribute')
   modal.hide()
   refresh()
+  refreshAttributes()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
@@ -270,6 +276,7 @@ const onUpdated = () => {
   const model = t('attribute')
   modal.hide()
   refresh()
+  refreshAttributes()
   addToast({ 
     header: t('success'),
     body: t('messages.model_updated', { model })
