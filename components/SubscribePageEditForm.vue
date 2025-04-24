@@ -116,6 +116,34 @@
         </div>
       </div>
       <div class="col-lg-12">
+        <div class="form-group">
+          <h6>
+            <span>{{ $t('attributes') }}</span>
+            <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshAttributes">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}"></i>
+            </button>
+          </h6>
+          <div class="form-text mb-2" v-html="$t('messages.form_text_subscribe_page_attributes')"></div>
+          <div class="checkboxes-attributes" v-if="attributes.length > 0">
+            <template v-for="attribute in attributes">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="inputId('attribute-' + attribute.id)"
+                  class="form-check-input"
+                  :value="attribute.id"
+                  :disabled="busyRefreshAttributes"
+                  v-model="pageAttributes"
+                />
+                <label :for="inputId('attribute-' + attribute.id)" class="form-check-label">
+                  {{ attributeLabel(attribute) }}
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
         <div class="form-group mb-0">
           <h6>
             <span>{{ $t('offer_mailing_lists') }}</span>
@@ -147,7 +175,7 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { IMailingList, ISubscribePage } from '@/types'
+import type { IAttribute, IMailingList, ISubscribePage } from '@/types'
 // Vars
 interface Props {
   page?: ISubscribePage | null
@@ -173,11 +201,16 @@ const {
   inputId
 } = useForm('subscribe-page-edit')
 const {
+  pageAttributes,
   pageLists,
+  attributes,
   languages,
   emailFormats,
+  busyRefreshAttributes,
   busyRefreshLists,
   lists,
+  attributeLabel,
+  refreshAttributes,
   refreshLists
 } = useFormSubscribePage()
 const { $_ } = useNuxtApp()
@@ -189,6 +222,12 @@ const page = computed<ISubscribePage>(() => {
 watch(page, () => {
   if (page.value) {
     Object.assign(form, page.value)
+    pageAttributes.value = []
+    if (page.value.attributes) {
+      page.value.attributes.forEach((attribute: IAttribute) => {
+        pageAttributes.value.push(attribute.id)
+      })
+    }
     pageLists.value = []
     if (page.value.mailing_lists) {
       page.value.mailing_lists.forEach((list: IMailingList) => {
@@ -205,6 +244,9 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
+  })
+  $_.forEach(pageAttributes.value, (id: any): void => {
+    formData.append('attributes[]', id.toString())
   })
   $_.forEach(pageLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())

@@ -21,7 +21,7 @@ export default function useFormSubscriber() {
   const { $_ } = useNuxtApp()
   // Computed
   const attributes = computed<IAttribute[]>(() => {
-    return $_.sortBy(unsortedAttributes.value, ['id'])
+    return $_.sortBy(unsortedAttributes.value, 'list_order')
   })
   const lists = computed<IMailingList[]>(() => {
     return unfilteredLists.value.filter((list: IMailingList) => {

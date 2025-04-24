@@ -12,6 +12,7 @@ export default function useFormAttribute() {
     slug: '',
     input_type: null,
     maxlength: 255,
+    list_order: 0,
     required: 0,
     active: 1
   }
@@ -30,7 +31,7 @@ export default function useFormAttribute() {
     return [4,5].includes(Number(form.input_type))
   })
   const placeholderable = computed<boolean>(() => {
-    return ! [5,6].includes(Number(form.input_type))
+    return [1,2,3,4].includes(Number(form.input_type))
   })
   return {
     fields,

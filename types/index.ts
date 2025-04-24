@@ -45,6 +45,7 @@ export interface IAttribute extends IBaseModel, ITimestamps, IUserstamps {
   placeholders: IAttributePlaceholder[] | null,
   options: IAttributeOption[] | null,
   input_texts: IAttributeInputText[] | null,
+  list_order: number | null,
   required: number | null,
   active: number | null,
   pivot?: IAttributePivot | null
@@ -117,6 +118,7 @@ export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   confirm_email: number | null,
   active: number | null,
   language?: ILanguage | null,
+  attributes?: IAttribute[] | null,
   mailing_lists?: IMailingList[] | null
 }
 export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {

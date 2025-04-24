@@ -101,6 +101,17 @@
           </tr>
           <tr>
             <td class="table-attribute">
+              {{ $t('list_order') }}
+            </td>
+            <td>
+              <span v-if="attribute.list_order !== null">
+                {{ attribute.list_order }}
+              </span>
+              <span v-else> - </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
               {{ $t('required') }}
             </td>
             <td>

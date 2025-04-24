@@ -1,6 +1,7 @@
 <template v-if="page">
   <tabs>
     <tab :title="$t('general')" target="#subscribe-page-general" active />
+    <tab :title="$t('attributes')" target="#subscribe-page-attributes" />
     <tab :title="$t('mailing_lists')" target="#subscribe-page-mailing-lists" />
   </tabs>
   <div class="tab-content py-3">
@@ -136,11 +137,17 @@
         </tbody>
       </table>
     </div>
-    <div class="tab-pane fade" id="subscribe-page-mailing-lists" role="tabpanel" aria-labelledby="tab-roles">
+    <div class="tab-pane fade" id="subscribe-page-attributes" role="tabpanel" aria-labelledby="tab-attributes">
+      <ul class="mb-0" v-if="page.attributes && page.attributes.length > 0">
+        <li v-for="attribute in page.attributes ">{{ attributeLabel(attribute) }}</li>
+      </ul>
+      <p class="text-center mt-3 mb-0" v-else>{{ $t('no_attributes') }}</p>
+    </div>
+    <div class="tab-pane fade" id="subscribe-page-mailing-lists" role="tabpanel" aria-labelledby="tab-mailing-lists">
       <ul class="mb-0" v-if="page.mailing_lists && page.mailing_lists.length > 0">
         <li v-for="list in page.mailing_lists ">{{ list.name }}</li>
       </ul>
-      <p class="text-center mt-3 mb-0" v-else>{{ $t('messages.subscribe_page_no_mailing_lists') }}</p>
+      <p class="text-center mt-3 mb-0" v-else>{{ $t('no_mailing_lists') }}</p>
     </div>
   </div>
 </template>
@@ -154,6 +161,7 @@ interface Props {
 const props = defineProps<Props>()
 // Composables
 const { data } = useAuth()
+const { label: attributeLabel } = useAttribute()
 const { emailFormat } = useSubscribePage()
 const { dateTimeFormat, fullName } = useUser()
 // Computed

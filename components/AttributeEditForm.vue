@@ -140,6 +140,21 @@
           </div>
         </div>        
       </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label :for="inputId('list-order')" class="form-label">{{ $t('list_order') }}</label>
+          <input
+            type="number"
+            class="form-control"
+            :class="{'is-invalid': error('list_order') !== null}"
+            :id="inputId('list-order')"
+            v-model="form.list_order"
+          />
+          <div class="invalid-feedback d-block" v-if="error('list_order') !== null">
+            {{ error('list_order') }}
+          </div>
+        </div>
+      </div>
       <div class="col-lg-12">
         <div class="form-group mb-0">
           <div class="form-check form-switch">
