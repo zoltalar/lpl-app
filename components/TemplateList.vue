@@ -75,7 +75,17 @@
                   <tbody>
                     <tr v-for="template in templates">
                       <td>{{ template.id }}</td>
-                      <td>{{ template.name }}</td>
+                      <td>
+                        <span class="text-truncate d-block" :title="template.name" style="width: 400px;">
+                          {{ template.name }}
+                        </span>
+                      </td>
+                      <td>
+                        <span v-if="template.created_at">
+                          {{ useDateFormat(template.created_at, dateTimeFormat(currentUser)) }}
+                        </span>
+                        <span v-else> - </span>
+                      </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
                           <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(template)" v-if="hasRole('admin') || can('template-edit')"><i class="mdi mdi-pencil"></i></button>
@@ -114,7 +124,7 @@
     <modal
       id="modal-template-create"
       :title="$t('create_template')"
-      size="md"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
@@ -148,8 +158,9 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useDateFormat } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import type { ITemplate } from '@/types'
+import type { ITemplate, IUser } from '@/types'
 // Vars
 const props = defineProps({
   endpoint: { type: String }
@@ -175,8 +186,13 @@ const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
+const { data } = useAuth()
+const { dateTimeFormat, fullName } = useUser()
 const { $bootstrap } = useNuxtApp()
 // Computed
+const currentUser = computed<IUser>(() => {
+  return data.value as IUser
+})
 const templates = computed<ITemplate[]>(() => {
   return resource?.value?.data as ITemplate[]
 })
