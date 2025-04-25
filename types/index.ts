@@ -75,6 +75,13 @@ export interface ICategory extends IBaseModel {
   name: string,
   lists_count?: number
 }
+export interface IConfiguration extends IBaseModel {
+  slug: string,
+  value: string | number | null,
+  updatable: number | null,
+  type: string,
+  active: number | null
+}
 export interface ICountry extends IBaseModel {
   name: string,
   list_order?: number | null,
@@ -98,6 +105,9 @@ export interface IMailingList extends IBaseModel, ITimestamps, IUserstamps {
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
+}
+export interface IPlaceholder extends IBaseModel {
+  name: string
 }
 export interface IRole extends IBaseModel, ITimestamps {
   name: string,
@@ -138,7 +148,8 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
 }
 export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
-  content: string
+  content: string,
+  placeholders?: IPlaceholder[] | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,

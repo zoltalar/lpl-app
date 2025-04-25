@@ -33,28 +33,15 @@
       <label class="form-label">{{ $t('set_as_default?') }}</label>
       <div class="form-check">
         <input
-          type="radio"
-          :id="inputId('option-default-yes')"
+          type="checkbox"
+          :id="inputId('option-default')"
           class="form-check-input"
-          name="option[default]"
-          :value="1"
+          :true-value="1"
+          :false-value="0"
           v-model="options.default"
         />
-        <label :for="inputId('option-default-yes')" class="form-check-label">
-          {{ $t('yes')}}
-        </label>
-      </div>
-      <div class="form-check">
-        <input
-          type="radio"
-          :id="inputId('option-default-no')"
-          class="form-check-input"
-          name="option[default]"
-          :value="0"
-          v-model="options.default"
-        />
-        <label :for="inputId('option-default-no')" class="form-check-label">
-          {{ $t('no')}}
+        <label :for="inputId('option-default')" class="form-check-label">
+          {{ $t('yes') }}
         </label>
       </div>
     </div>

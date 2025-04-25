@@ -1,4 +1,5 @@
 import { useAttributeStore } from '@/store/attribute'
+import { useConfigurationStore } from '@/store/configuration'
 import { useCountryStore } from '@/store/country'
 import { useLanguageStore } from '@/store/language'
 import { useMailingListStore } from '@/store/mailing-list'
@@ -13,6 +14,7 @@ export default function useApp() {
   // Composables
   const { $_ } = useNuxtApp()
   const attributeStore = useAttributeStore()
+  const configurationStore = useConfigurationStore()
   const countryStore = useCountryStore()
   const languageStore = useLanguageStore()
   const mailinglistStore = useMailingListStore()
@@ -32,6 +34,9 @@ export default function useApp() {
       const attributes = await attributeStore.fetchCollection()
       attributeStore.setCollection(attributes)
       responses.push(attributes)
+    }
+    if (configurationStore.getCollection.length === 0) {
+      const configurations = await configurationStore.fetchCollection()
     }
     if (countryStore.getCollection.length === 0) {
       const countries = await countryStore.fetchCollection()
