@@ -1,0 +1,31 @@
+// --------------------------------------------------
+// Quill
+// --------------------------------------------------
+
+.ql-editor {
+  max-height: 24rem;
+  min-height: 24rem;
+  overflow-y: scroll;
+  
+  p, ol, ul, pre, blockquote, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: $paragraph-margin-bottom;
+  }
+}
+
+.ql-toolbar {
+
+  .ql-formats {
+    margin-bottom: .3125rem;
+  }
+}
+
+@include color-mode(dark) {
+
+  .ql-container {
+    border-color: var(--#{$prefix}border-color);
+  }
+
+  .ql-toolbar {
+    border-color: var(--#{$prefix}border-color);
+  }
+}

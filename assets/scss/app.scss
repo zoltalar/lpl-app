@@ -4,8 +4,9 @@
 
 @import "variables";
 
-// Bootstrap
+// Third party
 @import "bootstrap/scss/bootstrap";
+@import "quill/dist/quill.snow.css";
 
 // Fonts
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap");
@@ -25,3 +26,4 @@
 @import "content";
 @import "forms";
 @import "tooltip";
+@import "quill";

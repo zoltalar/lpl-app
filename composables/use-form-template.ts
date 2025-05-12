@@ -4,7 +4,8 @@ export default function useFormTemplate() {
   // Vars
   const fields = {
     name: '',
-    content: ''
+    content_html: '',
+    content_text: ''
   }
   const form: Partial<ITemplate> = reactive({...fields})
   const options: Record<string, number> = reactive({})

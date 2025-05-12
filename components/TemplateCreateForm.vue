@@ -16,17 +16,11 @@
       </div>
     </div>
     <div class="form-group">
-      <label :for="inputId('content')" class="form-label">{{ $t('content') }}</label>
+      <label :for="inputId('content-html')" class="form-label">{{ $t('content') }} - {{ $t('html') }}</label>
       <required-input />
-      <textarea
-        class="form-control"
-        :class="{'is-invalid': error('content') !== null}"
-        :id="inputId('content')"
-        rows="15"
-        v-model="form.content"
-      ></textarea>
-      <div class="invalid-feedback d-block" v-if="error('content') !== null">
-        {{ error('content') }}
+      <editor :id="inputId('content-html')" v-model="form.content_html" />
+      <div class="invalid-feedback d-block" v-if="error('content_html') !== null">
+        {{ error('content_html') }}
       </div>
       <div class="form-text" v-html="$t('messages.form_text_template_content')" v-else></div>
     </div>

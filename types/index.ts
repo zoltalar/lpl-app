@@ -148,7 +148,8 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
 }
 export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
-  content: string,
+  content_html: string,
+  content_text: string,
   placeholders?: IPlaceholder[] | null
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
