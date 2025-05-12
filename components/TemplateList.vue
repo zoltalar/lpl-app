@@ -138,7 +138,7 @@
     <modal
       id="modal-template-edit"
       :title="$t('edit_template')"
-      size="md"
+      size="lg"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
@@ -187,7 +187,8 @@ const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { data } = useAuth()
-const { dateTimeFormat, fullName } = useUser()
+const { refresh: refreshConfigurations } = useConfiguration()
+const { dateTimeFormat } = useUser()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const currentUser = computed<IUser>(() => {
@@ -238,6 +239,7 @@ const onCreated = () => {
   const model = t('template')
   modal.hide()
   refresh()
+  refreshConfigurations()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
@@ -248,6 +250,7 @@ const onUpdated = () => {
   const model = t('template')
   modal.hide()
   refresh()
+  refreshConfigurations()
   addToast({ 
     header: t('success'),
     body: t('messages.model_updated', { model })

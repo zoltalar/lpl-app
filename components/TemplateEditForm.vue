@@ -1,5 +1,5 @@
 <template>
-  <form class="form-default" @submit.prevent="store">
+  <form class="form-default" @submit.prevent="update">
     <div class="form-group">
       <label :for="inputId('name')" class="form-label">{{ $t('name') }}</label>
       <required-input />
@@ -49,21 +49,46 @@
   </form>
 </template>
 <script setup lang="ts">
+import type { ITemplate } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+interface Props {
+  template?: ITemplate | null
+}
+const props = defineProps<Props>()
+const emits = defineEmits(['updated'])
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
-} = useForm('template-create')
-const { fields, form, options } = useFormTemplate()
+} = useForm('template-edit')
+const { form, options } = useFormTemplate()
+const {
+  findBySlug: configurationFindBySlug,
+  value: configurationValue
+} = useConfiguration()
 const { $_ } = useNuxtApp()
+// Computed
+const template = computed<ITemplate>(() => {
+  return props.template as ITemplate
+})
+// Watch
+watch(template, () => {
+  if (template.value) {
+    Object.assign(form, template.value)
+    const defaultTemplateId = Number(configurationValue(toRaw(configurationFindBySlug('default-template'))))
+    if (template.value.id === defaultTemplateId) {
+      options['default'] = 1
+    } else {
+      options['default'] = 0
+    }
+  }
+}, { immediate: true })
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
+  formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
@@ -74,17 +99,16 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const store = async () => {
-  const template: FormData = normalize()
-  await useApi('/admin/templates/store', {
+const update = async () => {
+  const templateData: FormData = normalize()
+  await useApi(`/admin/templates/update/${template.value.id}`, {
     method: 'post',
-    body: template,
+    body: templateData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        reset()
-        emits('created')
+        emits('updated')
       }
     },
     onResponseError({ request, response, options }) {
@@ -92,9 +116,5 @@ const store = async () => {
     }
   })
 }
-const reset = () => {
-  Object.assign(form, fields)
-  clearErrors()
-}
-defineExpose({ reset, store })
+defineExpose({ update })
 </script>

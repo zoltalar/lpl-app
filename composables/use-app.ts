@@ -37,6 +37,8 @@ export default function useApp() {
     }
     if (configurationStore.getCollection.length === 0) {
       const configurations = await configurationStore.fetchCollection()
+      configurationStore.setCollection(configurations)
+      responses.push(configurations)
     }
     if (countryStore.getCollection.length === 0) {
       const countries = await countryStore.fetchCollection()

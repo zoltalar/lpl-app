@@ -16,12 +16,27 @@ export default function useConfiguration() {
       return configuration.slug === slug
     })
   }
+  const refresh = async (): Promise<void> => {
+    busy.value = true
+    await configurationStore.refreshCollection()
+    setTimeout(() => {
+      busy.value = false
+    }, 1000)
+  }
+  const value = (configuration: IConfiguration | undefined): string => {
+    if (configuration) {
+      return configuration.value as string
+    }
+    return ''
+  }
   return {
     // Vars
     busy,
     // Computed
     configurations,
     // Functions
-    findBySlug
+    findBySlug,
+    refresh,
+    value
   }
 }
