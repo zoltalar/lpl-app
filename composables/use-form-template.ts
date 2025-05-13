@@ -9,9 +9,17 @@ export default function useFormTemplate() {
   }
   const form: Partial<ITemplate> = reactive({...fields})
   const options: Record<string, number> = reactive({})
+  // Composables
+  const {
+    renderEditor,
+    toggleEditor
+  } = useEditor()
   return {
     fields,
     form,
-    options
+    options,
+    renderEditor,
+    // Functions
+    toggleEditor
   }
 }

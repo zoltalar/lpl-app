@@ -16,13 +16,28 @@
       </div>
     </div>
     <div class="form-group">
-      <label :for="inputId('content-html')" class="form-label">{{ $t('content') }} - {{ $t('html') }}</label>
+      <div class="float-end">
+        <button type="button" class="btn btn-sm" :title="$t('toggle_editor')" @click.prevent="toggleEditor(inputId('editor-content-html'), form.content_html)">
+          <i class="mdi mdi-language-html5"></i>
+        </button>
+      </div>
+      <label :for="inputId('content-html')" class="form-label">{{ $t('html_content') }}</label>
       <required-input />
-      <editor :id="inputId('content-html')" v-model="form.content_html" />
+      <editor :id="inputId('editor-content-html')" v-model="form.content_html" v-if="renderEditor" />
+      <textarea class="form-control" :id="inputId('content-html')" rows="20" v-model="form.content_html" v-else></textarea>
       <div class="invalid-feedback d-block" v-if="error('content_html') !== null">
         {{ error('content_html') }}
       </div>
-      <div class="form-text" v-html="$t('messages.form_text_template_content')" v-else></div>
+      <div class="form-text" v-html="$t('messages.form_text_template_content_html')" v-else></div>
+    </div>
+    <div class="form-group">
+      <label :for="inputId('content-text')" class="form-label">{{ $t('text_content') }}</label>
+      <required-input />
+      <textarea class="form-control" :id="inputId('content-text')" rows="20" v-model="form.content_text"></textarea>
+      <div class="invalid-feedback d-block" v-if="error('content_text') !== null">
+        {{ error('content_text') }}
+      </div>
+      <div class="form-text" v-html="$t('messages.form_text_template_content_text')" v-else></div>
     </div>
     <div class="form-group mb-0">
       <label class="form-label">{{ $t('set_as_default?') }}</label>
@@ -53,7 +68,13 @@ const {
   getErrors,
   inputId
 } = useForm('template-create')
-const { fields, form, options } = useFormTemplate()
+const {
+  fields,
+  form,
+  options,
+  renderEditor,
+  toggleEditor
+} = useFormTemplate()
 const { $_ } = useNuxtApp()
 // Functions
 const normalize = (): FormData => {
