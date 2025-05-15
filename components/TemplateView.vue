@@ -22,8 +22,15 @@
               <span v-if="template.name">
                 {{ template.name }}                
               </span>
-              <span v-else> - </span>
-              <span class="badge text-bg-primary ms-2" v-if="template.id === defaultTemplateId">{{ $t('default') }}</span>
+              <span v-else> - </span>              
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
+              {{ $t('default') }}?
+            </td>
+            <td>
+              <yes-no :expression="template.id === defaultTemplateId"/>
             </td>
           </tr>
           <tr>
