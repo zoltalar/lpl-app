@@ -1,7 +1,6 @@
 <template v-if="template">
   <tabs>
     <tab :title="$t('general')" target="#template-general" active />
-    <tab :title="$t('placeholders')" target="#template-placeholders" />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="template-general" role="tabpanel" aria-labelledby="tab-general">
@@ -21,18 +20,30 @@
             </td>
             <td>
               <span v-if="template.name">
-                {{ template.name }}
+                {{ template.name }}                
+              </span>
+              <span v-else> - </span>
+              <span class="badge text-bg-primary ms-2" v-if="template.id === defaultTemplateId">{{ $t('default') }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-attribute">
+              {{ $t('html_content') }}
+            </td>
+            <td>
+              <span v-if="template.content_html">
+                <code>{{ template.content_html }}</code>
               </span>
               <span v-else> - </span>
             </td>
           </tr>
           <tr>
             <td class="table-attribute">
-              {{ $t('content') }}
+              {{ $t('text_content') }}
             </td>
             <td>
-              <span v-if="template.content">
-                <code>{{ template.content }}</code>
+              <span v-if="template.content_text">
+                <code>{{ template.content_text }}</code>
               </span>
               <span v-else> - </span>
             </td>
@@ -84,19 +95,11 @@
         </tbody>
       </table>
     </div>
-    <div class="tab-pane fade" id="template-placeholders" role="tabpanel" aria-labelledby="tab-placeholders">
-      <ul class="mb-0" v-if="template.placeholders && template.placeholders.length > 0">
-        <li v-for="placeholder in template.placeholders">{{ format(placeholder.name) }}</li>
-      </ul>
-      <div class="text-center" v-else>
-        <p class="mt-3 mb-0">{{ $t('no_placeholders') }}</p>
-      </div>
-    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core'
-import type { IConfiguration, ITemplate, IUser } from '@/types'
+import type { ITemplate, IUser } from '@/types'
 // Vars
 interface Props {
   template?: ITemplate | null
@@ -104,12 +107,14 @@ interface Props {
 const props = defineProps<Props>()
 // Composables
 const { data } = useAuth()
-const { findBySlug: configurationFindBySlug } = useConfiguration()
-const { format } = usePlaceholder()
+const {
+  findBySlug: configurationFindBySlug,
+  value: configurationValue
+} = useConfiguration()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
-const defaultTemplate = computed<IConfiguration|undefined>(() => {
-  return configurationFindBySlug('default-template')
+const defaultTemplateId = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('default-template'))))
 })
 const template = computed<ITemplate>(() => {
   return props.template as ITemplate

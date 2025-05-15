@@ -1,7 +1,7 @@
 import Quill from 'quill'
 export default function useEditor() {
   // Vars
-  const renderEditor = ref<boolean>(true)
+  const renderEditor = ref<boolean>(false)
   // Functions
   const toggleEditor = (id: string, html: string | undefined): void => {
     renderEditor.value = ! renderEditor.value

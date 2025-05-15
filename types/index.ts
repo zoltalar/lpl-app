@@ -106,9 +106,6 @@ export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
 }
-export interface IPlaceholder extends IBaseModel {
-  name: string
-}
 export interface IRole extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
@@ -149,8 +146,7 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
 export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
   content_html: string,
-  content_text: string,
-  placeholders?: IPlaceholder[] | null
+  content_text: string
 }
 export interface IUser extends IBaseModel, INamable, ITimestamps {
   email: string,

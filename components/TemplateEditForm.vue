@@ -16,19 +16,28 @@
       </div>
     </div>
     <div class="form-group">
-      <label :for="inputId('content')" class="form-label">{{ $t('content') }}</label>
-      <required-input />
-      <textarea
-        class="form-control"
-        :class="{'is-invalid': error('content') !== null}"
-        :id="inputId('content')"
-        rows="15"
-        v-model="form.content"
-      ></textarea>
-      <div class="invalid-feedback d-block" v-if="error('content') !== null">
-        {{ error('content') }}
+      <div class="float-end">
+        <button type="button" class="btn btn-sm" :title="$t('toggle_editor')" @click.prevent="toggleEditor(inputId('editor-content-html'), form.content_html)">
+          <i class="mdi mdi-language-html5"></i>
+        </button>
       </div>
-      <div class="form-text" v-html="$t('messages.form_text_template_content')" v-else></div>
+      <label :for="inputId('content-html')" class="form-label">{{ $t('html_content') }}</label>
+      <required-input />
+      <editor :id="inputId('editor-content-html')" v-model="form.content_html" v-if="renderEditor" />
+      <textarea class="form-control" :id="inputId('content-html')" rows="20" v-model="form.content_html" v-else></textarea>
+      <div class="invalid-feedback d-block" v-if="error('content_html') !== null">
+        {{ error('content_html') }}
+      </div>
+      <div class="form-text" v-html="$t('messages.form_text_template_content_html')" v-else></div>
+    </div>
+    <div class="form-group">
+      <label :for="inputId('content-text')" class="form-label">{{ $t('text_content') }}</label>
+      <required-input />
+      <textarea class="form-control" :id="inputId('content-text')" rows="20" v-model="form.content_text"></textarea>
+      <div class="invalid-feedback d-block" v-if="error('content_text') !== null">
+        {{ error('content_text') }}
+      </div>
+      <div class="form-text" v-html="$t('messages.form_text_template_content_text')" v-else></div>
     </div>
     <div class="form-group mb-0">
       <label class="form-label">{{ $t('set_as_default?') }}</label>
@@ -63,7 +72,12 @@ const {
   getErrors,
   inputId
 } = useForm('template-edit')
-const { form, options } = useFormTemplate()
+const {
+  form,
+  options,
+  renderEditor,
+  toggleEditor
+} = useFormTemplate()
 const {
   findBySlug: configurationFindBySlug,
   value: configurationValue
