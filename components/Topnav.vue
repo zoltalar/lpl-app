@@ -7,6 +7,15 @@
             <li class="nav-item">
               <nuxt-link to="/dashboard" class="nav-link" role="button">{{ $t('dashboard') }}</nuxt-link>
             </li>
+            <li class="nav-item dropdown">
+              <a id="top-nav-messages" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-if="hasRole('admin') || can('message-view')">{{ $t('the_messages') }}</a>
+              <div class="dropdown-menu" aria-labelledby="top-nav-messages">
+                <nuxt-link to="/messages/draft" class="dropdown-item">{{ $t('draft') }}</nuxt-link>
+                <nuxt-link to="/messages/active" class="dropdown-item">{{ $t('active') }}</nuxt-link>
+                <nuxt-link to="/messages/sent" class="dropdown-item">{{ $t('sent') }}</nuxt-link>
+                <nuxt-link to="/messages/deleted" class="dropdown-item">{{ $t('deleted') }}</nuxt-link>
+              </div>
+            </li>
             <li class="nav-item" v-if="hasRole('admin') || can('template-view')">
               <nuxt-link to="/templates" class="nav-link">{{ $t('templates') }}</nuxt-link>
             </li>

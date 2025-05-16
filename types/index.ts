@@ -102,6 +102,18 @@ export interface IMailingList extends IBaseModel, ITimestamps, IUserstamps {
   subscribers_unconfirmed_unblacklisted_count?: number,
   subscribers_blacklisted_count?: number  
 }
+export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
+  name: string | null,
+  subject: string | null,
+  from_field: string | null,
+  to_field: string | null,
+  reply_to: string | null,
+  message_html: string | null,
+  message_text: string | null,
+  template_id: number | null,
+  status: number | null,
+  deleted_at: string | null
+}
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
