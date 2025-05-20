@@ -12,7 +12,7 @@
     "@nuxt/devtools": "latest",
     "@sidebase/nuxt-auth": "^0.10.0",
     "@types/node": "^18.17.3",
-    "nuxt": "^3.6.5",
+    "nuxt": "^3.17.3",
     "vue-i18n": "^9.3.0"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "sass-loader": "^13.3.2"
   },
   "overrides": {
+    "eslint": "latest",
     "vue": "latest"
   }
 }

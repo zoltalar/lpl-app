@@ -14,7 +14,7 @@
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
                 <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                  <button type="button" class="btn btn-primary" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
+                  <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
                   <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('template-view')">{{ $t('refresh') }}</button>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
@@ -47,8 +47,11 @@
                       <th width="10%">
                         <sortable-column column="messages.id" v-model="sort">{{ $t('id') }}</sortable-column>
                       </th>
-                      <th width="50%">
+                      <th width="40%">
                         <sortable-column column="messages.name" v-model="sort">{{ $t('name') }}</sortable-column>
+                      </th>
+                      <th width="15%">
+                        <sortable-column column="messages.created_at" v-model="sort">{{ $t('created_at') }}</sortable-column>
                       </th>
                       <th class="text-end">{{ $t('actions') }}</th>
                     </tr>
@@ -59,6 +62,9 @@
                         </th>
                         <th>
                           <filter-input v-model="filters.name" />
+                        </th>
+                        <th>
+                          -
                         </th>
                         <th class="text-end">
                           -
@@ -73,6 +79,12 @@
                         <span class="text-truncate d-block" :title="message.name" style="width: 400px;">
                           {{ message.name }}
                         </span>
+                      </td>
+                      <td>
+                        <span v-if="message.created_at">
+                          {{ useDateFormat(message.created_at, dateTimeFormat(currentUser)) }}
+                        </span>
+                        <span v-else> - </span>
                       </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
@@ -112,6 +124,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useDateFormat } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import type { IMessage, IUser } from '@/types'
 // Vars
@@ -137,13 +150,31 @@ const { t } = useI18n()
 const { messages: toastMessages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
-const { refresh: refreshConfigurations } = useConfiguration()
-const { $bootstrap } = useNuxtApp()
+const { data } = useAuth()
+const { dateTimeFormat } = useUser()
 // Computed
+const currentUser = computed<IUser>(() => {
+  return data.value as IUser
+})
 const messages = computed<IMessage[]>(() => {
   return resource?.value?.data as IMessage[]
 })
 // Functions
+const create = async () => {
+  const model = t('message')
+  await useApi('/admin/messages/store', {
+    method: 'post',
+    onResponse({ request, response, options }) {
+      if (response._data.data) {
+        refresh()
+        addToast({ 
+          header: t('success'),
+          body: t('messages.model_created', { model })
+        })
+      }
+    }
+  })
+}
 const destroy = async (message: IMessage) => {
   const name = message.name
   const model = t('message')
