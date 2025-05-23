@@ -13,9 +13,31 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                  <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
-                  <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('template-view')">{{ $t('refresh') }}</button>
+                <!-- mobile options -->
+                <div class="d-inline-block d-md-none">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown-message-options" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ $t('options') }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
+                      <li><a href="/messages/draft" class="dropdown-item" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</a></li>
+                      <li><a href="/messages/draft" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/messages/draft" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- desktop options -->
+                <div class="d-inline-block d-none d-md-inline-block">
+                  <div class="btn-group" role="group" :aria-label="$t('message_options')">
+                    <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
+                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href="/messages/draft" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                      </ul>
+                    </div>
+                  </div>                  
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -23,7 +45,7 @@
               </div>
               <div class="col-md-5 col-lg-4">
                 <search-form
-                  class="mt-3 mt-sm-0"
+                  class="mt-3 mt-md-0"
                   v-model="search"
                 >
                   <button
@@ -44,6 +66,15 @@
                 <table class="table table-hover table-list">
                   <thead>
                     <tr>
+                      <th width="1%">
+                        <input
+                          type="checkbox"
+                          id="input-employees-toggle"
+                          class="form-check-input"
+                          :disabled="messages.length === 0"
+                          v-model="toggle"
+                        />
+                      </th>
                       <th width="10%">
                         <sortable-column column="messages.id" v-model="sort">{{ $t('id') }}</sortable-column>
                       </th>
@@ -57,6 +88,9 @@
                     </tr>
                     <transition name="fade">
                       <tr v-if="toggleFilters">
+                        <th class="text-center">
+                          -
+                        </th>
                         <th>
                           <filter-input v-model="filters.id" />
                         </th>
@@ -73,32 +107,43 @@
                     </transition>                    
                   </thead>
                   <tbody>
-                    <tr v-for="message in messages">
-                      <td>{{ message.id }}</td>
-                      <td>
-                        <span v-if="message.name">
-                          <span class="text-truncate d-block" :title="message.name" style="width: 400px;">
-                            {{ message.name }}
+                    <template v-for="message in messages">
+                      <tr :class="{'table-active': selected.includes(message.id) }">
+                        <td>
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            :value="message.id"
+                            number
+                            v-model="selected"
+                          />
+                        </td>
+                        <td>{{ message.id }}</td>
+                        <td>
+                          <span v-if="message.name">
+                            <span class="text-truncate d-block" :title="message.name" style="width: 400px;">
+                              {{ message.name }}
+                            </span>
                           </span>
-                        </span>
-                        <span v-else> - </span>
-                      </td>
-                      <td>
-                        <span v-if="message.created_at">
-                          {{ useDateFormat(message.created_at, dateTimeFormat(currentUser)) }}
-                        </span>
-                        <span v-else> - </span>
-                      </td>
-                      <td class="text-end">
-                        <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
-                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-close"></i></button>
-                        </div>
-                      </td>
-                    </tr>
+                          <span v-else> - </span>
+                        </td>
+                        <td>
+                          <span v-if="message.created_at">
+                            {{ useDateFormat(message.created_at, dateTimeFormat(currentUser)) }}
+                          </span>
+                          <span v-else> - </span>
+                        </td>
+                        <td class="text-end">
+                          <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
+                            <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-close"></i></button>
+                          </div>
+                        </td>
+                      </tr>                      
+                    </template>
                     <tr v-if="messages && messages.length === 0">
-                      <td colspan="3">
+                      <td colspan="5">
                         {{ $t('messages.no_messages') }}
                       </td>
                     </tr>
@@ -146,6 +191,7 @@ const {
   info,
   refresh
 } = useDataTable(props)
+const selected = ref<number[]>([])
 const toggleFilters = ref<boolean>(false)
 const selectedMessage = ref<IMessage>({} as IMessage)
 // Composables
@@ -161,6 +207,20 @@ const currentUser = computed<IUser>(() => {
 })
 const messages = computed<IMessage[]>(() => {
   return resource?.value?.data as IMessage[]
+})
+const toggle = computed<boolean>({
+  get: () => {
+    return messages.value ? messages.value.length === selected.value.length : false
+  },
+  set: (value) => {
+    const checked: number[] = []
+    if (value) {
+      messages.value.forEach((message: IMessage) => {
+        checked.push(message.id)
+      })
+    }
+    selected.value = checked
+  }
 })
 // Functions
 const create = async () => {
@@ -178,7 +238,7 @@ const create = async () => {
     }
   })
 }
-const softDelete = async (message: IMessage) => {
+const softDelete = async (message: IMessage): Promise<void> => {
   const name = message.name
   const model = t('the_message')
   const confirmMessage = t('messages.confirm_delete_name', { name })
@@ -197,6 +257,29 @@ const softDelete = async (message: IMessage) => {
             header: t('error'),
             body: t('messages.model_name_delete_error', { model, name }),
             type: 'danger'
+          })
+        }
+      },
+    })
+  }
+}
+const softDeleteBatch = async (): Promise<void> => {
+  let models = t('the_messages').toLowerCase()
+  let message = t('messages.confirm_delete_batch_models', { models })
+  if (confirm(message)) {
+    await useApi(`/admin/messages/soft-batch-delete`, {
+      method: 'post',
+      body: {
+        ids: selected.value
+      },
+      onResponse({ request, response, options }) {        
+        if (response.status === 204) {
+          selected.value = []
+          models = t('the_messages')
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.models_deleted', { models })
           })
         }
       },
