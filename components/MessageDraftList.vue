@@ -76,9 +76,12 @@
                     <tr v-for="message in messages">
                       <td>{{ message.id }}</td>
                       <td>
-                        <span class="text-truncate d-block" :title="message.name" style="width: 400px;">
-                          {{ message.name }}
+                        <span v-if="message.name">
+                          <span class="text-truncate d-block" :title="message.name" style="width: 400px;">
+                            {{ message.name }}
+                          </span>
                         </span>
+                        <span v-else> - </span>
                       </td>
                       <td>
                         <span v-if="message.created_at">
@@ -90,7 +93,7 @@
                         <div class="btn-group btn-group-sm">
                           <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
                           <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="destroy(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-close"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-close"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -161,7 +164,7 @@ const messages = computed<IMessage[]>(() => {
 })
 // Functions
 const create = async () => {
-  const model = t('message')
+  const model = t('the_message')
   await useApi('/admin/messages/store', {
     method: 'post',
     onResponse({ request, response, options }) {
@@ -175,24 +178,24 @@ const create = async () => {
     }
   })
 }
-const destroy = async (message: IMessage) => {
+const softDelete = async (message: IMessage) => {
   const name = message.name
-  const model = t('message')
-  const confirmMessage = t('messages.confirm_destroy_name', { name })
+  const model = t('the_message')
+  const confirmMessage = t('messages.confirm_delete_name', { name })
   if (confirm(confirmMessage)) {
-    await useApi(`/admin/messages/${message.id}`, {
+    await useApi(`/admin/messages/soft-delete/${message.id}`, {
       method: 'delete',
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
           addToast({
             header: t('success'),
-            body: t('messages.model_destroyed', { model })
+            body: t('messages.model_deleted', { model })
           })
         } else {
           addToast({
             header: t('error'),
-            body: t('messages.model_name_destroy_error', { model, name }),
+            body: t('messages.model_name_delete_error', { model, name }),
             type: 'danger'
           })
         }
