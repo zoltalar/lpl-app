@@ -13,9 +13,24 @@
           <div class="card-body">
             <div class="row toolbar">
               <div class="col-md-7 col-lg-8">
-                <div class="btn-group" role="group" :aria-label="$t('template_options')">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-template-create" v-if="hasRole('admin') || can('template-create')">{{ $t('create') }}</button>
-                  <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('template-view')">{{ $t('refresh') }}</button>
+                <!-- mobile options -->
+                <div class="d-inline-block d-md-none">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown-template-options" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ $t('options') }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
+                      <li><a href="/templates" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-template-create" v-if="hasRole('admin') || can('template-create')">{{ $t('create') }}</a></li>
+                      <li><a href="/templates" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('template-view')">{{ $t('refresh') }}</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- desktop options -->
+                <div class="d-inline-block d-none d-md-inline-block">
+                  <div class="btn-group" role="group" :aria-label="$t('template_options')">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-template-create" v-if="hasRole('admin') || can('template-create')">{{ $t('create') }}</button>
+                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('template-view')">{{ $t('refresh') }}</button>
+                  </div>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -23,7 +38,7 @@
               </div>
               <div class="col-md-5 col-lg-4">
                 <search-form
-                  class="mt-3 mt-sm-0"
+                  class="mt-3 mt-md-0"
                   v-model="search"
                 >
                   <button
