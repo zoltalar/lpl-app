@@ -3,7 +3,7 @@
 // --------------------------------------------------
 
 .top-nav {  
-  box-shadow: var(--#{$prefix}box-shadow);  
+  box-shadow: var(--#{$prefix}box-shadow);
 
   .navbar {
     padding-bottom: 0;
@@ -88,7 +88,7 @@
 @include color-mode(light) {
 
   .top-nav {
-    background-color: $white;
+    background-color: rgba(255, 255, 255, .95);
   }
 }
 
