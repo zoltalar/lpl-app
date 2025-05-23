@@ -88,13 +88,13 @@
 @include color-mode(light) {
 
   .top-nav {
-    background-color: rgba(255, 255, 255, .95);
+    background-color: rgba(255, 255, 255, .97);
   }
 }
 
 @include color-mode(dark) {
 
   .top-nav {
-    background-color: #2f3235;
+    background-color: rgba(47, 50, 53, .97);
   }
 }
