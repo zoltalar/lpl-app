@@ -23,7 +23,7 @@
               </div>
               <div class="col-md-5 col-lg-4">
                 <search-form
-                  class="mt-3 mt-sm-0"
+                  class="mt-3 mt-md-0"
                   v-model="search"
                 >
                   <button
