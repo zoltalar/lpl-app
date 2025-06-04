@@ -42,7 +42,7 @@ const fields = {
   name: '',
   description: ''
 }
-const form: Partial<IAttachment> = reactive({...fields})
+const form = reactive<Partial<IAttachment>>({...fields})
 // Composables
 const {
   errors,

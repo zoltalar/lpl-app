@@ -192,7 +192,7 @@ const fields = {
   time_format: null,
   active: 1
 }
-const form: Partial<IUser> = reactive({...fields})
+const form = reactive<Partial<IUser>>({...fields})
 // Composables
 const {
   errors,

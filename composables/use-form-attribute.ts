@@ -16,7 +16,7 @@ export default function useFormAttribute() {
     required: 0,
     active: 1
   }
-  const form: Partial<IAttribute> = reactive({...fields})
+  const form = reactive<Partial<IAttribute>>({...fields})
   const labels = ref<IAttributeLabel[]>([])
   const placeholders = ref<IAttributePlaceholder[]>([])
   const options = ref<IAttributeOption[]>([])

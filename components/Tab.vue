@@ -6,37 +6,33 @@
       :class="{'active': active}"
       :id="id()"
       aria-current="page"
-      ref="anchor"
       data-bs-toggle="tab"
-      :data-bs-target="target"
+      :data-bs-target="props.target"
     >
       {{ title }}
     </a>
   </li>
 </template>
 <script setup lang="ts">
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-    default: ''
-  },
-  target: {
-    type: String,
-    required: true
-  },
-  active: {
-    type: Boolean,
-    required: false,
-    default: false
-  }
+// Vars
+interface Props {
+  title: string,
+  target: string,
+  active?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  target: '',
+  active: false
 })
-const anchor = ref<HTMLAnchorElement|null>(null)
+const emits = defineEmits(['update:modelValue'])
+// Composables
+const { $_ } = useNuxtApp()
 // Functions
 const href = (): string => {
-  return ['#', props.title.toLowerCase()].join('')
+  return ['#', $_.kebabCase(props.title)].join('')
 }
 const id = (): string => {
-  return ['tab', props.title.toLowerCase()].join('-')
+  return ['tab', $_.kebabCase(props.title)].join('-')
 }
 </script>

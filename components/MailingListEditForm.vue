@@ -90,7 +90,7 @@ const fields = {
   type: null,
   active: 1
 }
-const form: Partial<IMailingList> = reactive({...fields})
+const form = reactive<Partial<IMailingList>>({...fields})
 // Composables
 const {
   errors,

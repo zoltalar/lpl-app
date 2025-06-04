@@ -53,7 +53,7 @@ const fields = {
   name: '',
   description: ''
 }
-const form: Partial<IAttachment> = reactive({...fields})
+const form = reactive<Partial<IAttachment>>({...fields})
 const file = ref<File|null>(null)
 const inputFile = useTemplateRef<HTMLInputElement>('inputFile')
 // Composables

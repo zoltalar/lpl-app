@@ -169,6 +169,17 @@
       </div>
     </div>
     <toasts :messages="toastMessages" />
+    <modal
+      id="modal-message-edit"
+      :title="$t('edit_message')"
+      size="lg"
+    >
+      <message-edit-form :message="selectedMessage" ref="formMessageEdit" />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+      </template>
+    </modal>
   </div>
 </template>
 <script setup lang="ts">
@@ -201,6 +212,7 @@ const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { data } = useAuth()
 const { dateTimeFormat } = useUser()
+const { $bootstrap } = useNuxtApp()
 // Computed
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
@@ -237,6 +249,11 @@ const create = async () => {
       }
     }
   })
+}
+const edit = (message: IMessage): void => {
+  selectedMessage.value = message
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
+  modal.show()
 }
 const softDelete = async (message: IMessage): Promise<void> => {
   const name = message.name

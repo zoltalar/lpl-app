@@ -7,8 +7,8 @@ export default function useFormTemplate() {
     content_html: '',
     content_text: ''
   }
-  const form: Partial<ITemplate> = reactive({...fields})
-  const options: Record<string, number> = reactive({})
+  const form = reactive<Partial<ITemplate>>({...fields})
+  const options = reactive<Record<string, number>>({})
   // Composables
   const {
     renderEditor,

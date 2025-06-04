@@ -163,7 +163,7 @@ const fields = {
   blacklisted: 0,
   active: 1
 }
-const form: Partial<ISubscriber> = reactive({...fields})
+const form = reactive<Partial<ISubscriber>>({...fields})
 // Composables
 const {
   errors,

@@ -195,7 +195,7 @@ const fields = {
   confirm_email: 0,
   active: 0
 }
-const form: Partial<ISubscribePage> = reactive({...fields})
+const form = reactive<Partial<ISubscribePage>>({...fields})
 // Composables
 const {
   errors,
