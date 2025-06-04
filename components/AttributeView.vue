@@ -1,5 +1,5 @@
 <template v-if="attribute">
-  <tabs>
+  <tabs id="tabs-attribute-view">
     <tab :title="$t('general')" target="#attribute-general" active />
   </tabs>
   <div class="tab-content py-3">

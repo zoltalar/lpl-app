@@ -2,7 +2,7 @@
   <div class="alert alert-danger text-center" role="alert" v-if="page.active !== 1">
     {{ $t('messages.subscribe_page_inactive') }}
   </div>
-  <tabs>
+  <tabs id="tabs-subscribe-page-view">
     <tab :title="$t('general')" target="#subscribe-page-general" active />
     <tab :title="$t('attributes')" target="#subscribe-page-attributes" />
     <tab :title="$t('mailing_lists')" target="#subscribe-page-mailing-lists" />

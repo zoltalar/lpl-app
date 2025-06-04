@@ -1,5 +1,5 @@
 <template v-if="attachment">
-  <tabs>
+  <tabs id="tabs-attachment-view">
     <tab :title="$t('general')" target="#attachment-general" active />
   </tabs>
   <div class="tab-content py-3">

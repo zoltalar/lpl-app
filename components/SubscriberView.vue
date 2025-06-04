@@ -2,7 +2,7 @@
   <div class="alert alert-danger" role="alert" v-if="subscriber.blacklisted === 1">
     {{ $t('messages.subscriber_blacklisted') }}
   </div>
-  <tabs>
+  <tabs id="tabs-subscriber-view">
     <tab :title="$t('general')" target="#subscriber-general" active />
     <tab :title="$t('attributes')" target="#subscriber-attributes" />
     <tab :title="$t('mailing_lists')" target="#subscriber-lists" />

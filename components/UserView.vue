@@ -2,7 +2,7 @@
   <div class="alert alert-danger text-center" role="alert" v-if="user.active !== 1">
     {{ $t('messages.user_inactive') }}
   </div>
-  <tabs>
+  <tabs id="tabs-user-view">
     <tab :title="$t('general')" target="#user-general" active />
     <tab :title="$t('roles')" target="#user-roles" />
     <tab :title="$t('permissions')" target="#user-permissions" />

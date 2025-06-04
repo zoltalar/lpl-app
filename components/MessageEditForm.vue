@@ -1,6 +1,6 @@
 <template>
   <form class="form-default" @submit.prevent="update">
-    <tabs>
+    <tabs id="tabs-message-edit">
       <tab :title="$t('content')" target="#message-edit-content" active />
       <tab :title="$t('format')" target="#message-edit-format" />
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
@@ -59,6 +59,13 @@ watch(message, () => {
   }
 }, { immediate: true })
 // Functions
+const activeTab = (): string => {
+  const nodes: NodeList[] = document.querySelectorAll('#tabs-message-edit a.active')
+  if (nodes.length > 0) {
+    return $_.kebabCase(nodes[0].text)
+  }
+  return ''
+}
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
   formData.append('_method', 'put')
@@ -71,7 +78,8 @@ const normalize = (): FormData => {
 }
 const update = async () => {
   const list: FormData = normalize()
-  await useApi(`/admin/messages/update/${message.value.id}`, {
+  const tab = activeTab()
+  await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',
     body: list,
     onResponse({ request, response, options }) {

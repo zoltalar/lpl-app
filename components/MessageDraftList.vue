@@ -204,6 +204,7 @@ const {
 } = useDataTable(props)
 const selected = ref<number[]>([])
 const toggleFilters = ref<boolean>(false)
+const formMessageEdit = useTemplateRef<{ update: () => void }>('formMessageEdit')
 const selectedMessage = ref<IMessage>({} as IMessage)
 // Composables
 const { t } = useI18n()
@@ -302,6 +303,9 @@ const softDeleteBatch = async (): Promise<void> => {
       },
     })
   }
+}
+const update = (): void => {
+  formMessageEdit.value?.update()
 }
 onMounted(() => {
   refresh()

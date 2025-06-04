@@ -1,5 +1,5 @@
 <template v-if="list">
-  <tabs>
+  <tabs id="tabs-list-view">
     <tab :title="$t('general')" target="#mailing-list-general" active />
   </tabs>
   <div class="tab-content py-3">
