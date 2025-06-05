@@ -22,6 +22,21 @@
             {{ error('subject') }}
           </div>
         </div>
+        <div class="form-group">
+          <label :for="inputId('from-field')" class="form-label">{{ $t('from_line') }}</label>
+          <required-input />
+          <input
+            type="text"
+            class="form-control"
+            :class="{'is-invalid': error('from_field') !== null}"
+            :id="inputId('from-field')"
+            maxlength="255"
+            v-model="form.from_field"
+          />
+          <div class="invalid-feedback d-block" v-if="error('from_field') !== null">
+            {{ error('from_field') }}
+          </div>
+        </div>
       </div>
     </div>    
   </form>
@@ -36,7 +51,8 @@ const props = defineProps<Props>()
 const emits = defineEmits(['updated'])
 const fields = {
   name: '',
-  subject: ''
+  subject: '',
+  from_field: ''
 }
 const form = reactive<Partial<IMessage>>({...fields})
 // Composables

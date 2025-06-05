@@ -9,9 +9,6 @@
         <slot />
       </div>
     </div>
-    <app-footer :progress="0" />
+    <app-footer />
   </client-only>
 </template>
-<script setup lang="ts">
-// Composables
-</script>

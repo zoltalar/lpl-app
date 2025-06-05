@@ -13,6 +13,6 @@
         </div>
       </div>
     </div>
-    <app-footer :progress="0" />
+    <app-footer />
   </client-only>
 </template>

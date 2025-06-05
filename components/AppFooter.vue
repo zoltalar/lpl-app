@@ -40,17 +40,17 @@
   </footer>
 </template>
 <script setup lang="ts">
-// Vars
-interface Props {
-  progress: number
-}
-const props = defineProps<Props>()
+import { useAppStore } from '@/store/app'
 // Composables
+const appStore = useAppStore()
 const { preferredTheme, setTheme } = useUi()
 // Computed
+const progress = computed<number>(() => {
+  return appStore.getProgress
+})
 const style = computed<Record<string, string>>(() => {
   return {
-    width: props.progress + '%'
+    width: progress.value + '%'
   }
 })
 const year = computed<number>(() => {
