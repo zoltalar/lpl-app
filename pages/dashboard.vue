@@ -13,6 +13,8 @@ definePageMeta({
   layout: 'default'
 })
 // Composables
+const { fetchData } = useApp()
+await useAsyncData('app-data', () => fetchData())
 const { t } = useI18n()
 const { token } = useAuth()
 const { preferredTheme } = useUi()

@@ -199,6 +199,7 @@
         "form_text_user_disabled": "Indicate if this account is disabled.",
         "form_text_user_html_email": "Send this subscriber HTML emails.",
         "form_text_user_permissions": "Permissions are required for <em>User</em> role only.",
+        "help_message_from_field": "Testing help <em>component</em>",
         "login_error_text": "Invalid email or password!",
         "login_text": "Enter your email address and password to access admin panel.",
         "model_created": "{model} has been created successfully.",

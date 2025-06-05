@@ -25,6 +25,7 @@
         <div class="form-group">
           <label :for="inputId('from-field')" class="form-label">{{ $t('from_line') }}</label>
           <required-input />
+          <help :content="$t('messages.help_message_from_field')" />
           <input
             type="text"
             class="form-control"
