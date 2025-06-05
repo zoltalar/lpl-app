@@ -174,7 +174,7 @@
       :title="$t('edit_message')"
       size="lg"
     >
-      <message-edit-form :message="selectedMessage" ref="formMessageEdit" />
+      <message-edit-form :message="selectedMessage" ref="formMessageEdit" @updated="handleUpdated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
@@ -255,6 +255,19 @@ const edit = (message: IMessage): void => {
   selectedMessage.value = message
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
   modal.show()
+}
+const handleUpdated = (): void => {
+  onUpdated()
+}
+const onUpdated = () => {
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
+  const model = t('message')
+  modal.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_updated', { model })
+  })
 }
 const softDelete = async (message: IMessage): Promise<void> => {
   const name = message.name
