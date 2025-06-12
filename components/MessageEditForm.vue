@@ -70,14 +70,36 @@
           </div>
           <label :for="inputId('message-html')" class="form-label">{{ $t('html_message') }}</label>
           <required-input />
-          <editor :id="inputId('editor-message-html')" v-model="form.message_html" v-if="renderEditor" />
+          <editor
+            :id="inputId('editor-message-html')"
+            v-model="form.message_html"
+            v-if="renderEditor(inputId('editor-message-html'))"
+          />
           <textarea class="form-control" :id="inputId('message-html')" rows="20" v-model="form.message_html" v-else></textarea>
           <div class="invalid-feedback d-block" v-if="error('message_html') !== null">
             {{ error('message_html') }}
           </div>
         </div>
+        <div class="form-group">
+          <div class="float-end">
+            <button type="button" class="btn btn-sm" :title="$t('toggle_editor')" @click.prevent="toggleEditor(inputId('editor-footer'), form.footer)">
+              <i class="mdi mdi-language-html5"></i>
+            </button>
+          </div>
+          <label :for="inputId('footer')" class="form-label">{{ $t('footer') }}</label>
+          <editor
+            :id="inputId('editor-footer')"
+            height="12rem"
+            v-model="form.footer"
+            v-if="renderEditor(inputId('editor-footer'))"
+          />
+          <textarea class="form-control" :id="inputId('footer')" rows="10" v-model="form.footer" v-else></textarea>
+          <div class="invalid-feedback d-block" v-if="error('footer') !== null">
+            {{ error('footer') }}
+          </div>
+        </div>
       </div>
-    </div>    
+    </div>
   </form>
 </template>
 <script setup lang="ts">
@@ -92,18 +114,19 @@ const fields = {
   name: '',
   subject: '',
   from_field: '',
-  message_html: ''
+  message_html: '',
+  message_text: '',
+  footer: ''
 }
 const form = reactive<Partial<IMessage>>({...fields})
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
 } = useForm('message-edit')
-const { renderEditor, toggleEditor } = useEditor()
+const { registerEditor, renderEditor, toggleEditor } = useEditor()
 const { $_ } = useNuxtApp()
 // Computed
 const message = computed<IMessage>(() => {
@@ -117,7 +140,7 @@ watch(message, () => {
 }, { immediate: true })
 // Functions
 const activeTab = (): string => {
-  const nodes: NodeList[] = document.querySelectorAll('#tabs-message-edit a.active')
+  const nodes: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('#tabs-message-edit a.active')
   if (nodes.length > 0) {
     return $_.kebabCase(nodes[0].text)
   }
@@ -151,5 +174,11 @@ const update = async () => {
     }
   })
 }
+// Hooks
+onMounted(() => {
+  registerEditor(inputId('editor-message-html'))
+  registerEditor(inputId('editor-footer'))
+})
+// Expose
 defineExpose({ update })
 </script>

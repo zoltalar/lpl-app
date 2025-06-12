@@ -173,6 +173,8 @@
       id="modal-message-edit"
       :title="$t('edit_message')"
       size="lg"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
     >
       <message-edit-form :message="selectedMessage" ref="formMessageEdit" @updated="handleUpdated" />
       <template #footer>

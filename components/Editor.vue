@@ -44,10 +44,9 @@
       <button class="ql-clean"></button>
     </span>
   </div>
-  <div :id="id" ref="element"></div>
+  <div :id="id" ref="element" :style="style"></div>
 </template>
 <script setup lang="ts">
-/*global defineEmits,defineProps,withDefaults*/
 import { onBeforeUnmount, onMounted, onUnmounted, ref } from 'vue'
 import Quill, { Range, type QuillOptions } from 'quill'
 import { Delta } from 'quill/core'
@@ -55,12 +54,14 @@ import { Delta } from 'quill/core'
 interface Props {
   modelValue?: string,
   id?: string,
-  disabled?: boolean
+  disabled?: boolean,
+  height?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   id: 'quill',
-  disabled: false
+  disabled: false,
+  height: '24rem'
 })
 const emits = defineEmits(['ready','blur','focus','update:modelValue'])
 const element = ref<HTMLDivElement|null>(null)
@@ -76,6 +77,13 @@ const defaultOptions: QuillOptions = {
   placeholder: '',
   readOnly: false
 }
+// Computed
+const style = computed<Record<string,string>>(() => {
+  return {
+    maxHeight: props.height,
+    minHeight: props.height
+  }
+})
 // Watch
 watch(() => props.modelValue, (value) => {
   if (value === '') {
