@@ -113,6 +113,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   footer: string,
   template_id: number | null,
   status: number | null,
+  send_format: string,
   deleted_at: string | null
 }
 export interface IPermission extends IBaseModel, ITimestamps {
@@ -198,6 +199,10 @@ export type TAttributeMeta = {
 }
 export type TMailingListMeta = {
   types: Record<string, string>
+}
+export type TMessageMeta = {
+  formats: Record<string, string>,
+  statuses: Record<number, string>
 }
 export type TSelectOption = {
   value: string | number | null,

@@ -4,6 +4,7 @@ import { useConfigurationStore } from '@/store/configuration'
 import { useCountryStore } from '@/store/country'
 import { useLanguageStore } from '@/store/language'
 import { useMailingListStore } from '@/store/mailing-list'
+import { useMessageStore } from '@/store/message'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
 import { useSubscribePageStore } from '@/store/subscribe-page' 
@@ -18,6 +19,7 @@ export default function useApp() {
   const countryStore = useCountryStore()
   const languageStore = useLanguageStore()
   const mailinglistStore = useMailingListStore()
+  const messageStore = useMessageStore()
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
   const subscribePageStore = useSubscribePageStore()
@@ -25,7 +27,7 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 9.09
+    const increment = 8.33
     appStore.reset()
     if ($_.isEmpty(attributeStore.getMeta)) {
       const meta = await attributeStore.fetchMeta()
@@ -66,6 +68,12 @@ export default function useApp() {
     if ($_.isEmpty(mailinglistStore.getMeta)) {
       const meta = await mailinglistStore.fetchMeta()
       mailinglistStore.setMeta(meta)
+      responses.push(meta)
+      appStore.increment(increment)
+    }
+    if ($_.isEmpty(messageStore.getMeta)) {
+      const meta = await messageStore.fetchMeta()
+      messageStore.setMeta(meta)
       responses.push(meta)
       appStore.increment(increment)
     }

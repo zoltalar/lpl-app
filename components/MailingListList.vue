@@ -228,8 +228,8 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
-const formMailingListCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formMailingListCreate')
-const formMailingListEdit = useTemplateRef<{ update: () => void }>('formMailingListEdit')
+const formMailingListCreate = useTemplateRef<HTMLFormElement>('formMailingListCreate')
+const formMailingListEdit = useTemplateRef<HTMLFormElement>('formMailingListEdit')
 const selectedList = ref<IMailingList>({} as IMailingList)
 // Composables
 const { t } = useI18n()

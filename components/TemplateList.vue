@@ -193,8 +193,8 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
-const formTemplateCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formTemplateCreate')
-const formTemplateEdit = useTemplateRef<{ update: () => void }>('formTemplateEdit')
+const formTemplateCreate = useTemplateRef<HTMLFormElement>('formTemplateCreate')
+const formTemplateEdit = useTemplateRef<HTMLFormElement>('formTemplateEdit')
 const selectedTemplate = ref<ITemplate>({} as ITemplate)
 // Composables
 const { t } = useI18n()

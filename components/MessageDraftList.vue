@@ -179,7 +179,8 @@
       <message-edit-form :message="selectedMessage" ref="formMessageEdit" @updated="handleUpdated" />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
-        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+        <button type="button" class="btn btn-outline-primary" @click.prevent="updateWithoutClosing">{{ $t('save') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save_and_close') }}</button>
       </template>
     </modal>
   </div>
@@ -206,7 +207,7 @@ const {
 } = useDataTable(props)
 const selected = ref<number[]>([])
 const toggleFilters = ref<boolean>(false)
-const formMessageEdit = useTemplateRef<{ update: () => void }>('formMessageEdit')
+const formMessageEdit = useTemplateRef<HTMLFormElement>('formMessageEdit')
 const selectedMessage = ref<IMessage>({} as IMessage)
 // Composables
 const { t } = useI18n()
@@ -258,13 +259,15 @@ const edit = (message: IMessage): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
   modal.show()
 }
-const handleUpdated = (): void => {
-  onUpdated()
+const handleUpdated = (close: boolean): void => {
+  onUpdated(close)
 }
-const onUpdated = () => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
+const onUpdated = (close: boolean) => {
+  if (close) {
+    const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
+    modal.hide()
+  }
   const model = t('message')
-  modal.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -321,6 +324,9 @@ const softDeleteBatch = async (): Promise<void> => {
 }
 const update = (): void => {
   formMessageEdit.value?.update()
+}
+const updateWithoutClosing = (): void => {
+  formMessageEdit.value?.update(false)
 }
 onMounted(() => {
   refresh()

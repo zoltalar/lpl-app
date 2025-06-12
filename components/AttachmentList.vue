@@ -193,8 +193,8 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
-const formAttachmentCreate = useTemplateRef<{ reset: () => void, store: () => void }>('formAttachmentCreate')
-const formAttachmentEdit = useTemplateRef<{ update: () => void }>('formAttachmentEdit')
+const formAttachmentCreate = useTemplateRef<HTMLFormElement>('formAttachmentCreate')
+const formAttachmentEdit = useTemplateRef<HTMLFormElement>('formAttachmentEdit')
 const selectedAttachment = ref<IAttachment>({} as IAttachment)
 // Composables
 const { t } = useI18n()

@@ -49,7 +49,6 @@
         <div class="form-group">
           <label :for="inputId('from-field')" class="form-label">{{ $t('from_line') }}</label>
           <required-input />
-          <help :content="$t('messages.help_message_from_field')" />
           <input
             type="text"
             class="form-control"
@@ -99,6 +98,22 @@
           </div>
         </div>
       </div>
+      <div class="tab-pane fade" id="message-edit-format" role="tabpanel" aria-labelledby="tab-format">
+        <div class="form-group">
+          <label :for="inputId('send-format')" class="form-label">{{ $t('send_as') }}</label>
+          <required-input />
+          <select
+            class="form-select"
+            :id="inputId('send-format')"
+            v-model="form.send_format"
+          >
+            <option :value="value" v-for="(format, value) in formats">{{ format }}</option>
+          </select>
+          <div class="invalid-feedback d-block" v-if="error('send_format') !== null">
+            {{ error('send_format') }}
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -122,11 +137,13 @@ const form = reactive<Partial<IMessage>>({...fields})
 // Composables
 const {
   errors,
+  clearErrors,
   error,
   getErrors,
   inputId
 } = useForm('message-edit')
 const { registerEditor, renderEditor, toggleEditor } = useEditor()
+const { formats } = useMessage()
 const { $_ } = useNuxtApp()
 // Computed
 const message = computed<IMessage>(() => {
@@ -156,7 +173,10 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const update = async () => {
+const reset = (): void => {
+  clearErrors()
+}
+const update = async (close: boolean = true) => {
   const list: FormData = normalize()
   const tab = activeTab()
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
@@ -166,7 +186,8 @@ const update = async () => {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
       } else if (response._data.data) {
-        emits('updated')
+        reset()
+        emits('updated', close)
       }
     },
     onResponseError({ request, response, options }) {
