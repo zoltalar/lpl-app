@@ -11,6 +11,7 @@ export default function useFormTemplate() {
   const options = reactive<Record<string, number>>({})
   // Composables
   const {
+    registerEditor,
     renderEditor,
     toggleEditor
   } = useEditor()
@@ -18,8 +19,9 @@ export default function useFormTemplate() {
     fields,
     form,
     options,
-    renderEditor,
     // Functions
+    registerEditor,
+    renderEditor,
     toggleEditor
   }
 }

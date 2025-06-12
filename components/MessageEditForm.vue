@@ -1,5 +1,5 @@
 <template>
-  <form class="form-default" @submit.prevent="update">
+  <form class="form-default" @submit.prevent="update(false)">
     <tabs id="tabs-message-edit">
       <tab :title="$t('meta')" target="#message-edit-meta" active />
       <tab :title="$t('content')" target="#message-edit-content" />
@@ -7,6 +7,7 @@
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
     </tabs>
     <div class="tab-content py-3">
+      <!-- meta tab -->
       <div class="tab-pane fade show active" id="message-edit-meta" role="tabpanel" aria-labelledby="tab-meta">
         <div class="form-group mb-0">
           <label :for="inputId('name')" class="form-label">{{ $t('name') }}</label>
@@ -27,6 +28,7 @@
           </div>
         </div>
       </div>
+      <!-- content tab -->
       <div class="tab-pane fade" id="message-edit-content" role="tabpanel" aria-labelledby="tab-content">
         <div class="form-group">
           <label :for="inputId('subject')" class="form-label">{{ $t('subject') }}</label>
@@ -79,7 +81,7 @@
             {{ error('message_html') }}
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-0">
           <div class="float-end">
             <button type="button" class="btn btn-sm" :title="$t('toggle_editor')" @click.prevent="toggleEditor(inputId('editor-footer'), form.footer)">
               <i class="mdi mdi-language-html5"></i>
@@ -98,6 +100,7 @@
           </div>
         </div>
       </div>
+      <!-- format tab -->
       <div class="tab-pane fade" id="message-edit-format" role="tabpanel" aria-labelledby="tab-format">
         <div class="form-group">
           <label :for="inputId('send-format')" class="form-label">{{ $t('send_as') }}</label>
@@ -111,6 +114,23 @@
           </select>
           <div class="invalid-feedback d-block" v-if="error('send_format') !== null">
             {{ error('send_format') }}
+          </div>
+        </div>
+        <div class="form-group mb-0">
+          <label :for="inputId('template-id')" class="form-label">{{ $t('use_template') }}</label>
+          <div class="input-group">
+            <select
+              class="form-select"
+              :id="inputId('template-id')"
+              :disabled="busyRefreshTemplates"
+              v-model="form.template_id"
+            >
+              <option :value="null"> - {{ $t('no_template') }} - </option>
+              <option :value="template.id" v-for="template in templates">{{ template.name }}</option>
+            </select>
+            <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshTemplates">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshTemplates}" />
+            </button>
           </div>
         </div>
       </div>
@@ -131,7 +151,9 @@ const fields = {
   from_field: '',
   message_html: '',
   message_text: '',
-  footer: ''
+  footer: '',
+  send_format: '',
+  template_id: null
 }
 const form = reactive<Partial<IMessage>>({...fields})
 // Composables
@@ -144,6 +166,7 @@ const {
 } = useForm('message-edit')
 const { registerEditor, renderEditor, toggleEditor } = useEditor()
 const { formats } = useMessage()
+const { busy: busyRefreshTemplates, refresh: refreshTemplates, templates } = useTemplate()
 const { $_ } = useNuxtApp()
 // Computed
 const message = computed<IMessage>(() => {

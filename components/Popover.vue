@@ -16,21 +16,19 @@ const props = withDefaults(defineProps<Props>(), {
   icon: 'mdi-help-circle-outline',
   content: ''
 })
-const element = ref<HTMLElement|null>(null)
+const element = useTemplateRef<HTMLElement>('element')
 // Composables
 const { $bootstrap } = useNuxtApp()
 // Functions
 const bind = (): void => {
-  if (element.value) {
-    new $bootstrap.Popover(element.value, {
-      trigger: 'hover focus',
-      placement: 'top',
-      html: true,
-      content: () => {
-        return props.content
-      }
-    })
-  }
+  new $bootstrap.Popover(element.value, {
+    trigger: 'hover focus',
+    placement: 'top',
+    html: true,
+    content: () => {
+      return props.content
+    }
+  })
 }
 const css = (): Record<string,boolean> => {
   const classes: Record<string,boolean> = {}

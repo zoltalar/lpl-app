@@ -204,6 +204,7 @@ const { can } = usePermission()
 const { data } = useAuth()
 const { refresh: refreshConfigurations } = useConfiguration()
 const { dateTimeFormat } = useUser()
+const { refresh: refreshTemplates } = useTemplate()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const currentUser = computed<IUser>(() => {
@@ -255,6 +256,7 @@ const onCreated = () => {
   modal.hide()
   refresh()
   refreshConfigurations()
+  refreshTemplates()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
@@ -266,6 +268,7 @@ const onUpdated = () => {
   modal.hide()
   refresh()
   refreshConfigurations()
+  refreshTemplates()
   addToast({ 
     header: t('success'),
     body: t('messages.model_updated', { model })

@@ -7,7 +7,8 @@ import { useMailingListStore } from '@/store/mailing-list'
 import { useMessageStore } from '@/store/message'
 import { usePermissionStore } from '@/store/permission'
 import { useRoleStore } from '@/store/role'
-import { useSubscribePageStore } from '@/store/subscribe-page' 
+import { useSubscribePageStore } from '@/store/subscribe-page'
+import { useTemplateStore } from '@/store/template'
 import { useUserStore } from '@/store/user'
 
 export default function useApp() {
@@ -23,11 +24,12 @@ export default function useApp() {
   const permissionStore = usePermissionStore()
   const roleStore = useRoleStore()
   const subscribePageStore = useSubscribePageStore()
+  const templateStore = useTemplateStore()
   const userStore = useUserStore()
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 8.33
+    const increment = 7.69
     appStore.reset()
     if ($_.isEmpty(attributeStore.getMeta)) {
       const meta = await attributeStore.fetchMeta()
@@ -99,6 +101,12 @@ export default function useApp() {
       const meta = await userStore.fetchMeta()
       userStore.setMeta(meta)
       responses.push(meta)
+      appStore.increment(increment)
+    }
+    if (templateStore.getCollection.length === 0) {
+      const templates = await templateStore.fetchCollection()
+      templateStore.setCollection(templates)
+      responses.push(templates)
       appStore.increment(increment)
     }
     appStore.finish()

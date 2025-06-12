@@ -23,7 +23,7 @@
       </div>
       <label :for="inputId('content-html')" class="form-label">{{ $t('html_content') }}</label>
       <required-input />
-      <editor :id="inputId('editor-content-html')" v-model="form.content_html" v-if="renderEditor" />
+      <editor :id="inputId('editor-content-html')" v-model="form.content_html" v-if="renderEditor(inputId('editor-content-html'))" />
       <textarea class="form-control" :id="inputId('content-html')" rows="20" v-model="form.content_html" v-else></textarea>
       <div class="invalid-feedback d-block" v-if="error('content_html') !== null">
         {{ error('content_html') }}
@@ -75,6 +75,7 @@ const {
 const {
   form,
   options,
+  registerEditor,
   renderEditor,
   toggleEditor
 } = useFormTemplate()
@@ -130,5 +131,10 @@ const update = async () => {
     }
   })
 }
+// Hooks
+onMounted(() => {
+  registerEditor(inputId('editor-content-html'))
+})
+// Expose
 defineExpose({ update })
 </script>
