@@ -1,6 +1,6 @@
 <template>
   <i
-    class="mdi ms-1"
+    class="mdi cursor-help fs-5 ms-1 text-secondary"
     :class="css()"
     role="button"
     ref="element"
