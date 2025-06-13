@@ -4,7 +4,7 @@
       <tab :title="$t('meta')" target="#message-edit-meta" active />
       <tab :title="$t('content')" target="#message-edit-content" />
       <tab :title="$t('format')" target="#message-edit-format" />
-      <tab :title="$t('attachments')" target="#message-edit-attachments" />
+      <tab :title="$t('attachments')" target="#message-edit-attachments" v-if="allowAttachments" />
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
     </tabs>
     <div class="tab-content py-3">
@@ -237,6 +237,10 @@ const {
   busy: busyRefreshAttachments,
   refresh: refreshAttachments
 } = useAttachment()
+const {
+  findBySlug: configurationFindBySlug,
+  value: configurationValue
+} = useConfiguration()
 const { registerEditor, renderEditor, toggleEditor } = useEditor()
 const { extension, formatBytes } = useFile()
 const {
@@ -253,6 +257,9 @@ const {
 } = useTemplate()
 const { $_ } = useNuxtApp()
 // Computed
+const allowAttachments = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('allow-attachments'))))
+})
 const lists = computed<IMailingList[]>(() => {
   return $_.sortBy(unalteredList.value, ['list_order', 'name'])
 })

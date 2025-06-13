@@ -187,6 +187,7 @@
     "yes": "Yes",
 
     "messages": {
+        "attachments_not_allowed": "Current configuration does not allow attachments in email messages.",
         "confirm_delete_batch_models": "Are you sure you want to delete selected {models}?",
         "confirm_delete_model": "Are you sure you want to delete this {model}?",
         "confirm_delete_name": "Are you sure you want to delete '{name}'?",

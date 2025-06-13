@@ -7,6 +7,9 @@
         </div>
       </div>
     </div>
+    <div class="alert alert-warning text-center" role="alert" v-if="allowAttachments !== 1">
+      {{ $t('messages.attachments_not_allowed') }}
+    </div>
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -20,7 +23,7 @@
                       {{ $t('options') }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-attachment-options">
-                      <li><a href="/attachments" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-attachment-create" v-if="hasRole('admin') || can('attachment-create')">{{ $t('create') }}</a></li>
+                      <li><a href="/attachments" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-attachment-create" v-if="(hasRole('admin') || can('attachment-create')) && allowAttachments === 1">{{ $t('create') }}</a></li>
                       <li><a href="/attachments" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('attachment-view')">{{ $t('refresh') }}</a></li>
                     </ul>
                   </div>
@@ -28,7 +31,7 @@
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('attachment_options')">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-attachment-create" v-if="hasRole('admin') || can('attachment-create')">{{ $t('create') }}</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-attachment-create" v-if="(hasRole('admin') || can('attachment-create')) && allowAttachments === 1">{{ $t('create') }}</button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('attachment-view')">{{ $t('refresh') }}</button>
                   </div>
                 </div>
@@ -202,9 +205,16 @@ const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { refresh: refreshAttachments } = useAttachment()
+const {
+  value: configurationValue,
+  findBySlug: configurationFindBySlug
+} = useConfiguration()
 const { formatBytes } = useFile()
 const { $bootstrap } = useNuxtApp()
 // Computed
+const allowAttachments = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('allow-attachments'))))
+})
 const attachments = computed<IAttachment[]>(() => {
   return resource?.value?.data as IAttachment[]
 })
