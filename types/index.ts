@@ -114,7 +114,8 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   template_id: number | null,
   status: number | null,
   send_format: string,
-  deleted_at: string | null
+  deleted_at: string | null,
+  attachments?: IAttachment[] | null
 }
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,

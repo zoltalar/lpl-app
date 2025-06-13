@@ -4,6 +4,7 @@
       <tab :title="$t('meta')" target="#message-edit-meta" active />
       <tab :title="$t('content')" target="#message-edit-content" />
       <tab :title="$t('format')" target="#message-edit-format" />
+      <tab :title="$t('attachments')" target="#message-edit-attachments" />
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
     </tabs>
     <div class="tab-content py-3">
@@ -134,11 +135,44 @@
           </div>
         </div>
       </div>
+      <!-- attachments tab -->
+      <div class="tab-pane fade" id="message-edit-attachments" role="tabpanel" aria-labelledby="tab-attachments">
+        <div class="form-group">
+          <h6 class="mb-0">
+            <span>{{ $t('attachments') }}</span>
+            <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshAttachments">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttachments}"></i>
+            </button>
+          </h6>
+          <div class="form-text mb-2" v-html="$t('messages.form_text_message_attachments')"></div>
+          <div class="checkboxes-attachments" v-if="attachments.length > 0">
+            <template v-for="attachment in attachments">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="inputId('attachment-' + attachment.id)"
+                  class="form-check-input"
+                  :value="attachment.id"
+                  :disabled="busyRefreshAttachments"
+                  v-model="messageAttachments"
+                />
+                <label :for="inputId('attachment-' + attachment.id)" class="form-check-label">
+                  {{ attachment.name }}
+                  <small class="text-secondary ms-1">
+                    <span>.{{ extension(attachment.file) }}</span>;
+                    <span v-if="attachment.size">{{ formatBytes(attachment.size, 0) }}</span>                    
+                  </small>
+                </label>
+              </div>
+            </template>            
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IMessage } from '@/types'
+import type { IAttachment, IMessage } from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -156,6 +190,7 @@ const fields = {
   template_id: null
 }
 const form = reactive<Partial<IMessage>>({...fields})
+const messageAttachments = ref<number[]>([])
 // Composables
 const {
   errors,
@@ -164,7 +199,13 @@ const {
   getErrors,
   inputId
 } = useForm('message-edit')
+const {
+  attachments,
+  busy: busyRefreshAttachments,
+  refresh: refreshAttachments
+} = useAttachment()
 const { registerEditor, renderEditor, toggleEditor } = useEditor()
+const { extension, formatBytes } = useFile()
 const { formats } = useMessage()
 const { busy: busyRefreshTemplates, refresh: refreshTemplates, templates } = useTemplate()
 const { $_ } = useNuxtApp()
@@ -176,6 +217,12 @@ const message = computed<IMessage>(() => {
 watch(message, () => {
   if (message.value) {
     Object.assign(form, message.value)
+    messageAttachments.value = []
+    if (message.value.attachments) {
+      message.value.attachments.forEach((attachment: IAttachment) => {
+        messageAttachments.value.push(attachment.id)
+      })
+    }
   }
 }, { immediate: true })
 // Functions
@@ -193,6 +240,9 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
+  })
+  $_.forEach(messageAttachments.value, (id: any): void => {
+    formData.append('attachments[]', id.toString())
   })
   return formData
 }

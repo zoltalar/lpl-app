@@ -1,4 +1,5 @@
 import { useAppStore } from '@/store/app'
+import { useAttachmentStore } from '@/store/attachment'
 import { useAttributeStore } from '@/store/attribute'
 import { useConfigurationStore } from '@/store/configuration'
 import { useCountryStore } from '@/store/country'
@@ -15,6 +16,7 @@ export default function useApp() {
   // Composables
   const { $_ } = useNuxtApp()
   const appStore = useAppStore()
+  const attachmentStore = useAttachmentStore()
   const attributeStore = useAttributeStore()
   const configurationStore = useConfigurationStore()
   const countryStore = useCountryStore()
@@ -29,8 +31,14 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 7.69
+    const increment = 7.14
     appStore.reset()
+    if (attachmentStore.getCollection.length === 0) {
+      const attachments = await attachmentStore.fetchCollection()
+      attachmentStore.setCollection(attachments)
+      responses.push(attachments)
+      appStore.increment(increment)
+    }
     if ($_.isEmpty(attributeStore.getMeta)) {
       const meta = await attributeStore.fetchMeta()
       attributeStore.setMeta(meta)

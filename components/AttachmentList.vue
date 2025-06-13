@@ -201,6 +201,7 @@ const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
+const { refresh: refreshAttachments } = useAttachment()
 const { fileSize } = useFile()
 const { $bootstrap } = useNuxtApp()
 // Computed
@@ -249,6 +250,7 @@ const onCreated = () => {
   const model = t('attachment')
   modal.hide()
   refresh()
+  refreshAttachments()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
@@ -259,6 +261,7 @@ const onUpdated = () => {
   const model = t('attachment')
   modal.hide()
   refresh()
+  refreshAttachments()
   addToast({ 
     header: t('success'),
     body: t('messages.model_updated', { model })
