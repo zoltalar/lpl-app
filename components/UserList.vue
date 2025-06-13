@@ -251,7 +251,7 @@ const handleCreated = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
-const onCreated = () => {
+const onCreated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-create')
   const model = t('user')
   modal.hide()
@@ -261,7 +261,7 @@ const onCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
-const onUpdated = () => {
+const onUpdated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
   const model = t('user')
   modal.hide()

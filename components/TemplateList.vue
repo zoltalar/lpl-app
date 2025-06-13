@@ -224,6 +224,7 @@ const destroy = async (template: ITemplate) => {
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
+          refreshTemplates()
           addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
@@ -250,7 +251,7 @@ const handleCreated = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
-const onCreated = () => {
+const onCreated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-create')
   const model = t('template')
   modal.hide()
@@ -262,7 +263,7 @@ const onCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
-const onUpdated = () => {
+const onUpdated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-edit')
   const model = t('template')
   modal.hide()

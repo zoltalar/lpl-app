@@ -243,7 +243,7 @@ const handleCreated = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
-const onCreated = () => {
+const onCreated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-create')
   const model = t('subscribe_page')
   modal.hide()
@@ -253,7 +253,7 @@ const onCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
-const onUpdated = () => {
+const onUpdated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-edit')
   const model = t('subscribe_page')
   modal.hide()

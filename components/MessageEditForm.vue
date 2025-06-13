@@ -137,8 +137,8 @@
       </div>
       <!-- attachments tab -->
       <div class="tab-pane fade" id="message-edit-attachments" role="tabpanel" aria-labelledby="tab-attachments">
-        <div class="form-group">
-          <h6 class="mb-0">
+        <div class="form-group mb-0">
+          <h6>
             <span>{{ $t('attachments') }}</span>
             <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshAttachments">
               <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttachments}"></i>
@@ -160,7 +160,7 @@
                   {{ attachment.name }}
                   <small class="text-secondary ms-1">
                     <span>.{{ extension(attachment.file) }}</span>;
-                    <span v-if="attachment.size">{{ formatBytes(attachment.size, 0) }}</span>                    
+                    <span v-if="attachment.size">{{ formatBytes(attachment.size) }}</span>                    
                   </small>
                 </label>
               </div>
@@ -168,11 +168,43 @@
           </div>
         </div>
       </div>
+      <!-- mailing lists tab -->
+      <div class="tab-pane fade" id="message-edit-mailing-lists" role="tabpanel" aria-labelledby="tab-mailing-lists">
+        <div class="form-group mb-0">
+          <h6>
+            <span>{{ $t('mailing_lists') }}</span>
+            <button type="button" class="btn btn-secondary btn-xs ms-2" :title="$t('refresh')" @click.prevent="refreshLists">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshLists}"></i>
+            </button>
+          </h6>
+          <div class="form-text mb-2" v-html="$t('messages.form_text_message_mailing_lists')"></div>
+          <div class="checkboxes-mailing-lists" v-if="lists.length > 0">
+            <template v-for="list in lists">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="inputId('mailing-list-' + list.id)"
+                  class="form-check-input"
+                  :value="list.id"
+                  :disabled="busyRefreshLists"
+                  v-model="messageMailingLists"
+                />
+                <label :for="inputId('mailing-list-' + list.id)" class="form-check-label">
+                  {{ list.name }}
+                  <small class="text-secondary ms-1">
+                    <span v-if="list.type">{{ listType(list.type) }}</span>; {{ list.subscribers_count }} {{ $t('subscriber_s') }}
+                  </small>
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment, IMessage } from '@/types'
+import type { IAttachment, IMailingList, IMessage } from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -191,6 +223,7 @@ const fields = {
 }
 const form = reactive<Partial<IMessage>>({...fields})
 const messageAttachments = ref<number[]>([])
+const messageMailingLists = ref<number[]>([])
 // Composables
 const {
   errors,
@@ -206,10 +239,23 @@ const {
 } = useAttachment()
 const { registerEditor, renderEditor, toggleEditor } = useEditor()
 const { extension, formatBytes } = useFile()
+const {
+  busy: busyRefreshLists,
+  lists: unalteredList,
+  refresh: refreshLists,
+  type: listType
+} = useMailingList()
 const { formats } = useMessage()
-const { busy: busyRefreshTemplates, refresh: refreshTemplates, templates } = useTemplate()
+const {
+  busy: busyRefreshTemplates,
+  refresh: refreshTemplates,
+  templates
+} = useTemplate()
 const { $_ } = useNuxtApp()
 // Computed
+const lists = computed<IMailingList[]>(() => {
+  return $_.sortBy(unalteredList.value, ['list_order', 'name'])
+})
 const message = computed<IMessage>(() => {
   return props.message as IMessage
 })
@@ -221,6 +267,12 @@ watch(message, () => {
     if (message.value.attachments) {
       message.value.attachments.forEach((attachment: IAttachment) => {
         messageAttachments.value.push(attachment.id)
+      })
+    }
+    messageMailingLists.value = []
+    if (message.value.mailing_lists) {
+      message.value.mailing_lists.forEach((list: IMailingList) => {
+        messageMailingLists.value.push(list.id)
       })
     }
   }
@@ -243,6 +295,9 @@ const normalize = (): FormData => {
   })
   $_.forEach(messageAttachments.value, (id: any): void => {
     formData.append('attachments[]', id.toString())
+  })
+  $_.forEach(messageMailingLists.value, (id: any): void => {
+    formData.append('lists[]', id.toString())
   })
   return formData
 }

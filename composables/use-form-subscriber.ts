@@ -13,7 +13,7 @@ export default function useFormSubscriber() {
   } = useAttribute()
   const {
     busy: busyRefreshLists,
-    lists: unfilteredLists,
+    lists,
     refresh: refreshLists,
     type: listType
   } = useMailingList()
@@ -22,11 +22,6 @@ export default function useFormSubscriber() {
   // Computed
   const attributes = computed<IAttribute[]>(() => {
     return $_.sortBy(unsortedAttributes.value, 'list_order')
-  })
-  const lists = computed<IMailingList[]>(() => {
-    return unfilteredLists.value.filter((list: IMailingList) => {
-      return list.type === 'public'
-    })
   })
   return {
     // Vars

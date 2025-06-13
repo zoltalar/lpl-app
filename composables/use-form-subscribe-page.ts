@@ -14,7 +14,7 @@ export default function useFormSubscribePage() {
   const { languages } = useLanguage()
   const {
     busy: busyRefreshLists,
-    lists: unfilteredLists,
+    lists: unalteredLists,
     refresh: refreshLists,
     type: listType
   } = useMailingList()
@@ -25,9 +25,10 @@ export default function useFormSubscribePage() {
     return $_.sortBy(unsortedAttributes.value, 'list_order')
   })
   const lists = computed<IMailingList[]>(() => {
-    return unfilteredLists.value.filter((list: IMailingList) => {
+    const lists = unalteredLists.value.filter((list: IMailingList) => {
       return list.type === 'public' && list.active === 1
     })
+    return $_.sortBy(lists, ['list_order', 'name'])
   })
   return {
     // Vars

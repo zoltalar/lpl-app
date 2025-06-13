@@ -115,7 +115,8 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   status: number | null,
   send_format: string,
   deleted_at: string | null,
-  attachments?: IAttachment[] | null
+  attachments?: IAttachment[] | null,
+  mailing_lists?: IMailingList[] | null
 }
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,

@@ -236,6 +236,7 @@ const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
+const { refresh: refreshLists } = useMailingList()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const lists = computed<IMailingList[]>(() => {
@@ -252,6 +253,7 @@ const destroy = async (list: IMailingList) => {
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
+          refreshLists()
           addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
@@ -278,21 +280,23 @@ const handleCreated = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
-const onCreated = () => {
+const onCreated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-create')
   const model = t('mailing_list')
   modal.hide()
   refresh()
+  refreshLists()
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
   })
 }
-const onUpdated = () => {
+const onUpdated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')
   const model = t('mailing_list')
   modal.hide()
   refresh()
+  refreshLists()
   addToast({ 
     header: t('success'),
     body: t('messages.model_updated', { model })

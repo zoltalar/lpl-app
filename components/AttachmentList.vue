@@ -219,6 +219,7 @@ const destroy = async (attachment: IAttachment) => {
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
+          refreshAttachments()
           addToast({
             header: t('success'),
             body: t('messages.model_destroyed', { model })
@@ -245,7 +246,7 @@ const handleCreated = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
-const onCreated = () => {
+const onCreated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-create')
   const model = t('attachment')
   modal.hide()
@@ -256,7 +257,7 @@ const onCreated = () => {
     body: t('messages.model_created', { model })
   })
 }
-const onUpdated = () => {
+const onUpdated = (): void => {
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
   const model = t('attachment')
   modal.hide()
