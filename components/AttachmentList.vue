@@ -97,7 +97,7 @@
                       </td>
                       <td>
                         <span v-if="attachment.size">
-                          {{ fileSize(attachment.size) }} kB
+                          {{ formatBytes(attachment.size) }}
                         </span>
                         <span v-else> - </span>
                       </td>
@@ -202,7 +202,7 @@ const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { refresh: refreshAttachments } = useAttachment()
-const { fileSize } = useFile()
+const { formatBytes } = useFile()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const attachments = computed<IAttachment[]>(() => {
