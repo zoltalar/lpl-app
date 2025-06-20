@@ -63,6 +63,7 @@
           <div class="invalid-feedback d-block" v-if="error('from_field') !== null">
             {{ error('from_field') }}
           </div>
+          <div class="form-text" v-html="$t('messages.form_text_message_from_field')" v-else></div>
         </div>
         <div class="form-group">
           <div class="float-end">
@@ -258,7 +259,7 @@ const {
 const { $_ } = useNuxtApp()
 // Computed
 const allowAttachments = computed<number>(() => {
-  return Number(configurationValue(toRaw(configurationFindBySlug('allow-attachments'))))
+  return Number(configurationValue(toRaw(configurationFindBySlug('allow_attachments'))))
 })
 const lists = computed<IMailingList[]>(() => {
   return $_.sortBy(unalteredList.value, ['list_order', 'name'])

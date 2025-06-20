@@ -1,5 +1,19 @@
+import { useI18n } from 'vue-i18n'
 export default function useForm(prefix?: string) {
+  // Vars
   const errors = ref<Record<string, string>>({})
+  // Composables
+  const { t } = useI18n()
+  const { addToast } = useToasts()
+  // Watch
+  watch(errors, () => {
+    if (Object.keys(errors.value).length > 0) {
+      addToast({ 
+        header: t('failure'),
+        body: t('messages.model_created')
+      })
+    }
+  })
   // Functions
   const clearErrors = (): void => {
     errors.value = {}

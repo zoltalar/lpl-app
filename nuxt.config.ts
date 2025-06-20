@@ -21,14 +21,32 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-02-21',
   css: ['~/assets/scss/app.scss'],
   devtools: { enabled: true },
-  ssr: false,
+  i18n: {
+    baseUrl: process.env.NUXT_PUBLIC_APP_URL,
+    lazy: true,
+    langDir: 'locales',
+    strategy: 'prefix_except_default',
+    locales: [
+      {
+        code: 'en',
+        name: 'English (United States)',
+        file: 'en-us.json'
+      },
+    ],
+    defaultLocale: 'en',
+    compilation: {
+      strictMessage: false,
+    },
+  },
+  modules: [
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    '@sidebase/nuxt-auth'
+  ],
   runtimeConfig: {
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_BASE_URL
     }
-  },
-  modules: [
-    '@pinia/nuxt',
-    '@sidebase/nuxt-auth'
-  ],  
+  },  
+  ssr: false, 
 })

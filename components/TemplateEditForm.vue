@@ -92,7 +92,7 @@ const template = computed<ITemplate>(() => {
 watch(template, () => {
   if (template.value) {
     Object.assign(form, template.value)
-    const defaultTemplateId = Number(configurationValue(toRaw(configurationFindBySlug('default-template'))))
+    const defaultTemplateId = Number(configurationValue(toRaw(configurationFindBySlug('default_template'))))
     if (template.value.id === defaultTemplateId) {
       options['default'] = 1
     } else {

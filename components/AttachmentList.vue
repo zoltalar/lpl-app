@@ -213,7 +213,7 @@ const { formatBytes } = useFile()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const allowAttachments = computed<number>(() => {
-  return Number(configurationValue(toRaw(configurationFindBySlug('allow-attachments'))))
+  return Number(configurationValue(toRaw(configurationFindBySlug('allow_attachments'))))
 })
 const attachments = computed<IAttachment[]>(() => {
   return resource?.value?.data as IAttachment[]

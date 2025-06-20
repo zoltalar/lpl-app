@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "mailsender-app",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -10,10 +10,10 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxtjs/i18n": "^9.5.5",
     "@sidebase/nuxt-auth": "^0.10.0",
     "@types/node": "^18.17.3",
-    "nuxt": "^3.17.3",
-    "vue-i18n": "^9.3.0"
+    "nuxt": "^3.17.3"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",

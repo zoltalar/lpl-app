@@ -121,7 +121,7 @@ const {
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const defaultTemplateId = computed<number>(() => {
-  return Number(configurationValue(toRaw(configurationFindBySlug('default-template'))))
+  return Number(configurationValue(toRaw(configurationFindBySlug('default_template'))))
 })
 const template = computed<ITemplate>(() => {
   return props.template as ITemplate
