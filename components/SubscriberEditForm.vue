@@ -163,7 +163,7 @@ interface Props {
   subscriber?: ISubscriber | null
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['updated'])
+const emits = defineEmits(['updated', 'errors'])
 const fields = {
   email: '',
   password: '',
@@ -251,6 +251,7 @@ const update = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

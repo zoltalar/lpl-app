@@ -28,12 +28,12 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     locales: [
       {
-        code: 'en',
+        code: 'en-us',
         name: 'English (United States)',
         file: 'en-us.json'
       },
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'en-us',
     compilation: {
       strictMessage: false,
     },

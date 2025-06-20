@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import type { IMailingList } from '@/types'
 // Vars
-const emits = defineEmits(['created'])
+const emits = defineEmits(['created', 'errors'])
 const fields = {
   name: '',
   description: '',
@@ -122,6 +122,7 @@ const store = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

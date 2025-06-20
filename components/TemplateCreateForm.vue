@@ -59,7 +59,7 @@
 </template>
 <script setup lang="ts">
 // Vars
-const emits = defineEmits(['created'])
+const emits = defineEmits(['created', 'errors'])
 // Composables
 const {
   errors,
@@ -105,6 +105,7 @@ const store = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

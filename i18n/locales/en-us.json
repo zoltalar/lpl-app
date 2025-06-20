@@ -192,6 +192,7 @@
         "confirm_delete_model": "Are you sure you want to delete this {model}?",
         "confirm_delete_name": "Are you sure you want to delete '{name}'?",
         "confirm_destroy_name": "Are you sure you want to permanently delete '{name}'?",
+        "form_errors": "Form contains errors ({count}). Please try again.",
         "form_text_attribute_maxlength": "Enter maximum allowed string length. Applies to <em>Text</em> and <em>Textarea</em> input types.",
         "form_text_attribute_option": "Specify options for the <em>Select</em> and <em>Radio</em> input types. Separate using comma or new line.",
         "form_text_attribute_placeholder": "Applies to <em>Text</em>, <em>Number</em>, <em>Textarea</em> and <em>Select</em> input types. If options contain dynamic options such as <em>[STATES]</em>, placeholder field will be ignored.",

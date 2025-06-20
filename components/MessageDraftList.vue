@@ -176,7 +176,12 @@
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <message-edit-form :message="selectedMessage" ref="formMessageEdit" @updated="handleUpdated" />
+      <message-edit-form
+        :message="selectedMessage"
+        ref="formMessageEdit"
+        @updated="handleUpdated"
+        @errors="handleErrors"
+      />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-outline-primary" @click.prevent="updateWithoutClosing">{{ $t('save') }}</button>
@@ -261,6 +266,16 @@ const edit = (message: IMessage): void => {
 }
 const handleUpdated = (close: boolean): void => {
   onUpdated(close)
+}
+const handleErrors = (errors: Record<string,string>): void => {
+  onErrors(errors)
+}
+const onErrors = (errors: Record<string,string>): void => {
+  addToast({ 
+    header: t('failure'),
+    body: t('messages.form_errors', { count: Object.keys(errors).length }),
+    type: 'danger'
+  })
 }
 const onUpdated = (close: boolean) => {
   if (close) {

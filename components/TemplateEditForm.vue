@@ -64,7 +64,7 @@ interface Props {
   template?: ITemplate | null
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['updated'])
+const emits = defineEmits(['updated', 'errors'])
 // Composables
 const {
   errors,
@@ -128,6 +128,7 @@ const update = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

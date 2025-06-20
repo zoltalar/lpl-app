@@ -183,7 +183,7 @@ interface Props {
   user?: IUser | null
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['updated'])
+const emits = defineEmits(['updated', 'errors'])
 const fields = {
   first_name: '',
   last_name: '',
@@ -224,7 +224,7 @@ const user = computed<IUser>(() => {
 // Watch
 watch(user, () => {
   if (user.value) {
-    Object.assign(form, user.value)
+    Object.assign(form, $_.omit(user.value, ['language', 'roles', 'permissions']))
     if (user.value.roles) {
       userRoles.value = []
       user.value.roles.forEach((role: IRole) => {
@@ -270,6 +270,7 @@ const update = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

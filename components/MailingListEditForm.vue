@@ -82,7 +82,7 @@ interface Props {
   list: IMailingList | null
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['updated'])
+const emits = defineEmits(['updated', 'errors'])
 const fields = {
   name: '',
   description: '',
@@ -135,6 +135,7 @@ const update = async () => {
     },
     onResponseError({ request, response, options }) {
       errors.value = getErrors(response._data.errors)
+      emits('errors', toRaw(errors.value))
     }
   })
 }

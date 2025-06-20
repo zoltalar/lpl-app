@@ -170,7 +170,11 @@
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <attribute-create-form ref="formAttributeCreate" @created="handleCreated" />
+      <attribute-create-form
+        ref="formAttributeCreate"
+        @created="handleCreated"
+        @errors="handleErrors"
+      />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="reset">{{ $t('reset') }}</button>
@@ -184,7 +188,12 @@
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <attribute-edit-form :attribute="selectedAttribute" ref="formAttributeEdit" @updated="handleUpdated" />
+      <attribute-edit-form
+        :attribute="selectedAttribute"
+        ref="formAttributeEdit"
+        @updated="handleUpdated"
+        @errors="handleErrors"
+      />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
@@ -272,6 +281,9 @@ const edit = (attribute: IAttribute): void => {
 const handleCreated = (): void => {
   onCreated()
 }
+const handleErrors = (errors: Record<string,string>): void => {
+  onErrors(errors)
+}
 const handleUpdated = (): void => {
   onUpdated()
 }
@@ -284,6 +296,13 @@ const onCreated = (): void => {
   addToast({ 
     header: t('success'),
     body: t('messages.model_created', { model })
+  })
+}
+const onErrors = (errors: Record<string,string>): void => {
+  addToast({ 
+    header: t('failure'),
+    body: t('messages.form_errors', { count: Object.keys(errors).length }),
+    type: 'danger'
   })
 }
 const onUpdated = (): void => {
