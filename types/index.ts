@@ -112,6 +112,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   message_text: string,
   footer: string,
   template_id: number | null,
+  analytics: number | null,
   status: number | null,
   send_format: string,
   deleted_at: string | null,
@@ -216,4 +217,12 @@ export type TSubscribePageMeta = {
 export type TUserMeta = {
   time_formats: string[],
   date_formats: string[]
+}
+export type TUtm = {
+  utm_id: string,
+  utm_source: string,
+  utm_medium: string,
+  utm_campaign: string,
+  utm_term: string,
+  utm_content: string
 }

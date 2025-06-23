@@ -2,6 +2,7 @@
     "actions": "Actions",
     "active": "Active",
     "admin": "Admin",
+    "analytics": "Analytics",
     "attachment": "Attachment",
     "attachment_details": "Attachment Details",
     "attachment_options": "Attachment Options",
@@ -198,6 +199,7 @@
         "form_text_attribute_placeholder": "Applies to <em>Text</em>, <em>Number</em>, <em>Textarea</em> and <em>Select</em> input types. If options contain dynamic options such as <em>[STATES]</em>, placeholder field will be ignored.",
         "form_text_attribute_slug": "Enter attribute computer name, e.g. <em>first_name</em>",
         "form_text_mailing_list_active": "Only active lists can be shown on subscribe pages",
+        "form_text_message_analytics": "Toggle UTM tracking for message links.",
         "form_text_message_attachments": "Select attachments to send with this email message.",
         "form_text_message_from_field": "{'Enter the message <em>From</em> address. You may specify an email address, e.g. <em>demo@mailsender.com</em> or an mailbox string comprised of name and email, e.g. <em>Demo &lt;demo@mailsender.com&gt;</em>.'}",
         "form_text_message_mailing_lists": "Select mailing lists to send to.",
@@ -215,6 +217,12 @@
         "form_text_user_disabled": "Indicate if this account is disabled.",
         "form_text_user_html_email": "Send this subscriber HTML emails.",
         "form_text_user_permissions": "Permissions are required for <em>User</em> role only.",
+        "form_text_message_utm_campaign": "Product, promo code, or slogan (e.g. spring_sale).",
+        "form_text_message_utm_content": "Use to differentiate ads.",
+        "form_text_message_utm_id": "Enter campaign ID.",
+        "form_text_message_utm_medium": "Enter campaign medium (e.g. email)",
+        "form_text_message_utm_source": "Enter campaign source (e.g. google, newsletter)",
+        "form_text_message_utm_term": "Identify the paid keywords.",
         "login_error_text": "Invalid email or password!",
         "login_text": "Enter your email address and password to access admin panel.",
         "model_created": "{model} has been created successfully.",
@@ -255,6 +263,12 @@
         "user_inactive": "User is inactive.",
         "user_no_lists": "This subscriber does not belong to any list.",
         "user_no_permissions": "This user does not have any permissions.",
-        "user_no_roles": "This user does not have any roles."
+        "user_no_roles": "This user does not have any roles.",
+        "utm_campaign": "Campaign Name",
+        "utm_content": "Campaign Content",
+        "utm_id": "Campaign ID",
+        "utm_medium": "Campaign Medium",
+        "utm_source": "Campaign Source",
+        "utm_term": "Campaign Term"
     }
 }

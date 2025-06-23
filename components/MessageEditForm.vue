@@ -6,6 +6,7 @@
       <tab :title="$t('format')" target="#message-edit-format" />
       <tab :title="$t('attachments')" target="#message-edit-attachments" v-if="allowAttachments" />
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
+      <tab :title="$t('analytics')" target="#message-edit-analytics" />
     </tabs>
     <div class="tab-content py-3">
       <!-- meta tab -->
@@ -201,11 +202,45 @@
           </div>
         </div>
       </div>
+      <!-- analytics tab -->
+      <div class="tab-pane fade" id="message-edit-analytics" role="tabpanel" aria-labelledby="tab-analytics">
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              :id="inputId('analytics')"
+              class="form-check-input"
+              aria-describedby="text-analytics"
+              :true-value="1"
+              :false-value="0"
+              v-model="form.analytics"
+            />
+            <label :for="inputId('analytics')" class="form-check-label">{{ $t('analytics') }}</label>
+          </div>
+          <div id="text-analytics" class="form-text">{{ $t('messages.form_text_message_analytics') }}</div>
+        </div>
+        <template v-for="(field, key) in utmFields">
+          <div class="form-group">
+            <label :for="inputId($_.kebabCase(key))" class="form-label">{{ $t('messages.' + key) }}</label>
+            <input
+              type="text"
+              class="form-control"
+              :id="inputId($_.kebabCase(key))"
+              maxlength="255"
+              :disabled="form.analytics !== 1"
+              v-model="utms[key]"
+            />
+            <div class="form-text">
+              {{ $t('messages.form_text_message_' + key) }}
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment, IMailingList, IMessage } from '@/types'
+import type { IAttachment, IMailingList, IMessage, TUtm } from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -223,6 +258,7 @@ const fields = {
   template_id: null
 }
 const form = reactive<Partial<IMessage>>({...fields})
+const utms = reactive<TUtm>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
 // Composables
@@ -256,6 +292,7 @@ const {
   refresh: refreshTemplates,
   templates
 } = useTemplate()
+const { fields: utmFields } = useUtm()
 const { $_ } = useNuxtApp()
 // Computed
 const allowAttachments = computed<number>(() => {
