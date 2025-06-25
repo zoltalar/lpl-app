@@ -216,21 +216,25 @@
               v-model="form.analytics"
             />
             <label :for="inputId('analytics')" class="form-check-label">{{ $t('analytics') }}</label>
-          </div>
+          </div>          
           <div id="text-analytics" class="form-text">{{ $t('messages.form_text_message_analytics') }}</div>
         </div>
         <template v-for="(field, key) in utmFields">
           <div class="form-group">
             <label :for="inputId($_.kebabCase(key))" class="form-label">{{ $t('messages.' + key) }}</label>
+            <required-input v-if="requiredFields.includes(key)" />
             <input
               type="text"
               class="form-control"
               :id="inputId($_.kebabCase(key))"
               maxlength="255"
               :disabled="form.analytics !== 1"
-              v-model="utms[key]"
+              v-model="utmItems[key]"
             />
-            <div class="form-text">
+            <div class="invalid-feedback d-block" v-if="error('utm') !== null && error('utm').indexOf(key) !== -1">
+              {{ $t(`messages.message_${key}_error`) }}
+            </div>
+            <div class="form-text" v-else>
               {{ $t('messages.form_text_message_' + key) }}
             </div>
           </div>
@@ -240,7 +244,7 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment, IMailingList, IMessage, TUtm } from '@/types'
+import type { IAttachment, IMailingList, IMessage, TUtmItem } from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -258,7 +262,7 @@ const fields = {
   template_id: null
 }
 const form = reactive<Partial<IMessage>>({...fields})
-const utms = reactive<TUtm>({})
+const utmItems = reactive<Partial<TUtmItems>>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
 // Composables
@@ -292,7 +296,10 @@ const {
   refresh: refreshTemplates,
   templates
 } = useTemplate()
-const { fields: utmFields } = useUtm()
+const {
+  fields: utmFields,
+  required: requiredFields
+} = useUtm()
 const { $_ } = useNuxtApp()
 // Computed
 const allowAttachments = computed<number>(() => {
@@ -307,7 +314,7 @@ const message = computed<IMessage>(() => {
 // Watch
 watch(message, () => {
   if (message.value) {
-    Object.assign(form, message.value)
+    Object.assign(form, $_.omit(message.value, ['creator', 'updater']))
     messageAttachments.value = []
     if (message.value.attachments) {
       message.value.attachments.forEach((attachment: IAttachment) => {
@@ -338,6 +345,8 @@ const normalize = (): FormData => {
       formData.append(key, value)
     }
   })
+  const items = toRaw(utmItems)
+  formData.append('utm', JSON.stringify(items))
   $_.forEach(messageAttachments.value, (id: any): void => {
     formData.append('attachments[]', id.toString())
   })
@@ -350,11 +359,11 @@ const reset = (): void => {
   clearErrors()
 }
 const update = async (close: boolean = true) => {
-  const list: FormData = normalize()
+  const messageData: FormData = normalize()
   const tab = activeTab()
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',
-    body: list,
+    body: messageData,
     onResponse({ request, response, options }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
@@ -372,7 +381,7 @@ const update = async (close: boolean = true) => {
 // Hooks
 onMounted(() => {
   registerEditor(inputId('editor-message-html'))
-  registerEditor(inputId('editor-footer'))
+  registerEditor(inputId('editor-footer'))  
 })
 // Expose
 defineExpose({ update })

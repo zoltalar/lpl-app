@@ -218,7 +218,7 @@ export type TUserMeta = {
   time_formats: string[],
   date_formats: string[]
 }
-export type TUtm = {
+export type TUtmItems = {
   utm_id: string,
   utm_source: string,
   utm_medium: string,
