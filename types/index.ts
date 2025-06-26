@@ -113,6 +113,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   footer: string,
   template_id: number | null,
   analytics: number | null,
+  utm: TUtmItems | null,
   status: number | null,
   send_format: string,
   deleted_at: string | null,

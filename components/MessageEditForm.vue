@@ -244,7 +244,7 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment, IMailingList, IMessage, TUtmItem } from '@/types'
+import type { IAttachment, IMailingList, IMessage, TUtmItems } from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -259,7 +259,8 @@ const fields = {
   message_text: '',
   footer: '',
   send_format: '',
-  template_id: null
+  template_id: null,
+  analytics: 0
 }
 const form = reactive<Partial<IMessage>>({...fields})
 const utmItems = reactive<Partial<TUtmItems>>({})
@@ -314,7 +315,15 @@ const message = computed<IMessage>(() => {
 // Watch
 watch(message, () => {
   if (message.value) {
-    Object.assign(form, $_.omit(message.value, ['creator', 'updater']))
+    Object.assign(form, $_.omit(message.value, ['creator', 'updater', 'attachments', 'mailing_lists']))
+    if (message.value.utm) {
+      const keys = Object.keys(utmFields)
+      $_.forOwn(toRaw(message.value.utm), (value: string, key: string) => {
+        if (keys.includes(key)) {
+          utmItems[key] = value
+        }
+      })
+    }
     messageAttachments.value = []
     if (message.value.attachments) {
       message.value.attachments.forEach((attachment: IAttachment) => {
