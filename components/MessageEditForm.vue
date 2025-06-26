@@ -231,8 +231,8 @@
               :disabled="form.analytics !== 1"
               v-model="utmItems[key]"
             />
-            <div class="invalid-feedback d-block" v-if="error('utm') !== null && error('utm').indexOf(key) !== -1">
-              {{ $t(`messages.message_${key}_error`) }}
+            <div class="invalid-feedback d-block" v-if="error('utm.' + key) !== null">
+              {{ error('utm.' + key) }}
             </div>
             <div class="form-text" v-else>
               {{ $t('messages.form_text_message_' + key) }}
