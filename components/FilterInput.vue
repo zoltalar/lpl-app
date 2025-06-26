@@ -1,13 +1,16 @@
 <template>
   <div class="input-group input-group-sm">
-    <delayed-input v-model="filter" />
+    <delayed-input
+      :disabled="props.disabled"
+      v-model="filter"
+    />
     <button
-        type="button"
-        class="btn btn-secondary"
-        :title="$t('clear_filter')"
-        :aria-label="$t('clear_filter')"
-        @click.prevent="clear"
-        v-if="hasInput()"
+      type="button"
+      class="btn btn-secondary"
+      :title="$t('clear_filter')"
+      :aria-label="$t('clear_filter')"
+      @click.prevent="clear"
+      v-if="hasInput()"
       >
         <i class="mdi mdi-close"></i>
       </button>
@@ -16,10 +19,12 @@
 <script setup lang="ts">
 // Vars
 interface Props {
-  modelValue?: string
+  modelValue?: string,
+  disabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: ''
+  modelValue: '',
+  disabled: false
 })
 const emits = defineEmits(['update:modelValue'])
 // Computed

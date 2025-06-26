@@ -76,10 +76,10 @@
                     <transition name="fade">
                       <tr v-if="toggleFilters">
                         <th>
-                          <filter-input v-model="filters.id" />
+                          <filter-input :disabled="busy" v-model="filters.id" />
                         </th>
                         <th>
-                          <filter-input v-model="filters.name" />
+                          <filter-input :disabled="busy" v-model="filters.name" />
                         </th>
                         <th>
                           -

@@ -79,10 +79,10 @@
                     <transition name="fade">
                       <tr v-if="toggleFilters">
                         <th>
-                          <filter-input v-model="filters.id" />
+                          <filter-input :disabled="busy" v-model="filters.id" />
                         </th>
                         <th>
-                          <filter-input v-model="filters.email" />
+                          <filter-input :disabled="busy" v-model="filters.email" />
                         </th>
                         <th>
                           <select class="form-select form-select-sm" v-model="filters.confirmed">

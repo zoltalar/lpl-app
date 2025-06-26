@@ -2,6 +2,7 @@
   <input
     type="text"
     class="form-control"
+    :disabled="props.disabled"
     @keydown="typing = true"
     v-model="value"
   />
@@ -10,10 +11,12 @@
 // Vars
 interface Props {
   modelValue?: string,
+  disabled?: boolean,
   delay?: number
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
+  disabled: false,
   delay: 400
 })
 const emits = defineEmits(['update:modelValue'])
