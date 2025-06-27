@@ -6,6 +6,7 @@
       <tab :title="$t('format')" target="#message-edit-format" />
       <tab :title="$t('attachments')" target="#message-edit-attachments" v-if="allowAttachments" />
       <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
+      <tab :title="$t('criteria')" target="#message-edit-criteria" />
       <tab :title="$t('analytics')" target="#message-edit-analytics" />
     </tabs>
     <div class="tab-content py-3">
@@ -202,6 +203,22 @@
           </div>
         </div>
       </div>
+      <!-- criteria tab -->
+      <div class="tab-pane fade" id="message-edit-criteria" role="tabpanel" aria-labelledby="tab-criteria">
+        <div class="form-group">
+          <label :for="inputId('attribute-id')" class="form-label">{{ $t('attribute') }}</label>
+          <required-input />
+          <div class="input-group">
+            <select :id="inputId('attribute-id')" class="form-select" :disabled="attributes.length === 0 || busyRefreshAttributes">
+              <option :value="null"></option>
+              <option :value="attribute.id" v-for="attribute in attributes">{{ label(attribute) }}</option>
+            </select>
+            <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshAttributes">
+              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}" />
+            </button>
+          </div>          
+        </div>
+      </div>
       <!-- analytics tab -->
       <div class="tab-pane fade" id="message-edit-analytics" role="tabpanel" aria-labelledby="tab-analytics">
         <div class="form-group">
@@ -244,7 +261,13 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { IAttachment, IMailingList, IMessage, TUtmItems } from '@/types'
+import type {
+  IAttachment,
+  IAttribute,
+  IMailingList,
+  IMessage,
+  TUtmItems
+} from '@/types'
 // Vars
 interface Props {
   message?: IMessage | null
@@ -280,6 +303,12 @@ const {
   refresh: refreshAttachments
 } = useAttachment()
 const {
+  attributes: unsortedAttributes,
+  busy: busyRefreshAttributes,
+  label,
+  refresh: refreshAttributes
+} = useAttribute()
+const {
   findBySlug: configurationFindBySlug,
   value: configurationValue
 } = useConfiguration()
@@ -306,6 +335,9 @@ const { $_ } = useNuxtApp()
 const allowAttachments = computed<number>(() => {
   return Number(configurationValue(toRaw(configurationFindBySlug('allow_attachments'))))
 })
+const attributes = computed<IAttribute[]>(() => {
+  return $_.sortBy(unsortedAttributes.value, 'list_order')
+})
 const lists = computed<IMailingList[]>(() => {
   return $_.sortBy(unalteredList.value, ['list_order', 'name'])
 })
@@ -319,9 +351,7 @@ watch(message, () => {
     if (message.value.utm) {
       const keys = Object.keys(utmFields)
       $_.forOwn(toRaw(message.value.utm), (value: string, key: string) => {
-        if (keys.includes(key)) {
-          utmItems[key] = value
-        }
+        utmItems[key] = value
       })
     }
     messageAttachments.value = []

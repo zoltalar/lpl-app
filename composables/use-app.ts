@@ -3,6 +3,7 @@ import { useAttachmentStore } from '@/store/attachment'
 import { useAttributeStore } from '@/store/attribute'
 import { useConfigurationStore } from '@/store/configuration'
 import { useCountryStore } from '@/store/country'
+import { useCriterionStore } from '@/store/criterion'
 import { useLanguageStore } from '@/store/language'
 import { useMailingListStore } from '@/store/mailing-list'
 import { useMessageStore } from '@/store/message'
@@ -20,6 +21,7 @@ export default function useApp() {
   const attributeStore = useAttributeStore()
   const configurationStore = useConfigurationStore()
   const countryStore = useCountryStore()
+  const criterionStore = useCriterionStore()
   const languageStore = useLanguageStore()
   const mailinglistStore = useMailingListStore()
   const messageStore = useMessageStore()
@@ -31,7 +33,7 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 7.14
+    const increment = 6.67
     appStore.reset()
     if (attachmentStore.getCollection.length === 0) {
       const attachments = await attachmentStore.fetchCollection()
@@ -61,6 +63,12 @@ export default function useApp() {
       const countries = await countryStore.fetchCollection()
       countryStore.setCollection(countries)
       responses.push(countries)
+      appStore.increment(increment)
+    }
+    if ($_.isEmpty(criterionStore.getMeta)) {
+      const meta = await criterionStore.fetchMeta()
+      criterionStore.setMeta(meta)
+      responses.push(meta)
       appStore.increment(increment)
     }
     if (languageStore.getCollection.length === 0) {

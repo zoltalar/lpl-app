@@ -85,7 +85,14 @@ export interface IConfiguration extends IBaseModel {
 export interface ICountry extends IBaseModel {
   name: string,
   list_order?: number | null,
-  states?: IState[] | null,
+  states?: IState[] | null
+}
+export interface ICriterion extends IBaseModel, ITimestamps, IUserstamps {
+  message_id: number,
+  attribute_id: number,
+  operator: string,
+  value: string,
+  attribute?: IAttribute[] | null
 }
 export interface ILanguage extends IBaseModel {
   name: string,
@@ -118,6 +125,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   send_format: string,
   deleted_at: string | null,
   attachments?: IAttachment[] | null,
+  criteria?: ICriterion[] | null,
   mailing_lists?: IMailingList[] | null
 }
 export interface IPermission extends IBaseModel, ITimestamps {
@@ -200,6 +208,9 @@ export type TToastMessage = {
 }
 export type TAttributeMeta = {
   input_types: Record<number, string>
+}
+export type TCriterionMeta = {
+  operators: Record<string, string>
 }
 export type TMailingListMeta = {
   types: Record<string, string>
