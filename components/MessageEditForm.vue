@@ -206,18 +206,52 @@
       <!-- criteria tab -->
       <div class="tab-pane fade" id="message-edit-criteria" role="tabpanel" aria-labelledby="tab-criteria">
         <div class="form-group">
-          <label :for="inputId('attribute-id')" class="form-label">{{ $t('attribute') }}</label>
-          <required-input />
-          <div class="input-group">
-            <select :id="inputId('attribute-id')" class="form-select" :disabled="attributes.length === 0 || busyRefreshAttributes">
-              <option :value="null"></option>
-              <option :value="attribute.id" v-for="attribute in attributes">{{ label(attribute) }}</option>
-            </select>
-            <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshAttributes">
-              <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}" />
-            </button>
+          <div class="form-check form-switch">
+            <input
+              type="checkbox"
+              :id="inputId('criteria')"
+              class="form-check-input"
+              aria-describedby="text-criteria"
+              :true-value="1"
+              :false-value="0"
+              v-model="form.criteria"
+            />
+            <label :for="inputId('criteria')" class="form-check-label">{{ $t('criteria') }}</label>
           </div>          
+          <div id="text-criteria" class="form-text">{{ $t('messages.form_text_message_criteria') }}</div>
         </div>
+        <template v-for="group in conditions">
+          <template v-for="condition in group">            
+            <div class="row">
+              <div class="col-sm-12 col-lg-5">
+                <div class="form-group">
+                  <div class="input-group">
+                    <select :id="inputId('attribute-id')" class="form-select" :disabled="attributes.length === 0 || busyRefreshAttributes">
+                      <option :value="null"> - {{ $t('attribute') }} - </option>
+                      <option :value="attribute.id" v-for="attribute in attributes">{{ label(attribute) }}</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshAttributes">
+                      <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}" />
+                    </button>
+                  </div>
+                </div> 
+              </div>
+              <div class="col-sm-12 col-lg-2">
+                <div class="form-group">
+                  <select :id="inputId('operator')" class="form-select">
+                    <option :value="null"></option>
+                    <option :value="operator" v-for="(name, operator) in operators">{{ name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-12 col-lg-5">
+                <div class="form-group">
+                  Test
+                </div>
+              </div>
+            </div>
+          </template>
+        </template>
       </div>
       <!-- analytics tab -->
       <div class="tab-pane fade" id="message-edit-analytics" role="tabpanel" aria-labelledby="tab-analytics">
@@ -266,6 +300,7 @@ import type {
   IAttribute,
   IMailingList,
   IMessage,
+  TMessageCondition,
   TUtmItems
 } from '@/types'
 // Vars
@@ -286,6 +321,7 @@ const fields = {
   analytics: 0
 }
 const form = reactive<Partial<IMessage>>({...fields})
+const conditions = reactive<Array<Array<TMessageCondition>>>([])
 const utmItems = reactive<Partial<TUtmItems>>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
@@ -320,7 +356,7 @@ const {
   refresh: refreshLists,
   type: listType
 } = useMailingList()
-const { formats } = useMessage()
+const { formats, operators } = useMessage()
 const {
   busy: busyRefreshTemplates,
   refresh: refreshTemplates,
@@ -348,11 +384,17 @@ const message = computed<IMessage>(() => {
 watch(message, () => {
   if (message.value) {
     Object.assign(form, $_.omit(message.value, ['creator', 'updater', 'attachments', 'mailing_lists']))
+    if (message.value.conditions) {
+      // @todo
+    } else {
+      conditions[0] = [{
+        slug: '',
+        operator: '',
+        value: ''
+      }]
+    }
     if (message.value.utm) {
-      const keys = Object.keys(utmFields)
-      $_.forOwn(toRaw(message.value.utm), (value: string, key: string) => {
-        utmItems[key] = value
-      })
+      Object.assign(utmItems, message.value.utm)
     }
     messageAttachments.value = []
     if (message.value.attachments) {

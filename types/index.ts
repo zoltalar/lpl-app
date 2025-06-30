@@ -119,13 +119,14 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   message_text: string,
   footer: string,
   template_id: number | null,
+  criteria: number | null,
+  conditions: Array<Array<TMessageCondition>> | null,
   analytics: number | null,
   utm: TUtmItems | null,
   status: number | null,
   send_format: string,
   deleted_at: string | null,
   attachments?: IAttachment[] | null,
-  criteria?: ICriterion[] | null,
   mailing_lists?: IMailingList[] | null
 }
 export interface IPermission extends IBaseModel, ITimestamps {
@@ -215,8 +216,14 @@ export type TCriterionMeta = {
 export type TMailingListMeta = {
   types: Record<string, string>
 }
+export type TMessageCondition = {
+  slug: string,
+  operator: string,
+  value: string
+}
 export type TMessageMeta = {
   formats: Record<string, string>,
+  operators: Record<string, string>,
   statuses: Record<number, string>
 }
 export type TSelectOption = {

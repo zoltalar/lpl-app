@@ -7,6 +7,9 @@ export default function useMessage() {
   const formats = computed<Record<string,string>>(() => {
     return messageStore.getMeta.formats
   })
+  const operators = computed<Record<string,string>>(() => {
+    return messageStore.getMeta.operators
+  })
   const statuses = computed<Record<number,string>>(() => {
     return messageStore.getMeta.statuses
   })
@@ -20,6 +23,7 @@ export default function useMessage() {
   return {
     // Computed
     formats,
+    operators,
     statuses,
     // Functions
     format,
