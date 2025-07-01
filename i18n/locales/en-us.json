@@ -1,8 +1,10 @@
 {
     "actions": "Actions",
     "active": "Active",
+    "add_group": "Add Group",
     "admin": "Admin",
     "analytics": "Analytics",
+    "and": "And",
     "attachment": "Attachment",
     "attachment_details": "Attachment Details",
     "attachment_options": "Attachment Options",
@@ -120,6 +122,7 @@
     "operator": "Operator",
     "opted_in": "Opted In",
     "options": "Options",
+    "or": "Or",
     "page_size": "Page Size",
     "password": "Password",
     "password_is_set": "Password is Set",
@@ -186,6 +189,7 @@
     "user_options": "User Options",
     "users": "Users",
     "uuid": "UUID",
+    "value": "Value",
     "view": "View",
     "yes": "Yes",
 

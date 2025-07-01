@@ -172,7 +172,7 @@
     <modal
       id="modal-message-edit"
       :title="$t('edit_message')"
-      size="lg"
+      size="xl"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >

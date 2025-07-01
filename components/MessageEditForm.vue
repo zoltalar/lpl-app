@@ -220,17 +220,28 @@
           </div>          
           <div id="text-criteria" class="form-text">{{ $t('messages.form_text_message_criteria') }}</div>
         </div>
-        <template v-for="group in conditions">
-          <template v-for="condition in group">            
+        <template v-for="(group, i) in conditions">          
+          <template v-for="(condition, j) in group">
             <div class="row">
-              <div class="col-sm-12 col-lg-5">
+              <div class="col-sm-12 col-lg-4">
                 <div class="form-group">
                   <div class="input-group">
-                    <select :id="inputId('attribute-id')" class="form-select" :disabled="attributes.length === 0 || busyRefreshAttributes">
+                    <select
+                      :id="inputId('attribute-id')"
+                      class="form-select"
+                      :disabled="attributes.length === 0 || busyRefreshAttributes || form.criteria !== 1"
+                      v-model="conditions[i][j].slug"
+                    >
                       <option :value="null"> - {{ $t('attribute') }} - </option>
-                      <option :value="attribute.id" v-for="attribute in attributes">{{ label(attribute) }}</option>
+                      <option :value="attribute.slug" v-for="attribute in attributes">{{ label(attribute) }}</option>
                     </select>
-                    <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshAttributes">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      :title="$t('refresh')"
+                      @click.prevent="refreshAttributes"
+                      v-if="j === 0"
+                    >
                       <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}" />
                     </button>
                   </div>
@@ -238,19 +249,71 @@
               </div>
               <div class="col-sm-12 col-lg-2">
                 <div class="form-group">
-                  <select :id="inputId('operator')" class="form-select">
-                    <option :value="null"></option>
+                  <select
+                    :id="inputId('operator')"
+                    class="form-select"
+                    :disabled="busyRefreshAttributes || form.criteria !== 1"
+                    v-model="conditions[i][j].operator"
+                  >
+                    <option :value="null"> - {{ $t('operator') }} - </option>
                     <option :value="operator" v-for="(name, operator) in operators">{{ name }}</option>
                   </select>
                 </div>
               </div>
-              <div class="col-sm-12 col-lg-5">
+              <div class="col-sm-12 col-lg-4">
                 <div class="form-group">
-                  Test
+                  <attribute-input
+                    :attribute="attributeMap[i][j]"
+                    prefix="message-edit"
+                    :disabled="busyRefreshAttributes || form.criteria !== 1"
+                    v-model="conditions[i][j].value"
+                    v-if="attributeMap && attributeMap[i] && attributeMap[i][j]"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    :placeholder="' - ' + $t('value') + ' - '"
+                    :disabled="busyRefreshAttributes || form.criteria !== 1"
+                    v-else 
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 col-lg-2">
+                <div class="form-group">
+                  <div class="btn-group w-100" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      :disabled="form.criteria !== 1"
+                      @click.prevent="addCondition(i)"
+                    >
+                      {{ $t('and') }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger"
+                      :disabled="form.criteria !== 1 || conditions[i].length <= 1"
+                      @click.prevent="deleteCondition(i, j)"
+                    >
+                      <i class="mdi mdi-close"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </template>
+          <div class="form-group">
+            {{ $t('or').toLowerCase() }}
+          </div>
+          <div class="form-group">
+            <button
+              type="button"
+              class="btn btn-primary"
+              :disabled="form.criteria !== 1"
+            >
+              {{ $t('add_group') }}
+            </button>
+          </div>
         </template>
       </div>
       <!-- analytics tab -->
@@ -322,6 +385,7 @@ const fields = {
 }
 const form = reactive<Partial<IMessage>>({...fields})
 const conditions = reactive<Array<Array<TMessageCondition>>>([])
+const attributeMap = reactive<Array<Array<IAttribute|null>>>([])
 const utmItems = reactive<Partial<TUtmItems>>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
@@ -381,6 +445,25 @@ const message = computed<IMessage>(() => {
   return props.message as IMessage
 })
 // Watch
+watch(conditions, () => {
+  if (conditions) {
+    toRaw(conditions).forEach((group, i) => {
+      attributeMap[i] = []
+      group.forEach((condition, j) => {
+        attributeMap[i][j] = null
+        if (condition.slug) {
+          const attribute: IAttribute | undefined = attributes.value.find((attribute: IAttribute) => {
+            return attribute.slug === condition.slug
+          })
+          if (attribute) {
+            attributeMap[i][j] = attribute
+            conditions[i][j].value = ''
+          }
+        }
+      })
+    })
+  }
+}, { immediate: true, deep: true })
 watch(message, () => {
   if (message.value) {
     Object.assign(form, $_.omit(message.value, ['creator', 'updater', 'attachments', 'mailing_lists']))
@@ -417,6 +500,20 @@ const activeTab = (): string => {
     return $_.kebabCase(nodes[0].text)
   }
   return ''
+}
+const addCondition = (i: number): void => {
+  if (conditions[i].length < 10) {
+    conditions[i].push({
+      slug: '',
+      operator: '',
+      value: ''
+    })
+  }
+}
+const deleteCondition = (i: number, j: number): void => {
+  if (conditions[i][j] && conditions[i].length > 1) {
+    conditions[i].splice(j, 1)
+  }
 }
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
