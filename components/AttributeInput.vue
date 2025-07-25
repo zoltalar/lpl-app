@@ -8,7 +8,7 @@
       :placeholder="placeholder"
       :required="required"
       :disabled="props.disabled"
-      v-model="attributeValue"
+      v-model="model"
       v-if="inputType === 1"
     />
     <input
@@ -18,7 +18,7 @@
       :placeholder="placeholder"
       :required="required"
       :disabled="props.disabled"
-      v-model="attributeValue"
+      v-model="model"
       v-else-if="inputType === 2"
     />
     <textarea
@@ -29,7 +29,7 @@
       :required="required"
       :disabled="props.disabled"
       rows="3"
-      v-model="attributeValue"
+      v-model="model"
       v-else-if="inputType === 3"
     ></textarea>
     <select
@@ -37,7 +37,7 @@
       :id="inputId"
       :required="required"
       :disabled="props.disabled"
-      v-model="attributeValue"
+      v-model="model"
       v-else-if="inputType === 4"
     >
       <optgroup :label="optgroupLabel" v-for="(options, optgroupLabel) in selectOptions">
@@ -53,7 +53,7 @@
           :name="inputName"
           :value="option"
           :required="required"
-          v-model="attributeValue"
+          v-model="model"
         />
         <label :for="inputId + '-' + i" class="form-check-label">
           {{ option }}
@@ -66,7 +66,7 @@
       :id="inputId"
       :required="required"
       :disabled="props.disabled"
-      v-model="attributeValue"
+      v-model="model"
       v-else-if="inputType === 6"
     />
   </div>
@@ -79,13 +79,15 @@ interface Props {
   modelValue?: string | number | null,
   prefix?: string | null,
   errored?: boolean,
-  disabled?: boolean
+  disabled?: boolean,
 }
 const props = withDefaults(defineProps<Props>(), {
   errored: false,
   disabled: false
 })
-const emits = defineEmits(['update:modelValue'])
+const model = defineModel<string | undefined>({
+  required: true
+})
 // Composables
 const {
   dynamicOption,
@@ -103,17 +105,6 @@ const { phrases } = useString()
 // Computed
 const attribute = computed<IAttribute>(() => {
   return props.attribute as IAttribute
-})
-const attributeValue = computed({
-  get: () => {
-    if (props.modelValue) {
-      return props.modelValue
-    }
-    return ''
-  },
-  set: (value) => {
-    emits('update:modelValue', value)
-  }
 })
 const countries = computed<Record<string, string[]>>(() => {
   let countries: Record<string, string[]> = {}

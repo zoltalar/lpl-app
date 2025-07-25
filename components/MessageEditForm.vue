@@ -220,7 +220,10 @@
           </div>          
           <div id="text-criteria" class="form-text">{{ $t('messages.form_text_message_criteria') }}</div>
         </div>
-        <template v-for="(group, i) in conditions">          
+        <template v-for="(group, i) in conditions">
+          <div class="form-group" v-if="i > 0">
+            {{ $t('or').toLowerCase() }}
+          </div>
           <template v-for="(condition, j) in group">
             <div class="row">
               <div class="col-sm-12 col-lg-4">
@@ -242,8 +245,11 @@
                       @click.prevent="refreshAttributes"
                       v-if="j === 0"
                     >
-                      <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}" />
+                      <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshAttributes}"></i>
                     </button>
+                  </div>
+                  <div class="invalid-feedback d-block" v-if="error('conditions.' + i + '.' + j + '.slug') !== null">
+                    {{ error('conditions.' + i + '.' + j + '.slug') }}
                   </div>
                 </div> 
               </div>
@@ -258,6 +264,9 @@
                     <option :value="null"> - {{ $t('operator') }} - </option>
                     <option :value="operator" v-for="(name, operator) in operators">{{ name }}</option>
                   </select>
+                  <div class="invalid-feedback d-block" v-if="error('conditions.' + i + '.' + j + '.operator') !== null">
+                    {{ error('conditions.' + i + '.' + j + '.operator') }}
+                  </div>
                 </div>
               </div>
               <div class="col-sm-12 col-lg-4">
@@ -274,8 +283,12 @@
                     class="form-control"
                     :placeholder="' - ' + $t('value') + ' - '"
                     :disabled="busyRefreshAttributes || form.criteria !== 1"
+                    v-model="conditions[i][j].value"
                     v-else 
                   />
+                  <div class="invalid-feedback d-block" v-if="error('conditions.' + i + '.' + j + '.value') !== null">
+                    {{ error('conditions.' + i + '.' + j + '.value') }}
+                  </div>
                 </div>
               </div>
               <div class="col-sm-12 col-lg-2">
@@ -292,7 +305,7 @@
                     <button
                       type="button"
                       class="btn btn-outline-danger"
-                      :disabled="form.criteria !== 1 || conditions[i].length <= 1"
+                      :disabled="form.criteria !== 1"
                       @click.prevent="deleteCondition(i, j)"
                     >
                       <i class="mdi mdi-close"></i>
@@ -300,16 +313,14 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <div class="form-group">
-            {{ $t('or').toLowerCase() }}
-          </div>
-          <div class="form-group">
+            </div>            
+          </template>          
+          <div class="form-group" v-if="i === conditions.length - 1">
             <button
               type="button"
               class="btn btn-primary"
               :disabled="form.criteria !== 1"
+              @click.prevent="addConditionGroup()"
             >
               {{ $t('add_group') }}
             </button>
@@ -381,6 +392,7 @@ const fields = {
   footer: '',
   send_format: '',
   template_id: null,
+  criteria: 0,
   analytics: 0
 }
 const form = reactive<Partial<IMessage>>({...fields})
@@ -441,6 +453,12 @@ const attributes = computed<IAttribute[]>(() => {
 const lists = computed<IMailingList[]>(() => {
   return $_.sortBy(unalteredList.value, ['list_order', 'name'])
 })
+const maxConditionGroups = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('message_criteria_max_condition_groups'))))
+})
+const maxConditions = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('message_criteria_max_conditions'))))
+})
 const message = computed<IMessage>(() => {
   return props.message as IMessage
 })
@@ -457,7 +475,6 @@ watch(conditions, () => {
           })
           if (attribute) {
             attributeMap[i][j] = attribute
-            conditions[i][j].value = ''
           }
         }
       })
@@ -502,7 +519,7 @@ const activeTab = (): string => {
   return ''
 }
 const addCondition = (i: number): void => {
-  if (conditions[i].length < 10) {
+  if (conditions[i].length < maxConditions.value) {
     conditions[i].push({
       slug: '',
       operator: '',
@@ -510,10 +527,24 @@ const addCondition = (i: number): void => {
     })
   }
 }
-const deleteCondition = (i: number, j: number): void => {
-  if (conditions[i][j] && conditions[i].length > 1) {
-    conditions[i].splice(j, 1)
+const addConditionGroup = (): void => {
+  const length = conditions.length
+  if (length < maxConditionGroups.value) {
+    conditions.push([])
+    addCondition(length)
   }
+}
+const deleteCondition = (i: number, j: number): boolean => {
+  if (conditions.length === 1 && conditions[i].length <= 1) {
+    return false
+  }
+  if (conditions[i][j]) {
+    conditions[i].splice(j, 1)
+    if (conditions[i].length === 0) {
+      conditions.splice(i, 1)
+    }
+  }
+  return true
 }
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
@@ -522,15 +553,15 @@ const normalize = (): FormData => {
     if ( ! $_.isNil(value)) {
       formData.append(key, value)
     }
-  })
-  const items = toRaw(utmItems)
-  formData.append('utm', JSON.stringify(items))
+  })  
   $_.forEach(messageAttachments.value, (id: any): void => {
     formData.append('attachments[]', id.toString())
   })
   $_.forEach(messageMailingLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())
   })
+  formData.append('conditions', JSON.stringify(toRaw(conditions)))
+  formData.append('utm', JSON.stringify(toRaw(utmItems)))
   return formData
 }
 const reset = (): void => {

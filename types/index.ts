@@ -217,8 +217,8 @@ export type TMailingListMeta = {
   types: Record<string, string>
 }
 export type TMessageCondition = {
-  slug: string,
-  operator: string,
+  slug: string | null,
+  operator: string | null,
   value: string
 }
 export type TMessageMeta = {
