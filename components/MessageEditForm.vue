@@ -483,9 +483,23 @@ watch(conditions, () => {
 }, { immediate: true, deep: true })
 watch(message, () => {
   if (message.value) {
-    Object.assign(form, $_.omit(message.value, ['creator', 'updater', 'attachments', 'mailing_lists']))
+    Object.assign(form, $_.omit(message.value, [
+      'conditions',
+      'utm',
+      'creator',
+      'updater',
+      'attachments',
+      'mailing_lists'
+    ]))
     if (message.value.conditions) {
-      // @todo
+      const messageConditions = toRaw(message.value.conditions)
+      if (Array.isArray(messageConditions)) {
+        messageConditions.forEach((group: TMessageCondition[], i: number) => {
+          group.forEach((condition: TMessageCondition, j: number) => {
+            conditions[i][j] = condition
+          })
+        })
+      }
     } else {
       conditions[0] = [{
         slug: '',
