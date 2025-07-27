@@ -2,7 +2,7 @@
 // Footer
 // --------------------------------------------------
 
-.footer {
+footer {
   border-top: solid 1px rgba(0, 0, 0, .05);
   bottom: 0;
   color: $gray-550;
@@ -40,14 +40,14 @@
 
 @include color-mode(light) {
   
-  .footer {
+  footer {
     background-color: $white;
   }
 }
 
 @include color-mode(dark) {
 
-  .footer {
+  footer {
     background-color: #33404a;
   }
 }

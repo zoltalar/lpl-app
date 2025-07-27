@@ -188,6 +188,13 @@
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save_and_close') }}</button>
       </template>
     </modal>
+    <modal
+      id="modal-message-view"
+      :title="$t('message_details')"
+      size="xl"
+    >
+      <message-view :message="selectedMessage" />
+    </modal> 
   </div>
 </template>
 <script setup lang="ts">
@@ -288,6 +295,11 @@ const onUpdated = (close: boolean) => {
     header: t('success'),
     body: t('messages.model_updated', { model })
   })
+}
+const show = (message: IMessage): void => {
+  selectedMessage.value = message
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-view')
+  modal.show()
 }
 const softDelete = async (message: IMessage): Promise<void> => {
   const name = message.name

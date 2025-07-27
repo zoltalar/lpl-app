@@ -38,10 +38,23 @@
               {{ $t('html_content') }}
             </td>
             <td>
-              <span v-if="template.content_html">
-                <code>{{ template.content_html }}</code>
-              </span>
-              <span v-else> - </span>
+              <div v-html="template.content_html" v-if="contentHtml"></div>
+              <div v-else>
+                <span v-if="template.content_html">
+                  <code>{{ template.content_html }}</code>
+                </span>
+                <span v-else> - </span>
+              </div>
+              <div class="mt-3">
+                <button
+                  type="button"
+                  class="btn btn-sm"
+                  :class="{'btn-primary': contentHtml, 'btn-secondary': !contentHtml}"
+                  @click.prevent="toggleContentHtml"
+                >
+                  <i class="mdi mdi-language-html5"></i>
+                </button>
+              </div>
             </td>
           </tr>
           <tr>
@@ -112,6 +125,7 @@ interface Props {
   template?: ITemplate | null
 }
 const props = defineProps<Props>()
+const contentHtml = ref<boolean>(false)
 // Composables
 const { data } = useAuth()
 const {
@@ -129,4 +143,8 @@ const template = computed<ITemplate>(() => {
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
 })
+// Functions
+const toggleContentHtml = (): void => {
+  contentHtml.value = ! contentHtml.value
+}
 </script>

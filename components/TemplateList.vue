@@ -175,7 +175,7 @@
     <modal
       id="modal-template-view"
       :title="$t('template_details')"
-      size="lg"
+      size="xl"
     >
       <template-view :template="selectedTemplate" />
     </modal>
