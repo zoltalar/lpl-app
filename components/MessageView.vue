@@ -2,6 +2,7 @@
   <tabs id="tabs-message-view">
     <tab :title="$t('general')" target="#message-general" active />
     <tab :title="$t('format')" target="#message-format" />
+    <tab :title="$t('attachments')" target="#message-attachments" v-if="allowAttachments" />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="message-general" role="tabpanel" aria-labelledby="tab-general">
@@ -175,6 +176,30 @@
         </table>
       </div>
     </div>
+    <div class="tab-pane fade" id="message-attachments" role="tabpanel" aria-labelledby="tab-attachments">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <template v-if="message.attachments && message.attachments.length > 0">
+              <tr v-for="attachment in message.attachments">
+                <td>
+                  {{ attachment.name }}
+                  <small class="text-secondary ms-1">
+                    <span>.{{ extension(attachment.file) }}</span>;
+                    <span v-if="attachment.size">{{ formatBytes(attachment.size) }}</span>                    
+                  </small>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <div class="text-center">
+                <p class="mt-3 mb-0">{{ $t('no_attributes') }}</p>
+              </div>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -189,8 +214,16 @@ const messageHtml = ref<boolean>(false)
 const footerHtml = ref<boolean>(false)
 // Composables
 const { data } = useAuth()
+const { extension, formatBytes } = useFile()
+const {
+  findBySlug: configurationFindBySlug,
+  value: configurationValue
+} = useConfiguration()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
+const allowAttachments = computed<number>(() => {
+  return Number(configurationValue(toRaw(configurationFindBySlug('allow_attachments'))))
+})
 const message = computed<IMessage>(() => {
   return props.message as IMessage
 })

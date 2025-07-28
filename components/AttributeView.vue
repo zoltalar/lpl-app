@@ -1,6 +1,7 @@
 <template v-if="attribute">
   <tabs id="tabs-attribute-view">
     <tab :title="$t('general')" target="#attribute-general" active />
+    <tab :title="$t('preview')" target="#attribute-preview" />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="attribute-general" role="tabpanel" aria-labelledby="tab-general">
@@ -173,6 +174,12 @@
         </tbody>
       </table>
     </div>
+    <div class="tab-pane fade" id="attribute-preview" role="tabpanel" aria-labelledby="tab-preview">
+      <div class="form-group mb-0">
+        <attribute-label :attribute="attribute" />
+        <attribute-input :attribute="attribute" v-model="attributeValue" />
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -183,6 +190,7 @@ interface Props {
   attribute?: IAttribute | null
 }
 const props = defineProps<Props>()
+const attributeValue = ref<string>('')
 // Composables
 const { data } = useAuth()
 const { inputTypeName } = useAttribute()
@@ -195,4 +203,8 @@ const attribute = computed<IAttribute>(() => {
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
 })
+// Watch
+watch(attribute, () => {
+    attributeValue.value = ''
+}, { immediate: true })
 </script>

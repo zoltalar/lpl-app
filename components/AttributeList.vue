@@ -202,7 +202,7 @@
     <modal
       id="modal-attribute-view"
       :title="$t('attribute_details')"
-      size="lg"
+      size="xl"
     >
       <attribute-view :attribute="selectedAttribute" />
     </modal>
