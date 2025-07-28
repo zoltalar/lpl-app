@@ -496,6 +496,7 @@ watch(message, () => {
       const messageConditions = toRaw(message.value.conditions)
       if (Array.isArray(messageConditions)) {
         messageConditions.forEach((group: TMessageCondition[], i: number) => {
+          conditions[i] = []
           group.forEach((condition: TMessageCondition, j: number) => {
             conditions[i][j] = condition
           })

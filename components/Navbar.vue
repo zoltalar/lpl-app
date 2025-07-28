@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-custom">
-    <div class="container">            
+    <div class="container-fluid">            
       <nuxt-link to="/dashboard" class="navbar-brand">
         <app-logo />
       </nuxt-link>

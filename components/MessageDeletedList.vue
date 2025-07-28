@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('draft_messages') }}</h4>
+          <h4 class="page-title">{{ $t('deleted_messages') }}</h4>
         </div>
       </div>
     </div>
@@ -151,7 +151,8 @@
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
-                            <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
+                            <button type="button" class="btn btn-warning" :title="$t('undelete')" @click.prevent="undelete(message)" v-if="hasRole('admin') || can('message-undelete')"><i class="mdi mdi-undo-variant"></i></button>
+                            <button type="button" class="btn btn-danger" :title="$t('purge')" @click.prevent="purge(message)" v-if="hasRole('admin') || can('message-purge')"><i class="mdi mdi-close"></i></button>
                           </div>
                         </td>
                       </tr>                      

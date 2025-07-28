@@ -66,4 +66,9 @@
   .navbar-toggler {
     border-color: transparent;
   }
+
+  @include media-breakpoint-up(md) {
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+  }
 }

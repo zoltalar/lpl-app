@@ -1,6 +1,6 @@
 <template>
   <div class="top-nav">
-    <div class="container">
+    <div class="container-fluid">
       <nav class="navbar navbar-light navbar-expand-lg">
         <div class="navbar-collapse collapse" id="top-nav-menu">
           <ul class="navbar-nav">
