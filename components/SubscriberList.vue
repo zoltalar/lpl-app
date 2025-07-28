@@ -198,7 +198,7 @@
     <modal
       id="modal-subscriber-view"
       :title="$t('subscriber_details')"
-      size="lg"
+      size="xl"
     >
       <subscriber-view :subscriber="selectedSubscriber" />
     </modal>

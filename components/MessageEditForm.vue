@@ -486,6 +486,7 @@ watch(message, () => {
     Object.assign(form, $_.omit(message.value, [
       'conditions',
       'utm',
+      'template',
       'creator',
       'updater',
       'attachments',
@@ -564,9 +565,7 @@ const normalize = (): FormData => {
   const formData: FormData = new FormData()
   formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
-    if ( ! $_.isNil(value)) {
-      formData.append(key, value)
-    }
+    formData.append(key, value ?? '')
   })  
   $_.forEach(messageAttachments.value, (id: any): void => {
     formData.append('attachments[]', id.toString())

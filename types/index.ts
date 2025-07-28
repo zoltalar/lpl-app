@@ -126,6 +126,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   status: number | null,
   send_format: string,
   deleted_at: string | null,
+  template?: ITemplate | null,
   attachments?: IAttachment[] | null,
   mailing_lists?: IMailingList[] | null
 }
