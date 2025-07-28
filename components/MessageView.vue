@@ -3,6 +3,9 @@
     <tab :title="$t('general')" target="#message-general" active />
     <tab :title="$t('format')" target="#message-format" />
     <tab :title="$t('attachments')" target="#message-attachments" v-if="allowAttachments" />
+    <tab :title="$t('mailing_lists')" target="#message-mailing-lists" />
+    <tab :title="$t('criteria')" target="#message-criteria" />
+    <tab :title="$t('analytics')" target="#message-analytics" />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="message-general" role="tabpanel" aria-labelledby="tab-general">
@@ -193,9 +196,95 @@
             </template>
             <template v-else>
               <div class="text-center">
-                <p class="mt-3 mb-0">{{ $t('no_attributes') }}</p>
+                <p class="mt-3 mb-0">{{ $t('no_attachments') }}</p>
               </div>
             </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="message-mailing-lists" role="tabpanel" aria-labelledby="tab-mailing-lists">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <template v-if="message.mailing_lists && message.mailing_lists.length > 0">
+              <tr v-for="list in message.mailing_lists">
+                <td>{{ list.name }}</td>
+              </tr>
+            </template>
+            <template v-else>
+              <div class="text-center">
+                <p class="mt-3 mb-0">{{ $t('no_mailing_lists') }}</p>
+              </div>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="message-criteria" role="tabpanel" aria-labelledby="tab-criteria">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <tr>
+              <td class="table-attribute">
+                {{ $t('criteria_enabled') }}
+              </td>
+              <td>
+                <yes-no :expression="message.criteria" />
+              </td>
+            </tr>
+            <tr>
+              <td class="table-attribute">
+                {{ $t('conditions') }}
+              </td>
+              <td>
+                <span v-if="message.conditions && message.conditions.length > 0">
+                  <template v-for="(group, i) in message.conditions">
+                    <span> ( </span>
+                    <template v-for="(condition, j) in group">
+                      {{ condition.slug }}
+                      {{ condition.operator }}
+                      {{ condition.value }}
+                      <span v-if="j < (group.length - 1)">
+                        <span class="badge text-bg-secondary ms-2 me-2">{{ $t('and') }}</span>
+                      </span>
+                    </template>
+                    <span> ) </span>
+                    <p class="mb-0" v-if="i < (message.conditions.length - 1)">
+                      <span class="badge text-bg-success">{{ $t('or') }}</span>
+                    </p>
+                  </template>
+                </span>
+                <span v-else> - </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="message-analytics" role="tabpanel" aria-labelledby="tab-analytics">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <tr>
+              <td class="table-attribute">
+                {{ $t('analytics_enabled') }}
+              </td>
+              <td>
+                <yes-no :expression="message.analytics" />
+              </td>
+            </tr>
+            <template v-for="(item, key) in message.utm">
+              <tr>
+                <td class="table-attribute">
+                  {{ $t('messages.' + key) }}
+                </td>
+                <td>
+                  <span v-if="item">{{ item }}</span>
+                  <span v-else> - </span>
+                </td>
+              </tr>
+            </template>            
           </tbody>
         </table>
       </div>
