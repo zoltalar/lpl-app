@@ -242,9 +242,11 @@
                   <template v-for="(group, i) in message.conditions">
                     <span> ( </span>
                     <template v-for="(condition, j) in group">
-                      {{ condition.slug }}
-                      {{ condition.operator }}
-                      {{ condition.value }}
+                      <span v-if="validCondition(condition)">
+                        {{ condition.slug }}
+                        {{ condition.operator }}
+                        {{ condition.value }}
+                      </span>
                       <span v-if="j < (group.length - 1)">
                         <span class="badge text-bg-secondary ms-2 me-2">{{ $t('and') }}</span>
                       </span>
@@ -308,6 +310,7 @@ const {
   findBySlug: configurationFindBySlug,
   value: configurationValue
 } = useConfiguration()
+const { validCondition } = useMessage()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const allowAttachments = computed<number>(() => {

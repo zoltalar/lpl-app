@@ -1,4 +1,5 @@
 import { useMessageStore } from '@/store/message'
+import type { TMessageCondition } from '@/types'
 
 export default function useMessage() {
   // Composables
@@ -20,6 +21,9 @@ export default function useMessage() {
   const status = (status: number): string => {
     return statuses.value[status] ?? ''
   }
+  const validCondition = (condition: TMessageCondition): boolean => {
+    return condition.slug !== '' && condition.operator !== '' && condition.value !== ''
+  }
   return {
     // Computed
     formats,
@@ -27,6 +31,7 @@ export default function useMessage() {
     statuses,
     // Functions
     format,
-    status
+    status,
+    validCondition
   }
 }
