@@ -344,7 +344,7 @@ const softDeleteBatch = async (): Promise<void> => {
   let models = t('the_messages').toLowerCase()
   let message = t('messages.confirm_delete_batch_models', { models })
   if (confirm(message)) {
-    await useApi(`/admin/messages/soft-batch-delete`, {
+    await useApi(`/admin/messages/soft-delete-batch`, {
       method: 'post',
       body: {
         ids: selected.value

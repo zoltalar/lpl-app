@@ -20,21 +20,19 @@
                       {{ $t('options') }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
-                      <li><a href="/messages/draft" class="dropdown-item" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</a></li>
-                      <li><a href="/messages/draft" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
-                      <li><a href="/messages/draft" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                      <li><a href="/messages/deleted" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="purgeBatch" v-if="hasRole('admin') || can('message-purge')">{{ $t('purge') }}</a></li>
                     </ul>
                   </div>
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                    <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
                     <div class="btn-group" role="group">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
                       <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="/messages/draft" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                        <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="purgeBatch" v-if="hasRole('admin') || can('message-purge')">{{ $t('purge') }}</a></li>
                       </ul>
                     </div>
                   </div>                  
@@ -266,21 +264,6 @@ const toggle = computed<boolean>({
   }
 })
 // Functions
-const create = async () => {
-  const model = t('the_message')
-  await useApi('/admin/messages/store', {
-    method: 'post',
-    onResponse({ request, response, options }) {
-      if (response._data.data) {
-        refresh()
-        addToast({ 
-          header: t('success'),
-          body: t('messages.model_created', { model })
-        })
-      }
-    }
-  })
-}
 const edit = (message: IMessage): void => {
   selectedMessage.value = message
   const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
@@ -311,30 +294,72 @@ const onUpdated = (close: boolean) => {
     body: t('messages.model_updated', { model })
   })
 }
-const show = (message: IMessage): void => {
-  selectedMessage.value = message
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-view')
-  modal.show()
-}
-const softDelete = async (message: IMessage): Promise<void> => {
+const purge = async (message: IMessage): Promise<void> => {
   const name = message.name
   const model = t('the_message')
-  const confirmMessage = t('messages.confirm_delete_name', { name })
+  const confirmMessage = t('messages.confirm_message_purge_name', { name })
   if (confirm(confirmMessage)) {
-    await useApi(`/admin/messages/soft-delete/${message.id}`, {
+    await useApi(`/admin/messages/${message.id}`, {
       method: 'delete',
       onResponse({ request, response, options }) {
         if (response.status === 204) {
           refresh()
           addToast({
             header: t('success'),
-            body: t('messages.model_deleted', { model })
+            body: t('messages.model_purged', { model })
           })
         } else {
           addToast({
             header: t('error'),
-            body: t('messages.model_name_delete_error', { model, name }),
+            body: t('messages.model_name_destroy_error', { model, name }),
             type: 'danger'
+          })
+        }
+      },
+    })
+  }
+}
+const purgeBatch = async (): Promise<void> => {
+  let models = t('the_messages').toLowerCase()
+  let message = t('messages.confirm_purge_batch_models', { models })
+  if (confirm(message)) {
+    await useApi(`/admin/messages/destroy-batch`, {
+      method: 'post',
+      body: {
+        ids: selected.value
+      },
+      onResponse({ request, response, options }) {        
+        if (response.status === 204) {
+          selected.value = []
+          models = t('the_messages')
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.models_purged', { models })
+          })
+        }
+      },
+    })
+  }
+}
+const show = (message: IMessage): void => {
+  selectedMessage.value = message
+  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-view')
+  modal.show()
+}
+const undelete = async (message: IMessage): Promise<void> => {
+  const name = message.name
+  const model = t('the_message')
+  const confirmMessage = t('messages.confirm_message_undelete_name', { name })
+  if (confirm(confirmMessage)) {
+    await useApi(`/admin/messages/undelete/${message.id}`, {
+      method: 'post',
+      onResponse({ request, response, options }) {
+        if (response._data.data) {
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.model_updated', { model })
           })
         }
       },
