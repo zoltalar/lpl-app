@@ -2,6 +2,10 @@
 // Buttons
 // --------------------------------------------------
 
+.btn-primary {
+  --#{$prefix}btn-color: white;
+}
+
 .btn-xs {
   @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $btn-font-size-xs, $btn-border-radius-xs);
 }

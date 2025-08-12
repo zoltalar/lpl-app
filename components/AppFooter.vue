@@ -20,7 +20,7 @@
         <div class="col-sm-5 text-center text-sm-end">
           <a
             href="/theme"
-            class="badge theme-light text-bg-primary ms-2"
+            class="badge theme-light ms-2"
             @click.stop.prevent="setTheme('light')"
             :title="$t('set_light_mode')"
           >
@@ -28,7 +28,7 @@
           </a>
           <a
             href="/theme"
-            class="badge theme-dark text-bg-secondary"
+            class="badge theme-dark"
             @click.stop.prevent="setTheme('dark')"
             :title="$t('set_dark_mode')"
           >

@@ -19,11 +19,13 @@ footer {
   }
 
   .theme-light {
+    background-color: var(--#{$prefix}primary);
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
 
   .theme-dark {
+    background-color: var(--#{$prefix}secondary);
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
