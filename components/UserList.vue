@@ -251,8 +251,7 @@ const destroy = async (user: IUser) => {
 }
 const edit = (user: IUser): void => {
   selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -264,9 +263,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-create')
   const model = t('user')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-user-create')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -281,9 +279,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')
   const model = t('user')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-user-edit')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -295,8 +292,7 @@ const reset = (): void => {
 }
 const show = (user: IUser): void => {
   selectedUser.value = user
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-user-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-user-view')?.show()
 }
 const store = (): void => {
   formUserCreate.value?.store()

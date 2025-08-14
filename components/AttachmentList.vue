@@ -256,8 +256,7 @@ const destroy = async (attachment: IAttachment) => {
 }
 const edit = (attachment: IAttachment): void => {
   selectedAttachment.value = attachment
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -269,9 +268,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-create')
   const model = t('attachment')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attachment-create')?.hide()
   refresh()
   refreshAttachments()
   addToast({ 
@@ -287,9 +285,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')
   const model = t('attachment')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attachment-edit')?.hide()
   refresh()
   refreshAttachments()
   addToast({ 
@@ -302,8 +299,7 @@ const reset = (): void => {
 }
 const show = (attachment: IAttachment): void => {
   selectedAttachment.value = attachment
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attachment-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attachment-view')?.show()
 }
 const store = (): void => {
   formAttachmentCreate.value?.store()

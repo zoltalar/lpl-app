@@ -265,8 +265,7 @@ const destroy = async (subscriber: ISubscriber) => {
 }
 const edit = (subscriber: ISubscriber): void => {
   selectedSubscriber.value = subscriber
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -278,9 +277,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-create')
   const model = t('subscriber')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-create')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -295,9 +293,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')
   const model = t('subscriber')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -309,8 +306,7 @@ const reset = (): void => {
 }
 const show = (subscriber: ISubscriber): void => {
   selectedSubscriber.value = subscriber
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-view')?.show()
 }
 const store = (): void => {
   formSubscriberCreate.value?.store()

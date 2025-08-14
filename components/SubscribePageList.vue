@@ -243,8 +243,7 @@ const destroy = async (page: ISubscribePage) => {
 }
 const edit = (page: ISubscribePage): void => {
   selectedPage.value = page
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -256,9 +255,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-create')
   const model = t('subscribe_page')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-create')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -273,9 +271,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-edit')
   const model = t('subscribe_page')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-edit')?.hide()
   refresh()
   addToast({ 
     header: t('success'),
@@ -287,8 +284,7 @@ const reset = (): void => {
 }
 const show = (page: ISubscribePage): void => {
   selectedPage.value = page
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscribe-page-view')?.show()
 }
 const store = (): void => {
   formSubscribePageCreate.value?.store()

@@ -151,6 +151,7 @@
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="hasRole('admin') || can('message-send')"><i class="mdi mdi-email-check-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
                           </div>
                         </td>
@@ -282,8 +283,7 @@ const create = async () => {
 }
 const edit = (message: IMessage): void => {
   selectedMessage.value = message
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.show()
 }
 const handleUpdated = (close: boolean): void => {
   onUpdated(close)
@@ -300,8 +300,7 @@ const onErrors = (errors: Record<string,string>): void => {
 }
 const onUpdated = (close: boolean) => {
   if (close) {
-    const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
-    modal.hide()
+    $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.hide()
   }
   const model = t('message')
   refresh()
@@ -312,8 +311,7 @@ const onUpdated = (close: boolean) => {
 }
 const show = (message: IMessage): void => {
   selectedMessage.value = message
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-view')?.show()
 }
 const softDelete = async (message: IMessage): Promise<void> => {
   const name = message.name
@@ -362,6 +360,10 @@ const softDeleteBatch = async (): Promise<void> => {
       },
     })
   }
+}
+const test = (message: IMessage): void => {
+  selectedMessage.value = message
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-test')?.show()
 }
 const update = (): void => {
   formMessageEdit.value?.update()

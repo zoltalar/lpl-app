@@ -23,7 +23,8 @@
     "pinia": "^2.1.6",
     "quill": "^2.0.3",
     "sass": "1.64.2",
-    "sass-loader": "^13.3.2"
+    "sass-loader": "^13.3.2",
+    "vue-select": "^4.0.0-beta.6"
   },
   "overrides": {
     "eslint": "latest",

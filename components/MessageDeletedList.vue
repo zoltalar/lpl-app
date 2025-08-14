@@ -266,8 +266,7 @@ const toggle = computed<boolean>({
 // Functions
 const edit = (message: IMessage): void => {
   selectedMessage.value = message
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.show()
 }
 const handleUpdated = (close: boolean): void => {
   onUpdated(close)
@@ -284,8 +283,7 @@ const onErrors = (errors: Record<string,string>): void => {
 }
 const onUpdated = (close: boolean) => {
   if (close) {
-    const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')
-    modal.hide()
+    $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.hide()
   }
   const model = t('message')
   refresh()
@@ -344,8 +342,7 @@ const purgeBatch = async (): Promise<void> => {
 }
 const show = (message: IMessage): void => {
   selectedMessage.value = message
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-message-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-view')?.show()
 }
 const undelete = async (message: IMessage): Promise<void> => {
   const name = message.name

@@ -280,8 +280,7 @@ const destroy = async (list: IMailingList) => {
 }
 const edit = (list: IMailingList): void => {
   selectedList.value = list
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -293,9 +292,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-create')
   const model = t('mailing_list')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-create')?.hide()
   refresh()
   refreshLists()
   addToast({ 
@@ -311,9 +309,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')
   const model = t('mailing_list')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-edit')?.hide()
   refresh()
   refreshLists()
   addToast({ 
@@ -326,8 +323,7 @@ const reset = (): void => {
 }
 const show = (list: IMailingList): void => {
   selectedList.value = list
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-mailing-list-view')?.show()
 }
 const store = (): void => {
   formMailingListCreate.value?.store()

@@ -251,8 +251,7 @@ const destroy = async (template: ITemplate) => {
 }
 const edit = (template: ITemplate): void => {
   selectedTemplate.value = template
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-template-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -264,9 +263,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-create')
   const model = t('template')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-template-create')?.hide()
   refresh()
   refreshConfigurations()
   refreshTemplates()
@@ -283,9 +281,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-edit')
   const model = t('template')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-template-edit')?.hide()
   refresh()
   refreshConfigurations()
   refreshTemplates()
@@ -299,8 +296,7 @@ const reset = (): void => {
 }
 const show = (template: ITemplate): void => {
   selectedTemplate.value = template
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-template-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-template-view')?.show()
 }
 const store = (): void => {
   formTemplateCreate.value?.store()

@@ -275,8 +275,7 @@ const destroy = async (attribute: IAttribute) => {
 }
 const edit = (attribute: IAttribute): void => {
   selectedAttribute.value = attribute
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attribute-edit')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attribute-edit')?.show()
 }
 const handleCreated = (): void => {
   onCreated()
@@ -288,9 +287,8 @@ const handleUpdated = (): void => {
   onUpdated()
 }
 const onCreated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attribute-create')
   const model = t('attribute')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attribute-create')?.hide()
   refresh()
   refreshAttributes()
   addToast({ 
@@ -306,9 +304,8 @@ const onErrors = (errors: Record<string,string>): void => {
   })
 }
 const onUpdated = (): void => {
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attribute-edit')
   const model = t('attribute')
-  modal.hide()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attribute-edit')?.hide()
   refresh()
   refreshAttributes()
   addToast({ 
@@ -321,8 +318,7 @@ const reset = (): void => {
 }
 const show = (attribute: IAttribute): void => {
   selectedAttribute.value = attribute
-  const modal = $bootstrap.Modal.getOrCreateInstance('#modal-attribute-view')
-  modal.show()
+  $bootstrap.Modal.getOrCreateInstance('#modal-attribute-view')?.show()
 }
 const store = (): void => {
   formAttributeCreate.value?.store()
