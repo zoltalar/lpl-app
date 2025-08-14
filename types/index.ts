@@ -246,3 +246,7 @@ export type TUtmItems = {
   utm_term: string,
   utm_content: string
 }
+export type TVSelectOption = {
+  value: string | number | null,
+  label: string
+}

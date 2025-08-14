@@ -363,29 +363,6 @@ const undelete = async (message: IMessage): Promise<void> => {
     })
   }
 }
-const softDeleteBatch = async (): Promise<void> => {
-  let models = t('the_messages').toLowerCase()
-  let message = t('messages.confirm_delete_batch_models', { models })
-  if (confirm(message)) {
-    await useApi(`/admin/messages/soft-batch-delete`, {
-      method: 'post',
-      body: {
-        ids: selected.value
-      },
-      onResponse({ request, response, options }) {        
-        if (response.status === 204) {
-          selected.value = []
-          models = t('the_messages')
-          refresh()
-          addToast({
-            header: t('success'),
-            body: t('messages.models_deleted', { models })
-          })
-        }
-      },
-    })
-  }
-}
 const update = (): void => {
   formMessageEdit.value?.update()
 }

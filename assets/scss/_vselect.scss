@@ -1,0 +1,56 @@
+// --------------------------------------------------
+// VSelect
+// --------------------------------------------------
+
+.vs__selected {
+  color: inherit;
+}
+
+@include color-mode(dark) {
+
+  .vs__clear,
+  .vs__open-indicator {
+    fill: $gray-500;
+  }
+
+  .vs__deselect {
+    fill: $gray-500;
+  }
+
+  .vs--disabled {
+
+    .vs__dropdown-toggle {
+      background-color: var(--#{$prefix}secondary-bg);
+    }
+
+    .vs__open-indicator {
+      background-color: var(--#{$prefix}secondary-bg);
+    }
+
+    .vs__search {
+      background-color: var(--#{$prefix}secondary-bg);
+    }
+  }
+
+  .vs__dropdown-menu {
+    color: $gray-900;
+  }
+
+  .vs__dropdown-option {
+    color: $gray-900;
+  }
+
+  .vs__dropdown-option--highlight {
+    background-color: $primary;
+    color: $white;
+  }
+
+  .vs__dropdown-toggle {
+    border-color: var(--#{$prefix}border-color) 
+  }
+
+  .vs__selected {
+    background-color: $gray-850;
+    border-color: var(--#{$prefix}border-color);
+  }
+}

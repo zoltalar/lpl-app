@@ -150,8 +150,8 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="hasRole('admin') || can('message-send')"><i class="mdi mdi-email-check-outline"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
                           </div>
                         </td>
@@ -204,12 +204,26 @@
       </template>
     </modal>
     <modal
+      id="modal-message-test"
+      :title="$t('send_message_test')"
+      size="lg"
+    >
+      <message-send-test-form
+        :message="selectedMessage"
+        ref="formMessageSendTest"
+      />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="send">{{ $t('send') }}</button>
+      </template>
+    </modal>
+    <modal
       id="modal-message-view"
       :title="$t('message_details')"
       size="xl"
     >
       <message-view :message="selectedMessage" />
-    </modal> 
+    </modal>
   </div>
 </template>
 <script setup lang="ts">
