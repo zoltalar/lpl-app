@@ -1,0 +1,15 @@
+// --------------------------------------------------
+// Badge
+// --------------------------------------------------
+
+.badge-danger {
+  background-color: var(--#{$prefix}danger);
+}
+
+.badge-primary {
+  background-color: var(--#{$prefix}primary);
+}
+
+.badge-secondary {
+  background-color: var(--#{$prefix}secondary);
+}

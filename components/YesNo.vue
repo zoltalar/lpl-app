@@ -13,9 +13,9 @@ const css = (): Record<string, boolean> => {
   const expression = props.expression
   const inverse = props.inverse ?? false
   if (parseInt(expression) === 1 || expression === true) {
-    classes['text-bg-' + (inverse ? 'danger' : 'primary')] = true
+    classes['badge-' + (inverse ? 'danger' : 'primary')] = true
   } else {
-    classes['text-bg-' + (inverse ? 'primary' : 'danger')] = true
+    classes['badge-' + (inverse ? 'primary' : 'danger')] = true
   }
   return classes
 }
