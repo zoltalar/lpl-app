@@ -211,6 +211,8 @@
       <message-send-test-form
         :message="selectedMessage"
         ref="formMessageSendTest"
+        @sent="handleTestSent"
+        @errors="handleErrors"
       />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
@@ -249,6 +251,7 @@ const {
 const selected = ref<number[]>([])
 const toggleFilters = ref<boolean>(false)
 const formMessageEdit = useTemplateRef<HTMLFormElement>('formMessageEdit')
+const formMessageSendTest = useTemplateRef<HTMLFormElement>('formMessageSendTest')
 const selectedMessage = ref<IMessage>({} as IMessage)
 // Composables
 const { t } = useI18n()
@@ -299,6 +302,9 @@ const edit = (message: IMessage): void => {
   selectedMessage.value = message
   $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.show()
 }
+const handleTestSent = (): void => {
+  onTestSent()
+}
 const handleUpdated = (close: boolean): void => {
   onUpdated(close)
 }
@@ -312,7 +318,14 @@ const onErrors = (errors: Record<string,string>): void => {
     type: 'danger'
   })
 }
-const onUpdated = (close: boolean) => {
+const onTestSent = (): void => {
+  $bootstrap.Modal.getOrCreateInstance('#modal-message-test')?.hide()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.message_test_sent')
+  })
+}
+const onUpdated = (close: boolean): void => {
   if (close) {
     $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.hide()
   }
@@ -322,6 +335,9 @@ const onUpdated = (close: boolean) => {
     header: t('success'),
     body: t('messages.model_updated', { model })
   })
+}
+const send = (): void => {
+  formMessageSendTest.value?.send()
 }
 const show = (message: IMessage): void => {
   selectedMessage.value = message
