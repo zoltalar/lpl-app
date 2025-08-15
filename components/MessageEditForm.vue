@@ -85,6 +85,14 @@
             {{ error('message_html') }}
           </div>
         </div>
+        <div class="form-group">
+          <label :for="inputId('message-text')" class="form-label">{{ $t('text_message') }}</label>
+          <required-input />
+          <textarea class="form-control" :id="inputId('message-text')" rows="20" v-model="form.message_text"></textarea>
+          <div class="invalid-feedback d-block" v-if="error('message_text') !== null">
+            {{ error('message_text') }}
+          </div>
+        </div>
         <div class="form-group mb-0">
           <div class="float-end">
             <button type="button" class="btn btn-sm" :title="$t('toggle_editor')" @click.prevent="toggleEditor(inputId('editor-footer'), form.footer)">
