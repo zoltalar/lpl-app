@@ -85,14 +85,17 @@ const message = computed<IMessage>(() => {
 })
 // Functions
 const fetchSubscriberOptions = $_.debounce(async (search: string): Promise<void> => {
+  busyFetchSubscribers.value = true
   await useApi('/admin/subscribers/search', {
     params: { search },
     onResponse({ request, response, options }) {
+      busyFetchSubscribers.value = false
       if (response._data.data) {
         subscriberOptions.value = transform(response._data.data)
       }
     },
     onResponseError({ request, response, options }) {
+      busyFetchSubscribers.value = false
       subscriberOptions.value = []
     }
   })
