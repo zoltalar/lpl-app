@@ -128,7 +128,8 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   deleted_at: string | null,
   template?: ITemplate | null,
   attachments?: IAttachment[] | null,
-  mailing_lists?: IMailingList[] | null
+  mailing_lists?: IMailingList[] | null,
+  mailable?: number
 }
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
