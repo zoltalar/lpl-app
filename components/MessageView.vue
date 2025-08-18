@@ -79,6 +79,17 @@
             </tr>
             <tr>
               <td class="table-attribute">
+                {{ $t('text_message') }}
+              </td>
+              <td>
+                <span v-if="message.message_text">
+                  <code>{{ message.message_text }}</code>
+                </span>
+                <span v-else> - </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-attribute">
                 {{ $t('footer') }}
               </td>
               <td>
