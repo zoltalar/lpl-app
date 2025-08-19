@@ -207,6 +207,8 @@
       id="modal-message-test"
       :title="$t('send_message_test')"
       size="lg"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
     >
       <message-send-test-form
         :message="selectedMessage"
