@@ -227,8 +227,8 @@ watch(page, () => {
   if (page.value) {
     Object.assign(form, page.value)
     pageAttributes.value = []
-    if (page.value.attributes) {
-      page.value.attributes.forEach((attribute: IAttribute) => {
+    if (page.value.subscriber_attributes) {
+      page.value.subscriber_attributes.forEach((attribute: IAttribute) => {
         pageAttributes.value.push(attribute.id)
       })
     }
@@ -257,21 +257,18 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const update = async () => {
+const update = async (): Promise<void> => {
   const pageData: FormData = normalize()
   await useApi(`/admin/subscribe-pages/update/${page.value.id}`, {
     method: 'post',
     body: pageData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('updated')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

@@ -91,22 +91,19 @@ const onFileChange = (event: Event): void => {
     file.value = el.files[0]
   }
 }
-const store = async () => {
+const store = async (): Promise<void> => {
   const attachment: FormData = normalize()
   await useApi('/admin/attachments/store', {
     method: 'post',
     body: attachment,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         reset()
         emits('created')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

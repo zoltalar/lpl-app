@@ -305,21 +305,18 @@ const normalize = (): FormData => {
   }
   return formData
 }
-const update = async () => {
+const update = async (): Promise<void> => {
   const attributeData: FormData = normalize()
   await useApi(`/admin/attributes/update/${attribute.value.id}`, {
     method: 'post',
     body: attributeData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('updated')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

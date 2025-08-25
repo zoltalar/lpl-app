@@ -231,22 +231,19 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const store = async () => {
+const store = async (): Promise<void> => {
   const page: FormData = normalize()
   await useApi('/admin/subscribe-pages/store', {
     method: 'post',
     body: page,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         reset()
         emits('created')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

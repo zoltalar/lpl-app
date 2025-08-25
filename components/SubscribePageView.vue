@@ -141,8 +141,8 @@
       </table>
     </div>
     <div class="tab-pane fade" id="subscribe-page-attributes" role="tabpanel" aria-labelledby="tab-attributes">
-      <ul class="mb-0" v-if="page.attributes && page.attributes.length > 0">
-        <li v-for="attribute in page.attributes ">{{ attributeLabel(attribute) }}</li>
+      <ul class="mb-0" v-if="page.subscriber_attributes && page.subscriber_attributes.length > 0">
+        <li v-for="attribute in page.subscriber_attributes ">{{ attributeLabel(attribute) }}</li>
       </ul>
       <p class="text-center mt-3 mb-0" v-else>{{ $t('no_attributes') }}</p>
     </div>

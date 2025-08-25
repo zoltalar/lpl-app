@@ -22,7 +22,7 @@ const download = async (): Promise<void> => {
   const timestamp = (new Date()).getTime()
   await useApi(`/admin/attachments/download/${attachment.value.id}&timestamp=${timestamp}`, {
     responseType: 'arrayBuffer',
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (attachment.value.mime) {
         const blob: Blob = new Blob([response._data], { type: attachment.value.mime })
         const link = document.createElement('a')

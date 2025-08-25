@@ -205,8 +205,8 @@ watch(subscriber, () => {
   if (subscriber.value) {
     Object.assign(form, subscriber.value)
     subscriberAttributes.value = {}
-    if (subscriber.value.attributes) {
-      subscriber.value.attributes.forEach((attribute: IAttribute) => {
+    if (subscriber.value.subscriber_attributes) {
+      subscriber.value.subscriber_attributes.forEach((attribute: IAttribute) => {
         subscriberAttributes.value[attribute.slug] = attribute.pivot?.value
       })
     }
@@ -237,21 +237,18 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const update = async () => {
+const update = async (): Promise<void> => {
   const subscriberData: FormData = normalize()
   await useApi(`/admin/subscribers/update/${subscriber.value.id}`, {
     method: 'post',
     body: subscriberData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('updated')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

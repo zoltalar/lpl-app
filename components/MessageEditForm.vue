@@ -589,23 +589,20 @@ const normalize = (): FormData => {
 const reset = (): void => {
   clearErrors()
 }
-const update = async (close: boolean = true) => {
+const update = async (close: boolean = true): Promise<void> => {
   const messageData: FormData = normalize()
   const tab = activeTab()
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',
     body: messageData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         reset()
         emits('updated', close)
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

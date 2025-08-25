@@ -24,7 +24,14 @@
       <label :for="inputId('content-html')" class="form-label">{{ $t('html_content') }}</label>
       <required-input />
       <editor :id="inputId('editor-content-html')" v-model="form.content_html" v-if="renderEditor(inputId('editor-content-html'))" />
-      <textarea class="form-control" :id="inputId('content-html')" rows="20" v-model="form.content_html" v-else></textarea>
+      <textarea
+        class="form-control"
+        :class="{'is-invalid': error('content_html') !== null}"
+        :id="inputId('content-html')"
+        rows="20"
+        v-model="form.content_html"
+        v-else
+      ></textarea>
       <div class="invalid-feedback d-block" v-if="error('content_html') !== null">
         {{ error('content_html') }}
       </div>
@@ -33,7 +40,13 @@
     <div class="form-group">
       <label :for="inputId('content-text')" class="form-label">{{ $t('text_content') }}</label>
       <required-input />
-      <textarea class="form-control" :id="inputId('content-text')" rows="20" v-model="form.content_text"></textarea>
+      <textarea
+        class="form-control"
+        :class="{'is-invalid': error('content_text') !== null}"
+        :id="inputId('content-text')"
+        rows="20"
+        v-model="form.content_text"
+      ></textarea>
       <div class="invalid-feedback d-block" v-if="error('content_text') !== null">
         {{ error('content_text') }}
       </div>
@@ -114,21 +127,18 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const update = async () => {
+const update = async (): Promise<void> => {
   const templateData: FormData = normalize()
   await useApi(`/admin/templates/update/${template.value.id}`, {
     method: 'post',
     body: templateData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('updated')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

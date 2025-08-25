@@ -15,5 +15,5 @@ export const useApi = <T = unknown, R extends NitroFetchRequest = NitroFetchRequ
     headers
   })
     
-  return api(request, options)
+  return api<T, R>(request, options as any)
 }

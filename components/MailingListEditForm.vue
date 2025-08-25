@@ -121,21 +121,18 @@ const normalize = (): FormData => {
   })
   return formData
 }
-const update = async () => {
+const update = async (): Promise<void> => {
   const listData: FormData = normalize()
   await useApi(`/admin/mailing-lists/update/${list.value.id}`, {
     method: 'post',
     body: listData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('updated')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

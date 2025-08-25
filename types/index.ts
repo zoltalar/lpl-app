@@ -154,8 +154,8 @@ export interface ISubscribePage extends IBaseModel, ITimestamps, IUserstamps {
   confirm_email: number | null,
   active: number | null,
   language?: ILanguage | null,
-  attributes?: IAttribute[] | null,
-  mailing_lists?: IMailingList[] | null
+  mailing_lists?: IMailingList[] | null,
+  subscriber_attributes?: IAttribute[] | null,
 }
 export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   email: string,
@@ -169,8 +169,8 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   active: number | null,
   unique_id: string | null,
   rss_frequency: string | null,
-  attributes?: IAttribute[] | null,
-  mailing_lists?: IMailingList[] | null
+  mailing_lists?: IMailingList[] | null,
+  subscriber_attributes?: IAttribute[] | null,
 }
 export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
