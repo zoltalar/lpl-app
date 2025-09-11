@@ -245,7 +245,7 @@ const destroy = async (subscriber: ISubscriber) => {
   if (confirm(message)) {
     await useApi(`/admin/subscribers/${subscriber.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           addToast({

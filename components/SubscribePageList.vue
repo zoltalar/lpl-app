@@ -223,7 +223,7 @@ const destroy = async (page: ISubscribePage) => {
   if (confirm(message)) {
     await useApi(`/admin/subscribe-pages/${page.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           addToast({

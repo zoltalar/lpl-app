@@ -299,7 +299,7 @@ const purge = async (message: IMessage): Promise<void> => {
   if (confirm(confirmMessage)) {
     await useApi(`/admin/messages/${message.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           addToast({
@@ -326,7 +326,7 @@ const purgeBatch = async (): Promise<void> => {
       body: {
         ids: selected.value
       },
-      onResponse({ request, response, options }) {        
+      onResponse({ response }) {        
         if (response.status === 204) {
           selected.value = []
           models = t('the_messages')
@@ -351,7 +351,7 @@ const undelete = async (message: IMessage): Promise<void> => {
   if (confirm(confirmMessage)) {
     await useApi(`/admin/messages/undelete/${message.id}`, {
       method: 'post',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response._data.data) {
           refresh()
           addToast({

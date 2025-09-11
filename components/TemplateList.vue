@@ -230,7 +230,7 @@ const destroy = async (template: ITemplate) => {
   if (confirm(message)) {
     await useApi(`/admin/templates/${template.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           refreshTemplates()

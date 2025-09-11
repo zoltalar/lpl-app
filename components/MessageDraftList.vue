@@ -150,6 +150,7 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-email-check-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
@@ -285,11 +286,30 @@ const toggle = computed<boolean>({
   }
 })
 // Functions
-const create = async () => {
+const copy = async (message: IMessage): Promise<void> => {
+  const model = t('the_message')
+  const name = message.name
+  const confirmMessage = t('messages.confirm_duplicate_name', { name })
+  if (confirm(confirmMessage)) {
+    await useApi(`/admin/messages/duplicate/${message.id}`, {
+      method: 'post',
+      onResponse({ response }) {
+        if (response._data.data) {
+          refresh()
+          addToast({ 
+            header: t('success'),
+            body: t('messages.model_created', { model })
+          })
+        }
+      }
+    })
+  }
+}
+const create = async (): Promise<void> => {
   const model = t('the_message')
   await useApi('/admin/messages/store', {
     method: 'post',
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.data) {
         refresh()
         addToast({ 
@@ -352,7 +372,7 @@ const softDelete = async (message: IMessage): Promise<void> => {
   if (confirm(confirmMessage)) {
     await useApi(`/admin/messages/soft-delete/${message.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           addToast({
@@ -379,7 +399,7 @@ const softDeleteBatch = async (): Promise<void> => {
       body: {
         ids: selected.value
       },
-      onResponse({ request, response, options }) {        
+      onResponse({ response }) {        
         if (response.status === 204) {
           selected.value = []
           models = t('the_messages')

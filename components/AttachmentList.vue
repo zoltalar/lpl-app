@@ -235,7 +235,7 @@ const destroy = async (attachment: IAttachment) => {
   if (confirm(message)) {
     await useApi(`/admin/attachments/${attachment.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           refreshAttachments()

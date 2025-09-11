@@ -231,7 +231,7 @@ const destroy = async (user: IUser) => {
   if (confirm(message)) {
     await useApi(`/admin/users/${user.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           addToast({

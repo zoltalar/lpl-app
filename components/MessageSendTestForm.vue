@@ -88,15 +88,12 @@ const fetchSubscriberOptions = $_.debounce(async (search: string): Promise<void>
   busyFetchSubscribers.value = true
   await useApi('/admin/subscribers/search', {
     params: { search },
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       busyFetchSubscribers.value = false
+      subscriberOptions.value = []
       if (response._data.data) {
         subscriberOptions.value = transform(response._data.data)
       }
-    },
-    onResponseError({ request, response, options }) {
-      busyFetchSubscribers.value = false
-      subscriberOptions.value = []
     }
   })
 }, 250)
@@ -104,15 +101,12 @@ const fetchSubscribersByMailingListId = async (id: number): Promise<void> => {
   busyFetchSubscribers.value = true
   await useApi('/admin/subscribers/search', {
     params: { mailing_list_id: id },
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       busyFetchSubscribers.value = false
+      subscribers.value = []
       if (response._data.data) {
         subscribers.value = transform(response._data.data)
       }
-    },
-    onResponseError({ request, response, options }) {
-      busyFetchSubscribers.value = false
-      subscribers.value = []
     }
   })
 }
@@ -133,16 +127,13 @@ const send = async () => {
   await useApi(`/admin/messages/test/${message.value.id}`, {
     method: 'post',
     body: messageData,
-    onResponse({ request, response, options }) {
+    onResponse({ response }) {
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
+        emits('errors', toRaw(errors.value))
       } else if (response._data.data) {
         emits('sent')
       }
-    },
-    onResponseError({ request, response, options }) {
-      errors.value = getErrors(response._data.errors)
-      emits('errors', toRaw(errors.value))
     }
   })
 }

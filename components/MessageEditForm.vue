@@ -74,7 +74,7 @@
             </button>
           </div>
           <label :for="inputId('message-html')" class="form-label">{{ $t('html_message') }}</label>
-          <required-input />
+          <required-input v-if="form.send_format === 'text/html'" />
           <editor
             :id="inputId('editor-message-html')"
             v-model="form.message_html"

@@ -254,7 +254,7 @@ const destroy = async (attribute: IAttribute) => {
   if (confirm(message)) {
     await useApi(`/admin/attributes/${attribute.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           refreshAttributes()

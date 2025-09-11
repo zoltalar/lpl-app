@@ -259,7 +259,7 @@ const destroy = async (list: IMailingList) => {
   if (confirm(message)) {
     await useApi(`/admin/mailing-lists/${list.id}`, {
       method: 'delete',
-      onResponse({ request, response, options }) {
+      onResponse({ response }) {
         if (response.status === 204) {
           refresh()
           refreshLists()
