@@ -17,7 +17,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   disabled: false,
-  delay: 400
+  delay: 500
 })
 const emits = defineEmits(['update:modelValue'])
 const typing = ref<boolean>(false)
