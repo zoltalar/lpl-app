@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('draft_messages') }}</h4>
+          <h4 class="page-title">{{ $t('saved_messages') }}</h4>
         </div>
       </div>
     </div>

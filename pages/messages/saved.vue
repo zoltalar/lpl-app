@@ -1,5 +1,5 @@
 <template>
-  <message-draft-list endpoint="/admin/messages/draft" />
+  <message-saved-list endpoint="/admin/messages/saved" />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
@@ -22,6 +22,6 @@ useHead({
   }
 })
 useSeoMeta({
-  'title': t('messages.title_messages_draft'),
+  'title': t('messages.title_messages_saved'),
 })
 </script>
