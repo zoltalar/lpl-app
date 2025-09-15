@@ -597,12 +597,17 @@ const deleteCondition = (i: number, j: number): boolean => {
 const handleSelected = (title: string): void => {
   selectedTab.value = title
 }
-const normalize = (): FormData => {
+const normalize = (override: Partial<IMessage> = {}): FormData => {
   const formData: FormData = new FormData()
   formData.append('_method', 'put')
   $_.forOwn(form, (value: any, key: string): void => {
     formData.append(key, value ?? '')
-  })  
+  })
+  if (override) {
+    $_.forOwn(override, (value: any, key: string): void => {
+      formData.set(key, value ?? '')
+    })
+  }
   $_.forEach(messageAttachments.value, (id: any): void => {
     formData.append('attachments[]', id.toString())
   })
@@ -616,8 +621,11 @@ const normalize = (): FormData => {
 const reset = (): void => {
   clearErrors()
 }
-const update = async (close: boolean = true): Promise<void> => {
-  const messageData: FormData = normalize()
+const update = async (
+  close: boolean = true,
+  override: Partial<IMessage> = {}
+): Promise<void> => {
+  const messageData: FormData = normalize(override)
   const tab = selectedTab.value
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',

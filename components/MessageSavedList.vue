@@ -200,6 +200,7 @@
       />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-outline-primary" @click.prevent="updateAndSubmit" v-if="selectedTab === 'mailing-lists'">{{ $t('send_to_selected_lists') }}</button>
         <button type="button" class="btn btn-outline-primary" @click.prevent="updateWithoutClosing">{{ $t('save') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save_and_close') }}</button>
       </template>
@@ -422,6 +423,9 @@ const test = (message: IMessage): void => {
 }
 const update = (): void => {
   formMessageEdit.value?.update()
+}
+const updateAndSubmit = (): void => {
+  formMessageEdit.value?.update(true, { status: 3 })
 }
 const updateWithoutClosing = (): void => {
   formMessageEdit.value?.update(false)
