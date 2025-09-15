@@ -271,6 +271,9 @@ const currentUser = computed<IUser>(() => {
 const messages = computed<IMessage[]>(() => {
   return resource?.value?.data as IMessage[]
 })
+const selectedTab = computed<string>(() => {
+  return formMessageEdit.value?.selectedTab
+})
 const toggle = computed<boolean>({
   get: () => {
     return messages.value ? messages.value.length === selected.value.length : false

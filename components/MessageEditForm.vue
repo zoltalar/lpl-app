@@ -1,13 +1,43 @@
 <template>
   <form class="form-default" @submit.prevent="update(false)">
     <tabs id="tabs-message-edit">
-      <tab :title="$t('meta')" target="#message-edit-meta" active />
-      <tab :title="$t('content')" target="#message-edit-content" />
-      <tab :title="$t('format')" target="#message-edit-format" />
-      <tab :title="$t('attachments')" target="#message-edit-attachments" v-if="allowAttachments" />
-      <tab :title="$t('mailing_lists')" target="#message-edit-mailing-lists" />
-      <tab :title="$t('criteria')" target="#message-edit-criteria" />
-      <tab :title="$t('analytics')" target="#message-edit-analytics" />
+      <tab
+        :title="$t('meta')"
+        target="#message-edit-meta"
+        @selected="handleSelected"
+        active
+      />
+      <tab
+        :title="$t('content')"
+        target="#message-edit-content"
+        @selected="handleSelected"
+      />
+      <tab
+        :title="$t('format')"
+        target="#message-edit-format"
+        @selected="handleSelected"
+      />
+      <tab
+        :title="$t('attachments')"
+        target="#message-edit-attachments"
+        @selected="handleSelected"
+        v-if="allowAttachments"
+      />
+      <tab
+        :title="$t('mailing_lists')"
+        target="#message-edit-mailing-lists"
+        @selected="handleSelected"
+      />
+      <tab
+        :title="$t('criteria')"
+        target="#message-edit-criteria"
+        @selected="handleSelected"
+      />
+      <tab
+        :title="$t('analytics')"
+        target="#message-edit-analytics"
+        @selected="handleSelected"
+      />
     </tabs>
     <div class="tab-content py-3">
       <!-- meta tab -->
@@ -409,6 +439,7 @@ const attributeMap = reactive<Array<Array<IAttribute|null>>>([])
 const utmItems = reactive<Partial<TUtmItems>>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
+const selectedTab = ref<string>('')
 // Composables
 const {
   errors,
@@ -535,13 +566,6 @@ watch(message, () => {
   }
 }, { immediate: true })
 // Functions
-const activeTab = (): string => {
-  const nodes: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('#tabs-message-edit a.active')
-  if (nodes.length > 0) {
-    return $_.kebabCase(nodes[0].text)
-  }
-  return ''
-}
 const addCondition = (i: number): void => {
   if (conditions[i].length < maxConditions.value) {
     conditions[i].push({
@@ -570,6 +594,9 @@ const deleteCondition = (i: number, j: number): boolean => {
   }
   return true
 }
+const handleSelected = (title: string): void => {
+  selectedTab.value = title
+}
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
   formData.append('_method', 'put')
@@ -591,7 +618,7 @@ const reset = (): void => {
 }
 const update = async (close: boolean = true): Promise<void> => {
   const messageData: FormData = normalize()
-  const tab = activeTab()
+  const tab = selectedTab.value
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',
     body: messageData,
@@ -612,5 +639,5 @@ onMounted(() => {
   registerEditor(inputId('editor-footer'))  
 })
 // Expose
-defineExpose({ update })
+defineExpose({ selectedTab, update })
 </script>

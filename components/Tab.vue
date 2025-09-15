@@ -8,6 +8,7 @@
       aria-current="page"
       data-bs-toggle="tab"
       :data-bs-target="props.target"
+      @click.prevent="select"
     >
       {{ title }}
     </a>
@@ -25,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   target: '',
   active: false
 })
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['selected'])
 // Composables
 const { $_ } = useNuxtApp()
 // Functions
@@ -34,5 +35,8 @@ const href = (): string => {
 }
 const id = (): string => {
   return ['tab', $_.kebabCase(props.title)].join('-')
+}
+const select = (): void => {
+  emits('selected', $_.kebabCase(props.title))
 }
 </script>
