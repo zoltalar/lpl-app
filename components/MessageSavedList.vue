@@ -162,6 +162,7 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('queue')" @click.prevent="queue(message)" v-if="hasRole('admin') || can('message-queue')"><i class="mdi mdi-location-enter"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-email-check-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
@@ -374,6 +375,25 @@ const onUpdated = (close: boolean): void => {
     header: t('success'),
     body: t('messages.model_updated', { model })
   })
+}
+const queue = async (message: IMessage): Promise<void> => {
+  const model = t('the_message')
+  const name = message.name
+  const confirmMessage = t('messages.confirm_message_queue_name', { name })
+  if (confirm(confirmMessage)) {
+    await useApi(`/admin/messages/queue/${message.id}`, {
+      method: 'post',
+      onResponse({ response }) {
+        if (response._data.data) {
+          refresh()
+          addToast({ 
+            header: t('success'),
+            body: t('messages.model_updated', { model })
+          })
+        }
+      }
+    })
+  }
 }
 const send = (): void => {
   formMessageSendTest.value?.send()
