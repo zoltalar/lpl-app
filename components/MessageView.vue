@@ -114,6 +114,14 @@
             </tr>
             <tr>
               <td class="table-attribute">
+                {{ $t('status') }}
+              </td>
+              <td>
+                <message-status :status="message.status" />
+              </td>
+            </tr>
+            <tr>
+              <td class="table-attribute">
                 {{ $t('created_at') }}
               </td>
               <td>

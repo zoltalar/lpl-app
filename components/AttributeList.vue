@@ -85,20 +85,20 @@
                           <filter-input :disabled="busy" v-model="filters.slug" />
                         </th>
                         <th>
-                          <select class="form-select form-select-sm" v-model="filters.input_type">
+                          <select class="form-select form-select-sm" :disabled="busy" v-model="filters.input_type">
                             <option></option>
                             <option :value="type" v-for="(name, type) in inputTypes">{{ name }}</option>
                           </select>
                         </th>
                         <th>
-                          <select class="form-select form-select-sm" v-model="filters.required">
+                          <select class="form-select form-select-sm" :disabled="busy" v-model="filters.required">
                             <option></option>
                             <option :value="1">{{ $t('yes') }}</option>
                             <option :value="0">{{ $t('no') }}</option>
                           </select>
                         </th>
                         <th>
-                          <select class="form-select form-select-sm" v-model="filters.active">
+                          <select class="form-select form-select-sm" :disabled="busy" v-model="filters.active">
                             <option></option>
                             <option :value="1">{{ $t('yes') }}</option>
                             <option :value="0">{{ $t('no') }}</option>

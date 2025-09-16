@@ -11,7 +11,7 @@
               <a id="top-nav-messages" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-if="hasRole('admin') || can('message-view')">{{ $t('the_messages') }}</a>
               <div class="dropdown-menu" aria-labelledby="top-nav-messages">
                 <nuxt-link to="/messages/saved" class="dropdown-item">{{ $t('saved') }}</nuxt-link>
-                <nuxt-link to="/messages/active" class="dropdown-item">{{ $t('active') }}</nuxt-link>
+                <nuxt-link to="/messages/scheduled" class="dropdown-item">{{ $t('scheduled') }}</nuxt-link>
                 <nuxt-link to="/messages/sent" class="dropdown-item">{{ $t('sent') }}</nuxt-link>
                 <nuxt-link to="/messages/deleted" class="dropdown-item">{{ $t('deleted') }}</nuxt-link>
               </div>

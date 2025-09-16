@@ -91,7 +91,7 @@
                           <filter-input :disabled="busy" v-model="filters.email" />
                         </th>
                         <th>
-                          <select class="form-select form-select-sm" v-model="filters.active">
+                          <select class="form-select form-select-sm" :disabled="busy" v-model="filters.active">
                             <option></option>
                             <option :value="1">{{ $t('yes') }}</option>
                             <option :value="0">{{ $t('no') }}</option>

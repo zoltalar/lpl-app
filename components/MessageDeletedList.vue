@@ -82,6 +82,9 @@
                       <th width="25%">
                         <sortable-column column="messages.subject" v-model="sort">{{ $t('subject') }}</sortable-column>
                       </th>
+                      <th width="10%">
+                        <sortable-column column="messages.status" v-model="sort">{{ $t('status') }}</sortable-column>
+                      </th>
                       <th width="15%">
                         <sortable-column column="messages.created_at" v-model="sort">{{ $t('created_at') }}</sortable-column>
                       </th>
@@ -100,6 +103,12 @@
                         </th>
                         <th>
                           <filter-input :disabled="busy" v-model="filters.subject" />
+                        </th>
+                        <th>
+                          <select class="form-select form-select-sm" :disabled="busy" v-model="filters.status">
+                            <option></option>
+                            <option :value="id" v-for="(name, id) in statuses">{{ name }}</option>
+                          </select>
                         </th>
                         <th>
                           -
@@ -140,6 +149,9 @@
                           <span v-else> - </span>
                         </td>
                         <td>
+                          <message-status :status="message.status" />
+                        </td>
+                        <td>
                           <span v-if="message.created_at">
                             {{ useDateFormat(message.created_at, dateTimeFormat(currentUser)) }}
                           </span>
@@ -156,7 +168,7 @@
                       </tr>                      
                     </template>
                     <tr v-if="messages && messages.length === 0">
-                      <td colspan="6">
+                      <td colspan="7">
                         {{ $t('messages.no_messages') }}
                       </td>
                     </tr>
@@ -240,6 +252,7 @@ const { messages: toastMessages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { data } = useAuth()
+const { statuses } = useMessage()
 const { dateTimeFormat } = useUser()
 const { $bootstrap } = useNuxtApp()
 // Computed

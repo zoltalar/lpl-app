@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('saved_messages') }}</h4>
+          <h4 class="page-title">{{ $t('scheduled_messages') }}</h4>
         </div>
       </div>
     </div>
@@ -20,21 +20,19 @@
                       {{ $t('options') }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
-                      <li><a href="/messages/saved" class="dropdown-item" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</a></li>
-                      <li><a href="/messages/saved" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
-                      <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                      <li><a href="/messages/scheduled" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/messages/scheduled" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                     </ul>
                   </div>
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                    <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
                     <div class="btn-group" role="group">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
                       <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
+                        <li><a href="/messages/scheduled" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                       </ul>
                     </div>
                   </div>                  
@@ -75,7 +73,7 @@
                           v-model="toggle"
                         />
                       </th>
-                      <th width="8%">
+                      <th width="10%">
                         <sortable-column column="messages.id" v-model="sort">{{ $t('id') }}</sortable-column>
                       </th>
                       <th width="25%">
@@ -162,7 +160,6 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-email-check-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
@@ -212,7 +209,6 @@
       />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
-        <button type="button" class="btn btn-outline-primary" @click.prevent="updateAndSubmit" v-if="selectedTab === 'mailing-lists'">{{ $t('send_to_selected_lists') }}</button>
         <button type="button" class="btn btn-outline-primary" @click.prevent="updateWithoutClosing">{{ $t('save') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save_and_close') }}</button>
       </template>
@@ -285,9 +281,6 @@ const currentUser = computed<IUser>(() => {
 const messages = computed<IMessage[]>(() => {
   return resource?.value?.data as IMessage[]
 })
-const selectedTab = computed<string>(() => {
-  return formMessageEdit.value?.selectedTab
-})
 const toggle = computed<boolean>({
   get: () => {
     return messages.value ? messages.value.length === selected.value.length : false
@@ -303,40 +296,6 @@ const toggle = computed<boolean>({
   }
 })
 // Functions
-const copy = async (message: IMessage): Promise<void> => {
-  const model = t('the_message')
-  const name = message.name
-  const confirmMessage = t('messages.confirm_duplicate_name', { name })
-  if (confirm(confirmMessage)) {
-    await useApi(`/admin/messages/duplicate/${message.id}`, {
-      method: 'post',
-      onResponse({ response }) {
-        if (response._data.data) {
-          refresh()
-          addToast({ 
-            header: t('success'),
-            body: t('messages.model_created', { model })
-          })
-        }
-      }
-    })
-  }
-}
-const create = async (): Promise<void> => {
-  const model = t('the_message')
-  await useApi('/admin/messages/store', {
-    method: 'post',
-    onResponse({ response }) {
-      if (response._data.data) {
-        refresh()
-        addToast({ 
-          header: t('success'),
-          body: t('messages.model_created', { model })
-        })
-      }
-    }
-  })
-}
 const edit = (message: IMessage): void => {
   selectedMessage.value = message
   $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.show()
@@ -436,9 +395,6 @@ const test = (message: IMessage): void => {
 }
 const update = (): void => {
   formMessageEdit.value?.update()
-}
-const updateAndSubmit = (): void => {
-  formMessageEdit.value?.update(true, { status: 3 })
 }
 const updateWithoutClosing = (): void => {
   formMessageEdit.value?.update(false)
