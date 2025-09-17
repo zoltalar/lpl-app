@@ -89,7 +89,7 @@
                         <sortable-column column="messages.status" v-model="sort">{{ $t('status') }}</sortable-column>
                       </th>
                       <th width="15%">
-                        <sortable-column column="messages.created_at" v-model="sort">{{ $t('created_at') }}</sortable-column>
+                        <sortable-column column="messages.sent_at" v-model="sort">{{ $t('sent_at') }}</sortable-column>
                       </th>
                       <th class="text-end">{{ $t('actions') }}</th>
                     </tr>
@@ -155,8 +155,8 @@
                           <message-status :status="message.status" />
                         </td>
                         <td>
-                          <span v-if="message.created_at">
-                            {{ useDateFormat(message.created_at, dateTimeFormat(currentUser)) }}
+                          <span v-if="message.sent_at">
+                            {{ useDateFormat(message.sent_at, dateTimeFormat(currentUser)) }}
                           </span>
                           <span v-else> - </span>
                         </td>
