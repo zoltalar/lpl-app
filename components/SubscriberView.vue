@@ -136,8 +136,8 @@
       <div class="table-responsive">
         <table class="table table-sm table-view mb-0">
           <tbody>
-            <template v-if="subscriber.attributes && subscriber.attributes.length > 0">
-              <tr v-for="attribute in subscriber.attributes">
+            <template v-if="subscriber.subscriber_attributes && subscriber.subscriber_attributes.length > 0">
+              <tr v-for="attribute in subscriber.subscriber_attributes">
                 <td class="table-attribute">
                   {{ attributeLabel(attribute) }}
                 </td>

@@ -7,6 +7,9 @@
         </div>
       </div>
     </div>
+    <div class="alert alert-warning text-center" role="alert" v-if="testMode">
+      {{ $t('messages.test_mode_enabled') }}
+    </div>
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -274,6 +277,7 @@ const { messages: toastMessages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { data } = useAuth()
+const { mailSender } = useConfiguration()
 const { statuses } = useMessage()
 const { dateTimeFormat } = useUser()
 const { $bootstrap } = useNuxtApp()
@@ -286,6 +290,9 @@ const messages = computed<IMessage[]>(() => {
 })
 const selectedTab = computed<string>(() => {
   return formMessageEdit.value?.selectedTab
+})
+const testMode = computed<number>(() => {
+  return Number(mailSender.value.test_mode)
 })
 const toggle = computed<boolean>({
   get: () => {
@@ -320,21 +327,6 @@ const copy = async (message: IMessage): Promise<void> => {
       }
     })
   }
-}
-const create = async (): Promise<void> => {
-  const model = t('the_message')
-  await useApi('/admin/messages/store', {
-    method: 'post',
-    onResponse({ response }) {
-      if (response._data.data) {
-        refresh()
-        addToast({ 
-          header: t('success'),
-          body: t('messages.model_created', { model })
-        })
-      }
-    }
-  })
 }
 const edit = (message: IMessage): void => {
   selectedMessage.value = message

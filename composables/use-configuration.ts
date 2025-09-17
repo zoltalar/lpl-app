@@ -10,6 +10,12 @@ export default function useConfiguration() {
   const configurations = computed<IConfiguration[]>(() => {
     return configurationStore.getCollection
   })
+  const mailSender = computed<Record<string, any>>(() => {
+    return configurationStore.getMeta.mailsender
+  })
+  const types = computed<Record<string, string>>(() => {
+    return configurationStore.getMeta.types
+  })
   // Functions
   const findBySlug = (slug: string): IConfiguration | undefined => {
     return configurations.value.find((configuration: IConfiguration) => {
@@ -34,6 +40,8 @@ export default function useConfiguration() {
     busy,
     // Computed
     configurations,
+    mailSender,
+    types,
     // Functions
     findBySlug,
     refresh,

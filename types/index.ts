@@ -212,6 +212,10 @@ export type TToastMessage = {
 export type TAttributeMeta = {
   input_types: Record<number, string>
 }
+export type TConfigurationMeta = {
+  mailsender: Record<string, any>,
+  types: Record<string, string>
+}
 export type TCriterionMeta = {
   operators: Record<string, string>
 }

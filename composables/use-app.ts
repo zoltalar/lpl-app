@@ -31,7 +31,7 @@ export default function useApp() {
   // Functions
   const fetchData = async (): Promise<Array<any>> => {
     const responses: any[] = []
-    const increment = 7.14
+    const increment = 6.667
     appStore.reset()
     if (attachmentStore.getCollection.length === 0) {
       const attachments = await attachmentStore.fetchCollection()
@@ -55,6 +55,12 @@ export default function useApp() {
       const configurations = await configurationStore.fetchCollection()
       configurationStore.setCollection(configurations)
       responses.push(configurations)
+      appStore.increment(increment)
+    }
+    if ($_.isEmpty(configurationStore.getMeta)) {
+      const meta = await configurationStore.fetchMeta()
+      configurationStore.setMeta(meta)
+      responses.push(meta)
       appStore.increment(increment)
     }
     if (countryStore.getCollection.length === 0) {

@@ -40,6 +40,7 @@
       v-model="model"
       v-else-if="inputType === 4"
     >
+      <option></option>
       <optgroup :label="optgroupLabel" v-for="(options, optgroupLabel) in selectOptions">
         <option :value="option" v-for="option in options">{{ option }}</option>
       </optgroup>

@@ -294,6 +294,7 @@
         "subscribers_blacklisted_count": "Blacklisted subscribers",
         "subscribers_confirmed_unblacklisted_count": "Confirmed and not blacklisted subscribers",
         "subscribers_unconfirmed_unblacklisted_count": "Unconfirmed and not blacklisted subscribers",
+        "test_mode_enabled": "Running in test mode. No emails will be sent.",
         "title_attachments": "Attachments",
         "title_attributes": "Attributes",
         "title_authentication": "Authentication",
