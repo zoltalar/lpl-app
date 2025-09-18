@@ -163,9 +163,9 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('queue')" @click.prevent="queue(message)" v-if="hasRole('admin') || can('message-queue')"><i class="mdi mdi-location-enter"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('suspend')" @click.prevent="suspend(message)" v-if="(hasRole('admin') || can('message-suspend')) && message.status === 4"><i class="mdi mdi-email-alert-outline"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('requeue')" @click.prevent="requeue(message)" v-else-if="(hasRole('admin') || can('message-requeue'))"><i class="mdi mdi-replay"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-email-check-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
                           </div>
@@ -220,24 +220,6 @@
       </template>
     </modal>
     <modal
-      id="modal-message-test"
-      :title="$t('send_message_test')"
-      size="lg"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-    >
-      <message-send-test-form
-        :message="selectedMessage"
-        ref="formMessageSendTest"
-        @sent="handleTestSent"
-        @errors="handleErrors"
-      />
-      <template #footer>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
-        <button type="button" class="btn btn-primary" @click.prevent="send">{{ $t('send') }}</button>
-      </template>
-    </modal>
-    <modal
       id="modal-message-view"
       :title="$t('message_details')"
       size="xl"
@@ -269,7 +251,6 @@ const {
 const selected = ref<number[]>([])
 const toggleFilters = ref<boolean>(false)
 const formMessageEdit = useTemplateRef<HTMLFormElement>('formMessageEdit')
-const formMessageSendTest = useTemplateRef<HTMLFormElement>('formMessageSendTest')
 const selectedMessage = ref<IMessage>({} as IMessage)
 // Composables
 const { t } = useI18n()
@@ -332,9 +313,6 @@ const edit = (message: IMessage): void => {
   selectedMessage.value = message
   $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.show()
 }
-const handleTestSent = (): void => {
-  onTestSent()
-}
 const handleUpdated = (close: boolean): void => {
   onUpdated(close)
 }
@@ -348,13 +326,6 @@ const onErrors = (errors: Record<string,string>): void => {
     type: 'danger'
   })
 }
-const onTestSent = (): void => {
-  $bootstrap.Modal.getOrCreateInstance('#modal-message-test')?.hide()
-  addToast({ 
-    header: t('success'),
-    body: t('messages.message_test_sent')
-  })
-}
 const onUpdated = (close: boolean): void => {
   if (close) {
     $bootstrap.Modal.getOrCreateInstance('#modal-message-edit')?.hide()
@@ -366,12 +337,12 @@ const onUpdated = (close: boolean): void => {
     body: t('messages.model_updated', { model })
   })
 }
-const queue = async (message: IMessage): Promise<void> => {
+const requeue = async (message: IMessage): Promise<void> => {
   const model = t('the_message')
   const name = message.name
-  const confirmMessage = t('messages.confirm_message_queue_name', { name })
+  const confirmMessage = t('messages.confirm_message_requeue_name', { name })
   if (confirm(confirmMessage)) {
-    await useApi(`/admin/messages/queue/${message.id}`, {
+    await useApi(`/admin/messages/requeue/${message.id}`, {
       method: 'post',
       onResponse({ response }) {
         if (response._data.data) {
@@ -384,9 +355,6 @@ const queue = async (message: IMessage): Promise<void> => {
       }
     })
   }
-}
-const send = (): void => {
-  formMessageSendTest.value?.send()
 }
 const show = (message: IMessage): void => {
   selectedMessage.value = message
@@ -440,9 +408,24 @@ const softDeleteBatch = async (): Promise<void> => {
     })
   }
 }
-const test = (message: IMessage): void => {
-  selectedMessage.value = message
-  $bootstrap.Modal.getOrCreateInstance('#modal-message-test')?.show()
+const suspend = async (message: IMessage): Promise<void> => {
+  const model = t('the_message')
+  const name = message.name
+  const confirmMessage = t('messages.confirm_message_suspend_name', { name })
+  if (confirm(confirmMessage)) {
+    await useApi(`/admin/messages/suspend/${message.id}`, {
+      method: 'post',
+      onResponse({ response }) {
+        if (response._data.data) {
+          refresh()
+          addToast({ 
+            header: t('success'),
+            body: t('messages.model_updated', { model })
+          })
+        }
+      }
+    })
+  }
 }
 const update = (): void => {
   formMessageEdit.value?.update()
