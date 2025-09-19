@@ -164,7 +164,7 @@
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('suspend')" @click.prevent="suspend(message)" v-if="(hasRole('admin') || can('message-suspend')) && message.status === 4"><i class="mdi mdi-email-alert-outline"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('requeue')" @click.prevent="requeue(message)" v-else-if="(hasRole('admin') || can('message-requeue'))"><i class="mdi mdi-replay"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('requeue')" @click.prevent="requeue(message)" v-else-if="(hasRole('admin') || can('message-requeue'))"><i class="mdi mdi-email-sync-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>

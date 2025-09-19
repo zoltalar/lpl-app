@@ -165,9 +165,9 @@
                         <td class="text-end">
                           <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(message)" v-if="hasRole('admin') || can('message-edit')"><i class="mdi mdi-pencil"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('queue')" @click.prevent="queue(message)" v-if="hasRole('admin') || can('message-queue')"><i class="mdi mdi-lan"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('queue')" @click.prevent="queue(message)" v-if="hasRole('admin') || can('message-queue')"><i class="mdi mdi-email-plus-outline"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('duplicate')" @click.prevent="copy(message)" v-if="hasRole('admin') || can('message-duplicate')"><i class="mdi mdi-content-copy"></i></button>
-                            <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-email-check-outline"></i></button>
+                            <button type="button" class="btn btn-light" :title="$t('send_test')" @click.prevent="test(message)" v-if="(hasRole('admin') || can('message-send')) && message.mailable === 1"><i class="mdi mdi-check"></i></button>
                             <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(message)" v-if="hasRole('admin') || can('message-view')"><i class="mdi mdi-eye-outline"></i></button>
                             <button type="button" class="btn btn-danger" :title="$t('delete')" @click.prevent="softDelete(message)" v-if="hasRole('admin') || can('message-delete')"><i class="mdi mdi-trash-can-outline"></i></button>
                           </div>
@@ -236,7 +236,10 @@
       />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
-        <button type="button" class="btn btn-primary" @click.prevent="send">{{ $t('send') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="send">
+          {{ $t('send') }}
+          <i class="mdi mdi-sync mdi-spin" v-if="busySendingTest"></i>
+        </button>
       </template>
     </modal>
     <modal
@@ -284,6 +287,9 @@ const { statuses } = useMessage()
 const { dateTimeFormat } = useUser()
 const { $bootstrap } = useNuxtApp()
 // Computed
+const busySendingTest = computed<boolean>(() => {
+  return formMessageSendTest.value?.busy
+})
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
 })

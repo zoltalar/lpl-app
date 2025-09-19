@@ -58,10 +58,10 @@ const emits = defineEmits(['sent', 'errors'])
 const subscribers = ref<TVSelectOption[]>([])
 const subscriberOptions = ref<TVSelectOption[]>([])
 const busyFetchSubscribers = ref<boolean>(false)
+const busy = ref<boolean>(false)
 // Composables
 const {
   errors,
-  clearErrors,
   error,
   getErrors,
   inputId
@@ -123,11 +123,13 @@ const onSubscriberSearch = (search: string) => {
   }
 }
 const send = async () => {
+  busy.value = true
   const messageData: FormData = normalize()
   await useApi(`/admin/messages/test/${message.value.id}`, {
     method: 'post',
     body: messageData,
     onResponse({ response }) {
+      busy.value = false
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
@@ -143,5 +145,5 @@ const transform = (subscribers: ISubscriber[]): TVSelectOption[] => {
   })
 }
 // Expose
-defineExpose({ send })
+defineExpose({ busy, send })
 </script>
