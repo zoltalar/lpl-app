@@ -209,11 +209,17 @@
               type="button"
               class="btn btn-outline-secondary"
               id="button-delayed-until"
+              :title="$t('clear')"
               @click.prevent="clearDelayedUntil"              
-            >{{ $t('clear') }}</button>
+            >
+            <i class="mdi mdi-calendar-remove"></i>
+          </button>
           </div>
           <div class="invalid-feedback d-block" v-if="error('delayed_until') !== null">
             {{ error('delayed_until') }}
+          </div>
+          <div class="form-text" v-else>
+            {{ $t('messages.form_text_message_delayed_until') }}
           </div>
         </div>
       </div>

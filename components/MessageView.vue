@@ -145,6 +145,17 @@
             </tr>
             <tr>
               <td class="table-attribute">
+                {{ $t('deleted_at') }}
+              </td>
+              <td>
+                <span v-if="message.deleted_at">
+                  {{ useDateFormat(message.deleted_at, dateTimeFormat(currentUser)) }}
+                </span>
+                <span v-else> - </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-attribute">
                 {{ $t('created_by') }}
               </td>
               <td>

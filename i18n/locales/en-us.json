@@ -251,6 +251,7 @@
         "form_text_message_analytics": "Enable or disable UTM tracking for message links.",
         "form_text_message_attachments": "Select attachments to send with this email message.",
         "form_text_message_criteria": "Enable or disable subscriber criteria.",
+        "form_text_message_delayed_until": "Specify server date and time after which the message should be sent.",
         "form_text_message_from_field": "{'Enter the message <em>From</em> address. You may specify an email address, e.g. <em>demo@mailsender.com</em> or an mailbox string comprised of name and email, e.g. <em>Demo &lt;demo@mailsender.com&gt;</em>.'}",
         "form_text_message_mailing_lists": "Select mailing lists to send to.",
         "form_text_message_name": "The message name is for your own use only. It is not visible to your subscribers and it will not be used in the outgoing emails.",
