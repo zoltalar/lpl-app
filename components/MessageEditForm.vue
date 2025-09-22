@@ -191,7 +191,7 @@
             :id="inputId('server-time')"
             maxlength="255"
             readonly
-            :value="serverTime"
+            :value="now"
           />
         </div>
         <div class="form-group mb-0">
@@ -454,7 +454,6 @@
   </form>
 </template>
 <script setup lang="ts">
-import { DateTime } from 'luxon'
 import type {
   IAttachment,
   IAttribute,
@@ -522,6 +521,7 @@ const {
   type: listType
 } = useMailingList()
 const { formats, operators } = useMessage()
+const { now } = useServerNow()
 const {
   busy: busyRefreshTemplates,
   refresh: refreshTemplates,
@@ -550,10 +550,6 @@ const maxConditions = computed<number>(() => {
 })
 const message = computed<IMessage>(() => {
   return props.message as IMessage
-})
-const serverTime = computed<string>(() => {
-  const timezone = appConfig.value.timezone
-  return DateTime.now().setZone(timezone).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
 })
 // Watch
 watch(conditions, () => {
@@ -701,7 +697,7 @@ const update = async (
 // Hooks
 onMounted(() => {
   registerEditor(inputId('editor-message-html'))
-  registerEditor(inputId('editor-footer'))  
+  registerEditor(inputId('editor-footer'))
 })
 // Expose
 defineExpose({ selectedTab, update })
