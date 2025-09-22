@@ -488,6 +488,7 @@ const utmItems = reactive<Partial<TUtmItems>>({})
 const messageAttachments = ref<number[]>([])
 const messageMailingLists = ref<number[]>([])
 const selectedTab = ref<string>('')
+const busy = ref<boolean>(false)
 // Composables
 const {
   errors,
@@ -508,7 +509,6 @@ const {
   refresh: refreshAttributes
 } = useAttribute()
 const {
-  app: appConfig,
   findBySlug: configurationFindBySlug,
   value: configurationValue
 } = useConfiguration()
@@ -678,12 +678,14 @@ const update = async (
   close: boolean = true,
   override: Partial<IMessage> = {}
 ): Promise<void> => {
+  busy.value = true
   const messageData: FormData = normalize(override)
   const tab = selectedTab.value
   await useApi(`/admin/messages/update/${message.value.id}/${tab}`, {
     method: 'post',
     body: messageData,
     onResponse({ response }) {
+      busy.value = false
       if (response._data.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
@@ -700,5 +702,5 @@ onMounted(() => {
   registerEditor(inputId('editor-footer'))
 })
 // Expose
-defineExpose({ selectedTab, update })
+defineExpose({ busy, selectedTab, update })
 </script>

@@ -216,6 +216,14 @@
           <tbody>
             <tr>
               <td class="table-attribute">
+                {{ $t('current_server_time') }}
+              </td>
+              <td>
+                {{ now }}
+              </td>
+            </tr>
+            <tr>
+              <td class="table-attribute">
                 {{ $t('delayed_until') }}
                 ({{ $t('server_time') }})
               </td>
@@ -225,7 +233,7 @@
                 </span>
                 <span v-else> - </span>
               </td>
-            </tr>
+            </tr>            
           </tbody>
         </table>
       </div>
@@ -362,6 +370,7 @@ const {
   value: configurationValue
 } = useConfiguration()
 const { validCondition } = useMessage()
+const { now } = useServerNow()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const allowAttachments = computed<number>(() => {
