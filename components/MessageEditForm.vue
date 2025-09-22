@@ -18,6 +18,11 @@
         @selected="handleSelected"
       />
       <tab
+        :title="$t('scheduling')"
+        target="#message-edit-scheduling"
+        @selected="handleSelected"
+      />
+      <tab
         :title="$t('attachments')"
         target="#message-edit-attachments"
         @selected="handleSelected"
@@ -173,6 +178,42 @@
             <button type="button" class="btn btn-secondary" :title="$t('refresh')" @click.prevent="refreshTemplates">
               <i class="mdi mdi-sync" :class="{'mdi-spin': busyRefreshTemplates}" />
             </button>
+          </div>
+        </div>
+      </div>
+      <!-- scheduling tab -->
+      <div class="tab-pane fade" id="message-edit-scheduling" role="tabpanel" aria-labelledby="tab-scheduling">
+        <div class="form-group">
+          <label :for="inputId('server-time')" class="form-label">{{ $t('current_server_time') }}</label>
+          <input
+            type="text"
+            class="form-control"
+            :id="inputId('server-time')"
+            maxlength="255"
+            readonly
+            :value="serverTime"
+          />
+        </div>
+        <div class="form-group mb-0">
+          <label :for="inputId('delayed-until')" class="form-label">{{ $t('delayed_until') }}</label>
+          <div class="input-group">
+            <input
+              type="datetime-local"
+              class="form-control"
+              :class="{'is-invalid': error('delayed_until') !== null}"
+              :id="inputId('delayed-until')"
+              aria-describedby="button-delayed-until"
+              v-model="form.delayed_until"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              id="button-delayed-until"
+              @click.prevent="clearDelayedUntil"              
+            >{{ $t('clear') }}</button>
+          </div>
+          <div class="invalid-feedback d-block" v-if="error('delayed_until') !== null">
+            {{ error('delayed_until') }}
           </div>
         </div>
       </div>
@@ -407,6 +448,7 @@
   </form>
 </template>
 <script setup lang="ts">
+import { DateTime } from 'luxon'
 import type {
   IAttachment,
   IAttribute,
@@ -430,6 +472,7 @@ const fields = {
   footer: '',
   send_format: '',
   template_id: null,
+  delayed_until: null,
   criteria: 0,
   analytics: 0
 }
@@ -460,6 +503,7 @@ const {
   refresh: refreshAttributes
 } = useAttribute()
 const {
+  app: appConfig,
   findBySlug: configurationFindBySlug,
   value: configurationValue
 } = useConfiguration()
@@ -500,6 +544,10 @@ const maxConditions = computed<number>(() => {
 })
 const message = computed<IMessage>(() => {
   return props.message as IMessage
+})
+const serverTime = computed<string>(() => {
+  const timezone = appConfig.value.timezone
+  return DateTime.now().setZone(timezone).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
 })
 // Watch
 watch(conditions, () => {
@@ -581,6 +629,9 @@ const addConditionGroup = (): void => {
     conditions.push([])
     addCondition(length)
   }
+}
+const clearDelayedUntil = (): void => {
+  form.delayed_until = null
 }
 const deleteCondition = (i: number, j: number): boolean => {
   if (conditions.length === 1 && conditions[i].length <= 1) {

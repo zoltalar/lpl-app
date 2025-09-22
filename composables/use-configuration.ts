@@ -7,6 +7,9 @@ export default function useConfiguration() {
   // Composables
   const configurationStore = useConfigurationStore()
   // Computed
+  const app = computed<Record<string, any>>(() => {
+    return configurationStore.getMeta.app
+  })
   const configurations = computed<IConfiguration[]>(() => {
     return configurationStore.getCollection
   })
@@ -39,6 +42,7 @@ export default function useConfiguration() {
     // Vars
     busy,
     // Computed
+    app,
     configurations,
     mailSender,
     types,

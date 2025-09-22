@@ -126,6 +126,7 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
   status: number | null,
   send_format: string,
   deleted_at: string | null,
+  delayed_until: string | null,
   sent_at: string | null,
   template?: ITemplate | null,
   attachments?: IAttachment[] | null,
@@ -214,6 +215,7 @@ export type TAttributeMeta = {
   input_types: Record<number, string>
 }
 export type TConfigurationMeta = {
+  app: Record<string, any>,
   mailsender: Record<string, any>,
   types: Record<string, string>
 }

@@ -2,6 +2,7 @@
   <tabs id="tabs-message-view">
     <tab :title="$t('general')" target="#message-general" active />
     <tab :title="$t('format')" target="#message-format" />
+    <tab :title="$t('scheduling')" target="#message-scheduling" />
     <tab :title="$t('attachments')" target="#message-attachments" v-if="allowAttachments" />
     <tab :title="$t('mailing_lists')" target="#message-mailing-lists" />
     <tab :title="$t('criteria')" target="#message-criteria" />
@@ -190,6 +191,26 @@
               <td>
                 <span v-if="message.template">
                   {{ message.template.name }}
+                </span>
+                <span v-else> - </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="message-scheduling" role="tabpanel" aria-labelledby="tab-scheduling">
+      <div class="table-responsive">
+        <table class="table table-sm table-view mb-0">
+          <tbody>
+            <tr>
+              <td class="table-attribute">
+                {{ $t('delayed_until') }}
+                ({{ $t('server_time') }})
+              </td>
+              <td>
+                <span v-if="message.delayed_until">
+                  {{ useDateFormat(message.delayed_until, dateTimeFormat(currentUser)) }}                  
                 </span>
                 <span v-else> - </span>
               </td>
