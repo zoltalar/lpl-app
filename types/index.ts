@@ -239,8 +239,12 @@ export type TSelectOption = {
   value: string | number | null,
   text: string
 }
+export type TSubscriberImportFile = {
+  confirmed: number
+}
 export type TSubscriberImportList = {
-  emails: string
+  emails: string,
+  confirmed: number
 }
 export type TSubscribePageMeta = {
   email_formats: Record<string, string>

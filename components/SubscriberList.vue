@@ -23,6 +23,7 @@
                       <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</a></li>
                       <li><a href="/subscribers" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</a></li>
                       <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
+                      <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-file" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_file') }}</a></li>
                     </ul>
                   </div>
                 </div>
@@ -37,6 +38,7 @@
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('import') }}</button>
                       <ul class="dropdown-menu">
                         <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
+                        <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-file" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_file') }}</a></li>
                       </ul>
                     </div>
                   </div>
@@ -201,7 +203,25 @@
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-secondary" @click.prevent="resetImportList">{{ $t('reset') }}</button>
-        <button type="button" class="btn btn-primary" @click.prevent="process">{{ $t('submit') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="processImportList">{{ $t('submit') }}</button>
+      </template>
+    </modal>
+    <modal
+      id="modal-subscriber-import-file"
+      :title="$t('import_subscribers_from_file')"
+      size="lg"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <subscriber-import-file-form
+        ref="formSubscriberImportFile"
+        @processed="handleProcessed"
+        @errors="handleErrors"
+      />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="resetImportFile">{{ $t('reset') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="processImportFile">{{ $t('submit') }}</button>
       </template>
     </modal>
     <modal
@@ -252,6 +272,7 @@ const {
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
 const formSubscriberCreate = useTemplateRef<HTMLFormElement>('formSubscriberCreate')
+const formSubscriberImportFile = useTemplateRef<HTMLFormElement>('formSubscriberImportFile')
 const formSubscriberImportList = useTemplateRef<HTMLFormElement>('formSubscriberImportList')
 const formSubscriberEdit = useTemplateRef<HTMLFormElement>('formSubscriberEdit')
 const selectedSubscriber = ref<ISubscriber>({} as ISubscriber)
@@ -340,11 +361,17 @@ const onUpdated = (): void => {
     body: t('messages.model_updated', { model })
   })
 }
-const process = (): void => {
+const processImportFile = (): void => {
+  formSubscriberImportFile.value?.process()
+}
+const processImportList = (): void => {
   formSubscriberImportList.value?.process()
 }
 const reset = (): void => {
   formSubscriberCreate.value?.reset()
+}
+const resetImportFile = (): void => {
+  formSubscriberImportFile.value?.reset()
 }
 const resetImportList = (): void => {
   formSubscriberImportList.value?.reset()

@@ -1,20 +1,21 @@
 <template>
-  <form novalidate @submit.prevent="process">
+  <form class="form-default" @submit.prevent="process">
     <div class="form-group">
-      <label :for="inputId('emails')" class="form-label">{{ $t('email_addresses') }}</label>
+      <label :for="inputId('file')" class="form-label">{{ $t('file') }}</label>
       <required-input />
-      <textarea
+      <input
+        type="file"
+        :id="inputId('file')"
         class="form-control"
-        :class="{'is-invalid': error('emails') !== null}"
-        :id="inputId('emails')"
-        rows="10"
-        aria-describedby="subscriber-import-list-text-emails"
-        v-model="form.emails"
-      ></textarea>
-      <div class="invalid-feedback d-block" v-if="error('emails') !== null">
-        {{ error('emails') }}
+        :class="{'is-invalid': error('file') !== null}"
+        aria-describedby="subscriber-import-file-text-file"
+        ref="inputFile"
+        @change="onFileChange"
+      />
+      <div class="invalid-feedback d-block" v-if="error('file') !== null">
+        {{ error('file') }}
       </div>
-      <div id="subscriber-import-list-text-emails" class="form-text" v-html="$t('messages.form_text_subscriber_import_emails')" v-else></div>
+      <div id="subscriber-import-file-text-file" class="form-text" v-html="$t('messages.form_text_subscriber_import_file')"></div>
     </div>
     <div class="form-group">
       <div class="form-check form-switch">
@@ -22,14 +23,14 @@
           type="checkbox"
           :id="inputId('confirmed')"
           class="form-check-input"
-          aria-describedby="subscriber-import-list-text-confirmed"
+          aria-describedby="subscriber-import-file-text-confirmed"
           :true-value="1"
           :false-value="0"
           v-model="form.confirmed"
         />
         <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirm_emails') }}</label>
       </div>
-      <div id="subscriber-import-list-text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_import_confirmed')"></div>
+      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_import_confirmed')"></div>
     </div>
     <div class="form-group mb-0">
       <h6 class="mb-0">
@@ -63,14 +64,15 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { TSubscriberImportList } from '@/types'
+import type { TSubscriberImportFile } from '@/types'
 // Vars
 const emits = defineEmits(['processed', 'errors'])
 const fields = {
-  emails: '',
   confirmed: 1
 }
-const form = reactive<TSubscriberImportList>({...fields})
+const form = reactive<TSubscriberImportFile>({...fields})
+const file = ref<File|null>(null)
+const inputFile = useTemplateRef<HTMLInputElement>('inputFile')
 // Composables
 const {
   errors,
@@ -78,7 +80,7 @@ const {
   error,
   getErrors,
   inputId
-} = useForm('subscriber-import-list')
+} = useForm('subscriber-import-file')
 const {
   busyRefreshLists,
   lists,
@@ -91,18 +93,25 @@ const { $_ } = useNuxtApp()
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
   $_.forOwn(form, (value: any, key: string): void => {
-    if ( ! $_.isNil(value)) {
-      formData.append(key, value)
-    }
+    formData.append(key, value ?? '')
   })
+  if (file.value) {
+    formData.append('file', file.value)
+  }
   $_.forEach(subscriberLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())
   })
   return formData
 }
+const onFileChange = (event: Event): void => {
+  const el = event.target as HTMLInputElement
+  if (el.files) {
+    file.value = el.files[0]
+  }
+}
 const process = async (): Promise<void> => {
   const formData: FormData = normalize()
-  await useApi('/admin/subscribers/import-list', {
+  await useApi('/admin/subscribers/import-file', {
     method: 'post',
     body: formData,
     onResponse({ response }) {
@@ -118,7 +127,10 @@ const process = async (): Promise<void> => {
 }
 const reset = () => {
   Object.assign(form, fields)
-  subscriberLists.value = []
+  file.value = null
+  if (inputFile.value) {
+    inputFile.value.value = ''
+  }
   clearErrors()
 }
 defineExpose({ process, reset })
