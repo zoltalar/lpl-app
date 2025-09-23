@@ -105,8 +105,8 @@ export interface IMailingList extends IBaseModel, ITimestamps, IUserstamps {
   type: string | null,
   active: number | null,
   subscribers_count?: number,
-  subscribers_confirmed_unblacklisted_count?: number,
-  subscribers_unconfirmed_unblacklisted_count?: number,
+  subscribers_confirmed_unblacklisted_active_count?: number,
+  subscribers_unconfirmed_unblacklisted_inactive_count?: number,
   subscribers_blacklisted_count?: number  
 }
 export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {

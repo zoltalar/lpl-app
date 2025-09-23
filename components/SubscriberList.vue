@@ -28,13 +28,17 @@
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
-                  <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</button>
-                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</button>
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('import') }}</button>
-                    <ul class="dropdown-menu">
-                      <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
-                    </ul>
+                  <div class="btn-toolbar" role="toolbar" :aria-label="$t('subscriber_options_toolbar')">
+                    <div class="btn-group me-2" role="group" :aria-label="$t('subscriber_options')">
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</button>
+                      <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</button>
+                    </div>
+                    <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
+                      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('import') }}</button>
+                      <ul class="dropdown-menu">
+                        <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
@@ -196,6 +200,7 @@
       />
       <template #footer>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="resetImportList">{{ $t('reset') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="process">{{ $t('submit') }}</button>
       </template>
     </modal>
@@ -296,6 +301,9 @@ const handleCreated = (): void => {
 const handleErrors = (errors: Record<string,string>): void => {
   onErrors(errors)
 }
+const handleProcessed = (): void => {
+  onProcessed()
+}
 const handleUpdated = (): void => {
   onUpdated()
 }
@@ -315,6 +323,14 @@ const onErrors = (errors: Record<string,string>): void => {
     type: 'danger'
   })
 }
+const onProcessed = (): void => {
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-import-list')?.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.subscribers_import_processed')
+  })
+}
 const onUpdated = (): void => {
   const model = t('subscriber')
   $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')?.hide()
@@ -329,6 +345,9 @@ const process = (): void => {
 }
 const reset = (): void => {
   formSubscriberCreate.value?.reset()
+}
+const resetImportList = (): void => {
+  formSubscriberImportList.value?.reset()
 }
 const show = (subscriber: ISubscriber): void => {
   selectedSubscriber.value = subscriber

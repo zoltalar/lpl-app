@@ -36,8 +36,8 @@
       <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center" v-for="list in lists">
           <a :href="'/mailing-lists/' + $_.kebabCase(list.name)" @click.prevent="fetchSubscribersByMailingListId(list.id)">{{ list.name }}</a>
-          <span class="badge badge-primary rounded-pill" v-if="list.subscribers_confirmed_unblacklisted_count !== undefined">
-            {{ list.subscribers_confirmed_unblacklisted_count }}
+          <span class="badge badge-primary rounded-pill" v-if="list.subscribers_confirmed_unblacklisted_active_count !== undefined">
+            {{ list.subscribers_confirmed_unblacklisted_active_count }}
           </span>
         </li>
       </ul>
@@ -91,7 +91,7 @@ const fetchSubscriberOptions = $_.debounce(async (search: string): Promise<void>
     onResponse({ response }) {
       busyFetchSubscribers.value = false
       subscriberOptions.value = []
-      if (response._data.data) {
+      if (response?._data?.data) {
         subscriberOptions.value = transform(response._data.data)
       }
     }
@@ -130,10 +130,10 @@ const send = async () => {
     body: messageData,
     onResponse({ response }) {
       busy.value = false
-      if (response._data.errors) {
+      if (response?._data?.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
-      } else if (response._data.data) {
+      } else if (response?._data?.data) {
         emits('sent')
       }
     }

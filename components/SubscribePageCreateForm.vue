@@ -237,10 +237,10 @@ const store = async (): Promise<void> => {
     method: 'post',
     body: page,
     onResponse({ response }) {
-      if (response._data.errors) {
+      if (response?._data?.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
-      } else if (response._data.data) {
+      } else if (response?._data?.data) {
         reset()
         emits('created')
       }

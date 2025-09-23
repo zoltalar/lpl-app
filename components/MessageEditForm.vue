@@ -686,10 +686,10 @@ const update = async (
     body: messageData,
     onResponse({ response }) {
       busy.value = false
-      if (response._data.errors) {
+      if (response?._data?.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
-      } else if (response._data.data) {
+      } else if (response?._data?.data) {
         reset()
         emits('updated', close)
       }

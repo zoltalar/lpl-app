@@ -119,17 +119,17 @@
                           class="text-success cursor-help"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          :data-bs-title="$t('messages.subscribers_confirmed_unblacklisted_count')"
+                          :data-bs-title="$t('messages.subscribers_confirmed_unblacklisted_active_count')"
                         >
-                          {{ list.subscribers_confirmed_unblacklisted_count ?? 0 }}
+                          {{ list.subscribers_confirmed_unblacklisted_active_count ?? 0 }}
                         </span>
                         (<span
                           class="text-warning cursor-help"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          :data-bs-title="$t('messages.subscribers_unconfirmed_unblacklisted_count')"
+                          :data-bs-title="$t('messages.subscribers_unconfirmed_unblacklisted_inactive_count')"
                         >
-                          {{ list.subscribers_unconfirmed_unblacklisted_count ?? 0 }}
+                          {{ list.subscribers_unconfirmed_unblacklisted_inactive_count ?? 0 }}
                         </span>, 
                         <span
                           class="text-danger cursor-help"
