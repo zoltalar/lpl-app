@@ -1,4 +1,4 @@
-import type { IAttribute, IMailingList } from '@/types'
+import type { IAttribute } from '@/types'
 
 export default function useFormSubscriber() {
   // Vars

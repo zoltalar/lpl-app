@@ -121,7 +121,7 @@
         />
         <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
       </div>
-      <div id="text-active" class="form-text">{{ $t('messages.form_text_user_active') }}</div>
+      <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
     </div>
     <div class="form-group">
       <h6>

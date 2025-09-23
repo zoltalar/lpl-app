@@ -47,7 +47,7 @@
         />
         <label :for="inputId('html-email')" class="form-check-label">{{ $t('html_email') }}</label>
       </div>
-      <div id="text-html-email" class="form-text" v-html="$t('messages.form_text_user_html_email')"></div>
+      <div id="text-html-email" class="form-text" v-html="$t('messages.form_text_subscriber_html_email')"></div>
     </div>
     <div class="form-group">
       <div class="form-check form-switch">
@@ -62,7 +62,7 @@
         />
         <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirmed') }}</label>
       </div>
-      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_user_confirmed')"></div>
+      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_confirmed')"></div>
     </div>        
     <div class="form-group">
       <div class="form-check form-switch">
@@ -77,7 +77,7 @@
         />
         <label :for="inputId('blacklisted')" class="form-check-label">{{ $t('blacklisted') }}</label>
       </div>
-      <div id="text-blacklisted" class="form-text" v-html="$t('messages.form_text_user_blacklisted')"></div>
+      <div id="text-blacklisted" class="form-text" v-html="$t('messages.form_text_subscriber_blacklisted')"></div>
     </div>
     <div class="form-group">
       <div class="form-check form-switch">

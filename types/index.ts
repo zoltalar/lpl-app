@@ -239,6 +239,9 @@ export type TSelectOption = {
   value: string | number | null,
   text: string
 }
+export type TSubscriberImportList = {
+  emails: string
+}
 export type TSubscribePageMeta = {
   email_formats: Record<string, string>
 }

@@ -22,6 +22,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdown-subscriber-options">
                       <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</a></li>
                       <li><a href="/subscribers" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
                     </ul>
                   </div>
                 </div>
@@ -30,6 +31,10 @@
                   <div class="btn-group" role="group" :aria-label="$t('subscriber_options')">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-subscriber-create" v-if="hasRole('admin') || can('subscriber-create')">{{ $t('create') }}</button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('subscriber-view')">{{ $t('refresh') }}</button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('import') }}</button>
+                    <ul class="dropdown-menu">
+                      <li><a href="/subscribers" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-subscriber-import-list" v-if="hasRole('admin') || can('subscriber-import')">{{ $t('import_from_list') }}</a></li>
+                    </ul>
                   </div>
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
@@ -178,6 +183,23 @@
       </template>
     </modal>
     <modal
+      id="modal-subscriber-import-list"
+      :title="$t('import_subscribers_from_list')"
+      size="lg"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <subscriber-import-list-form
+        ref="formSubscriberImportList"
+        @processed="handleProcessed"
+        @errors="handleErrors"
+      />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="process">{{ $t('submit') }}</button>
+      </template>
+    </modal>
+    <modal
       id="modal-subscriber-edit"
       :title="$t('edit_subscriber')"
       size="md"
@@ -225,6 +247,7 @@ const {
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
 const formSubscriberCreate = useTemplateRef<HTMLFormElement>('formSubscriberCreate')
+const formSubscriberImportList = useTemplateRef<HTMLFormElement>('formSubscriberImportList')
 const formSubscriberEdit = useTemplateRef<HTMLFormElement>('formSubscriberEdit')
 const selectedSubscriber = ref<ISubscriber>({} as ISubscriber)
 // Composables
@@ -300,6 +323,9 @@ const onUpdated = (): void => {
     header: t('success'),
     body: t('messages.model_updated', { model })
   })
+}
+const process = (): void => {
+  formSubscriberImportList.value?.process()
 }
 const reset = (): void => {
   formSubscriberCreate.value?.reset()
