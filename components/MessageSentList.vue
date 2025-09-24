@@ -30,15 +30,17 @@
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
-                  <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
-                    <div class="btn-group" role="group">
+                  <div class="btn-toolbar" role="toolbar" :aria-label="$t('message_options_toolbar')">
+                    <div class="btn-group me-2" role="group" :aria-label="$t('message_options')">
+                      <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
+                    </div>
+                    <div class="btn-group" role="group" :aria-label="$t('message_options')">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
-                      <ul class="dropdown-menu dropdown-menu-end">
+                      <ul class="dropdown-menu">
                         <li><a href="/messages/sent" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                       </ul>
                     </div>
-                  </div>                  
+                  </div>                                    
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>

@@ -25,22 +25,26 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
                       <li><a href="/messages/saved" class="dropdown-item" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</a></li>
                       <li><a href="/messages/saved" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="queueBatch" v-if="hasRole('admin') || can('message-queue')">{{ $t('queue') }}</a></li>
                       <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                     </ul>
                   </div>
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
-                  <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                    <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
-                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
-                    <div class="btn-group" role="group">
+                  <div class="btn-toolbar" role="toolbar" :aria-label="$t('message_options_toolbar')">
+                    <div class="btn-group me-2" role="group" :aria-label="$t('message_options')">
+                      <button type="button" class="btn btn-primary" @click.prevent="create" v-if="hasRole('admin') || can('message-create')">{{ $t('create') }}</button>
+                      <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
+                    </div>
+                    <div class="btn-group" role="group" :aria-label="$t('message_options')">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
                       <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="queueBatch" v-if="hasRole('admin') || can('message-queue')">{{ $t('queue') }}</a></li>
                         <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                       </ul>
                     </div>
-                  </div>                  
+                  </div>                                    
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -405,6 +409,29 @@ const queue = async (message: IMessage): Promise<void> => {
           })
         }
       }
+    })
+  }
+}
+const queueBatch = async (): Promise<void> => {
+  let models = t('the_messages').toLowerCase()
+  let message = t('messages.confirm_queue_batch_models', { models })
+  if (confirm(message)) {
+    await useApi(`/admin/messages/queue-batch`, {
+      method: 'post',
+      body: {
+        ids: selected.value
+      },
+      onResponse({ response }) {        
+        if (response?._data?.count) {
+          selected.value = []
+          models = t('the_messages')
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.models_queued', { models })
+          })
+        }
+      },
     })
   }
 }

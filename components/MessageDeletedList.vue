@@ -24,21 +24,25 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-message-options">
                       <li><a href="/messages/deleted" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="undeleteBatch" v-if="hasRole('admin') || can('message-undelete')">{{ $t('undelete') }}</a></li>
                       <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="purgeBatch" v-if="hasRole('admin') || can('message-purge')">{{ $t('purge') }}</a></li>
                     </ul>
                   </div>
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
-                  <div class="btn-group" role="group" :aria-label="$t('message_options')">
-                    <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
-                    <div class="btn-group" role="group">
+                  <div class="btn-toolbar" role="toolbar" :aria-label="$t('message_options_toolbar')">
+                    <div class="btn-group me-2" role="group" :aria-label="$t('message_options')">
+                      <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('message-view')">{{ $t('refresh') }}</button>
+                    </div>
+                    <div class="btn-group" role="group" :aria-label="$t('message_options')">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
-                      <ul class="dropdown-menu dropdown-menu-end">
+                      <ul class="dropdown-menu">
+                        <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="undeleteBatch" v-if="hasRole('admin') || can('message-undelete')">{{ $t('undelete') }}</a></li>
                         <li><a href="/messages/deleted" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="purgeBatch" v-if="hasRole('admin') || can('message-purge')">{{ $t('purge') }}</a></li>
                       </ul>
                     </div>
-                  </div>                  
+                  </div>                                    
                 </div>
                 <div class="spinner-border spinner-border-sm ms-3" role="status" v-if="busy">
                   <span class="visually-hidden">{{ $t('loading') }}...</span>
@@ -377,6 +381,29 @@ const undelete = async (message: IMessage): Promise<void> => {
           addToast({
             header: t('success'),
             body: t('messages.model_updated', { model })
+          })
+        }
+      },
+    })
+  }
+}
+const undeleteBatch = async (): Promise<void> => {
+  let models = t('the_messages').toLowerCase()
+  let message = t('messages.confirm_undelete_batch_models', { models })
+  if (confirm(message)) {
+    await useApi(`/admin/messages/undelete-batch`, {
+      method: 'post',
+      body: {
+        ids: selected.value
+      },
+      onResponse({ response }) {        
+        if (response?._data?.count) {
+          selected.value = []
+          models = t('the_messages')
+          refresh()
+          addToast({
+            header: t('success'),
+            body: t('messages.models_undeleted', { models })
           })
         }
       },
