@@ -18,7 +18,7 @@
     <div class="form-group">
       <label :for="inputId('password')" class="form-label">{{ $t('password') }}</label>
       <span
-        class="badge text-bg-primary ms-2"
+        class="badge badge-primary ms-2"
         :title="$t('password_is_set')"
         v-if="subscriber.password_set === 1"
       >{{ $t('set') }}</span>
