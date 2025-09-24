@@ -197,7 +197,7 @@
     >
       <subscriber-import-list-form
         ref="formSubscriberImportList"
-        @processed="handleProcessed"
+        @processed="handleProcessedImportList"
         @errors="handleErrors"
       />
       <template #footer>
@@ -215,7 +215,7 @@
     >
       <subscriber-import-file-form
         ref="formSubscriberImportFile"
-        @processed="handleProcessed"
+        @processed="handleProcessedImportFile"
         @errors="handleErrors"
       />
       <template #footer>
@@ -322,8 +322,11 @@ const handleCreated = (): void => {
 const handleErrors = (errors: Record<string,string>): void => {
   onErrors(errors)
 }
-const handleProcessed = (): void => {
-  onProcessed()
+const handleProcessedImportFile = (): void => {
+  onProcessedImportFile()
+}
+const handleProcessedImportList = (): void => {
+  onProcessedImportList()
 }
 const handleUpdated = (): void => {
   onUpdated()
@@ -344,7 +347,15 @@ const onErrors = (errors: Record<string,string>): void => {
     type: 'danger'
   })
 }
-const onProcessed = (): void => {
+const onProcessedImportFile = (): void => {
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-import-file')?.hide()
+  refresh()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.subscribers_import_processed')
+  })
+}
+const onProcessedImportList = (): void => {
   $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-import-list')?.hide()
   refresh()
   addToast({ 

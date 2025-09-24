@@ -202,13 +202,13 @@
               class="form-control"
               :class="{'is-invalid': error('delayed_until') !== null}"
               :id="inputId('delayed-until')"
-              aria-describedby="button-delayed-until"
+              aria-describedby="message-edit-button-delayed-until"
               v-model="form.delayed_until"
             />
             <button
               type="button"
               class="btn btn-outline-secondary"
-              id="button-delayed-until"
+              id="message-edit-button-delayed-until"
               :title="$t('clear')"
               @click.prevent="clearDelayedUntil"              
             >
@@ -296,14 +296,14 @@
               type="checkbox"
               :id="inputId('criteria')"
               class="form-check-input"
-              aria-describedby="text-criteria"
+              aria-describedby="message-edit-text-criteria"
               :true-value="1"
               :false-value="0"
               v-model="form.criteria"
             />
             <label :for="inputId('criteria')" class="form-check-label">{{ $t('criteria') }}</label>
           </div>          
-          <div id="text-criteria" class="form-text">{{ $t('messages.form_text_message_criteria') }}</div>
+          <div id="message-edit-text-criteria" class="form-text">{{ $t('messages.form_text_message_criteria') }}</div>
         </div>
         <template v-for="(group, i) in conditions">
           <div class="form-group" v-if="i > 0">
@@ -420,14 +420,14 @@
               type="checkbox"
               :id="inputId('analytics')"
               class="form-check-input"
-              aria-describedby="text-analytics"
+              aria-describedby="message-edit-text-analytics"
               :true-value="1"
               :false-value="0"
               v-model="form.analytics"
             />
             <label :for="inputId('analytics')" class="form-check-label">{{ $t('analytics') }}</label>
           </div>          
-          <div id="text-analytics" class="form-text">{{ $t('messages.form_text_message_analytics') }}</div>
+          <div id="message-edit-text-analytics" class="form-text">{{ $t('messages.form_text_message_analytics') }}</div>
         </div>
         <template v-for="(field, key) in utmFields">
           <div class="form-group">

@@ -40,14 +40,14 @@
           type="checkbox"
           :id="inputId('html-email')"
           class="form-check-input"
-          aria-describedby="text-html-email"
+          aria-describedby="subscriber-create-text-html-email"
           :true-value="1"
           :false-value="0"
           v-model="form.html_email"
         />
         <label :for="inputId('html-email')" class="form-check-label">{{ $t('html_email') }}</label>
       </div>
-      <div id="text-html-email" class="form-text" v-html="$t('messages.form_text_subscriber_html_email')"></div>
+      <div id="subscriber-create-text-html-email" class="form-text" v-html="$t('messages.form_text_subscriber_html_email')"></div>
     </div>
     <div class="form-group">
       <div class="form-check form-switch">
@@ -55,14 +55,14 @@
           type="checkbox"
           :id="inputId('confirmed')"
           class="form-check-input"
-          aria-describedby="text-confirmed"
+          aria-describedby="subscriber-create-text-confirmed"
           :true-value="1"
           :false-value="0"
           v-model="form.confirmed"
         />
         <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirmed') }}</label>
       </div>
-      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_confirmed')"></div>
+      <div id="subscriber-create-text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_confirmed')"></div>
     </div>        
     <div class="form-group">
       <div class="form-check form-switch">
@@ -70,14 +70,14 @@
           type="checkbox"
           :id="inputId('blacklisted')"
           class="form-check-input"
-          aria-describedby="text-blacklisted"
+          aria-describedby="subscriber-create-text-blacklisted"
           :true-value="1"
           :false-value="0"
           v-model="form.blacklisted"
         />
         <label :for="inputId('blacklisted')" class="form-check-label">{{ $t('blacklisted') }}</label>
       </div>
-      <div id="text-blacklisted" class="form-text" v-html="$t('messages.form_text_subscriber_blacklisted')"></div>
+      <div id="subscriber-create-text-blacklisted" class="form-text" v-html="$t('messages.form_text_subscriber_blacklisted')"></div>
     </div>
     <div class="form-group">
       <div class="form-check form-switch">
@@ -85,14 +85,14 @@
           type="checkbox"
           :id="inputId('active')"
           class="form-check-input"
-          aria-describedby="text-active"
+          aria-describedby="subscriber-create-text-active"
           :true-value="1"
           :false-value="0"
           v-model="form.active"
         />
         <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
       </div>
-      <div id="text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
+      <div id="subscriber-create-text-active" class="form-text">{{ $t('messages.form_text_subscriber_active') }}</div>
     </div>
     <div class="form-group mb-0">
       <h6>

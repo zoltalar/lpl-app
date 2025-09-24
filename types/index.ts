@@ -244,7 +244,10 @@ export type TSubscriberImportFile = {
 }
 export type TSubscriberImportList = {
   emails: string,
-  confirmed: number
+  html_email: number,
+  confirmed: number,
+  blacklisted: number,
+  active: number
 }
 export type TSubscribePageMeta = {
   email_formats: Record<string, string>

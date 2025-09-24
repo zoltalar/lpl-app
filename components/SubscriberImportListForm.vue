@@ -17,19 +17,54 @@
       <div id="subscriber-import-list-text-emails" class="form-text" v-html="$t('messages.form_text_subscriber_import_emails')" v-else></div>
     </div>
     <div class="form-group">
+      <h6 class="mb-0">
+        <span>{{ $t('defaults') }}</span>
+      </h6>
+      <div class="form-text mb-2" v-html="$t('messages.form_text_subscriber_import_defaults')"></div>
+      <div class="form-check form-switch">
+        <input
+          type="checkbox"
+          :id="inputId('html-email')"
+          class="form-check-input"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.html_email"
+        />
+        <label :for="inputId('html-email')" class="form-check-label">{{ $t('html_email') }}</label>
+      </div>
       <div class="form-check form-switch">
         <input
           type="checkbox"
           :id="inputId('confirmed')"
           class="form-check-input"
-          aria-describedby="subscriber-import-list-text-confirmed"
           :true-value="1"
           :false-value="0"
           v-model="form.confirmed"
         />
-        <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirm_emails') }}</label>
+        <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirmed') }}</label>
       </div>
-      <div id="subscriber-import-list-text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_import_confirmed')"></div>
+      <div class="form-check form-switch">
+        <input
+          type="checkbox"
+          :id="inputId('blacklisted')"
+          class="form-check-input"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.blacklisted"
+        />
+        <label :for="inputId('blacklisted')" class="form-check-label">{{ $t('blacklisted') }}</label>
+      </div>
+      <div class="form-check form-switch">
+        <input
+          type="checkbox"
+          :id="inputId('active')"
+          class="form-check-input"
+          :true-value="1"
+          :false-value="0"
+          v-model="form.active"
+        />
+        <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
+      </div>
     </div>
     <div class="form-group mb-0">
       <h6 class="mb-0">
@@ -68,7 +103,10 @@ import type { TSubscriberImportList } from '@/types'
 const emits = defineEmits(['processed', 'errors'])
 const fields = {
   emails: '',
-  confirmed: 1
+  html_email: 1,
+  confirmed: 1,
+  blacklisted: 0,
+  active: 1
 }
 const form = reactive<TSubscriberImportList>({...fields})
 // Composables
@@ -91,9 +129,7 @@ const { $_ } = useNuxtApp()
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
   $_.forOwn(form, (value: any, key: string): void => {
-    if ( ! $_.isNil(value)) {
-      formData.append(key, value)
-    }
+    formData.append(key, value ?? '')
   })
   $_.forEach(subscriberLists.value, (id: any): void => {
     formData.append('lists[]', id.toString())

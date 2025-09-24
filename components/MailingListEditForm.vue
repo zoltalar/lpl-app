@@ -64,14 +64,14 @@
           type="checkbox"
           :id="inputId('active')"
           class="form-check-input"
-          aria-describedby="text-active"
+          aria-describedby="mailing-list-edit-text-active"
           :true-value="1"
           :false-value="0"
           v-model="form.active"
         />
         <label :for="inputId('active')" class="form-check-label">{{ $t('active') }}</label>
       </div>
-      <div id="text-active" class="form-text">{{ $t('messages.form_text_mailing_list_active') }}</div>
+      <div id="mailing-list-edit-text-active" class="form-text">{{ $t('messages.form_text_mailing_list_active') }}</div>
     </div>
   </form>
 </template>

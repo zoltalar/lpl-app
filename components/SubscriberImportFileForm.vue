@@ -18,19 +18,15 @@
       <div id="subscriber-import-file-text-file" class="form-text" v-html="$t('messages.form_text_subscriber_import_file')"></div>
     </div>
     <div class="form-group">
-      <div class="form-check form-switch">
-        <input
-          type="checkbox"
-          :id="inputId('confirmed')"
-          class="form-check-input"
-          aria-describedby="subscriber-import-file-text-confirmed"
-          :true-value="1"
-          :false-value="0"
-          v-model="form.confirmed"
-        />
-        <label :for="inputId('confirmed')" class="form-check-label">{{ $t('confirm_emails') }}</label>
+      <div class="card border">
+        <div class="card-header">
+          {{ $t('sample') }}
+        </div>
+        <div class="card-body">
+          <pre class="mb-0">"email","password","html_email","confirmed","blacklisted","active","first_name","last_name"
+"subscriber@domain.com","welcome",1,1,0,1,"John","Smith"</pre>
+        </div>
       </div>
-      <div id="text-confirmed" class="form-text" v-html="$t('messages.form_text_subscriber_import_confirmed')"></div>
     </div>
     <div class="form-group mb-0">
       <h6 class="mb-0">
@@ -64,13 +60,8 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { TSubscriberImportFile } from '@/types'
 // Vars
 const emits = defineEmits(['processed', 'errors'])
-const fields = {
-  confirmed: 1
-}
-const form = reactive<TSubscriberImportFile>({...fields})
 const file = ref<File|null>(null)
 const inputFile = useTemplateRef<HTMLInputElement>('inputFile')
 // Composables
@@ -92,9 +83,6 @@ const { $_ } = useNuxtApp()
 // Functions
 const normalize = (): FormData => {
   const formData: FormData = new FormData()
-  $_.forOwn(form, (value: any, key: string): void => {
-    formData.append(key, value ?? '')
-  })
   if (file.value) {
     formData.append('file', file.value)
   }
@@ -118,7 +106,7 @@ const process = async (): Promise<void> => {
       if (response?._data?.errors) {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
-      } else if (response.status === 204) {
+      } else if (response?._data?.file_name) {
         reset()
         emits('processed')
       }
@@ -126,7 +114,6 @@ const process = async (): Promise<void> => {
   })
 }
 const reset = () => {
-  Object.assign(form, fields)
   file.value = null
   if (inputFile.value) {
     inputFile.value.value = ''
