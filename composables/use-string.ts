@@ -2,6 +2,13 @@ export default function useString() {
   // Composables
   const { $_ } = useNuxtApp()
   // Functions
+  const nl2br = (string: string | null | undefined, xhtml: boolean = true): string => {
+    if (typeof string === 'undefined' || string === null) {
+      return ''
+    }
+    const tag = (xhtml || typeof xhtml === 'undefined') ? '<br />' : '<br>'
+    return string.toString().replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + tag + '$2')
+  }
   const phrases = (string: string): any[] => {
     let phrases: any[] = []
     if (string) {
@@ -27,6 +34,7 @@ export default function useString() {
     return string.substring(0, length) + '...'
   }
   return {
+    nl2br,
     phrases,
     truncate
   }

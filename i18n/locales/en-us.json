@@ -1,6 +1,7 @@
 {
     "actions": "Actions",
     "active": "Active",
+    "activity": "Activity",
     "add_group": "Add Group",
     "admin": "Admin",
     "analytics": "Analytics",
@@ -65,6 +66,7 @@
     "deleted_at": "Deleted At",
     "deleted_messages": "Deleted Messages",
     "description": "Description",
+    "details": "Details",
     "disabled": "Disabled",
     "download": "Download",
     "draft": "Draft",
@@ -101,6 +103,7 @@
     "import_from_list": "Import From List",
     "import_subscribers_from_file": "Import Subscribers From File",
     "import_subscribers_from_list": "Import Subscribers From List",
+    "info": "Info",
     "input_help_text": "Input Help Text",
     "input_help_texts": "Input Help Texts",
     "input_type": "Input Type",

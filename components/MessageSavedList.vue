@@ -39,7 +39,7 @@
                     </div>
                     <div class="btn-group" role="group" :aria-label="$t('message_options')">
                       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ $t('bulk_actions') }}</button>
-                      <ul class="dropdown-menu dropdown-menu-end">
+                      <ul class="dropdown-menu">
                         <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="queueBatch" v-if="hasRole('admin') || can('message-queue')">{{ $t('queue') }}</a></li>
                         <li><a href="/messages/saved" class="dropdown-item" :class="{'disabled': selected.length === 0}" @click.prevent="softDeleteBatch" v-if="hasRole('admin') || can('message-delete')">{{ $t('delete') }}</a></li>
                       </ul>

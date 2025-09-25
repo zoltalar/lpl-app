@@ -6,6 +6,7 @@
     <tab :title="$t('general')" target="#subscriber-general" active />
     <tab :title="$t('attributes')" target="#subscriber-attributes" />
     <tab :title="$t('mailing_lists')" target="#subscriber-lists" />
+    <tab :title="$t('activity')" target="#subscriber-history" />
     <tab :title="$t('campaigns')" target="#subscriber-campaigns" />
     <tab :title="$t('bounces')" target="#subscriber-bounces" />
   </tabs>
@@ -158,6 +159,24 @@
         </table>
       </div>
     </div>
+    <div class="tab-pane fade" id="subscriber-history" role="tabpanel" aria-labelledby="tab-history">
+      <div v-if="subscriber.history && subscriber.history.length > 0">
+        <div class="card border" :class="{'mb-3': (j < subscriber.history.length - 1)}" v-for="(entry, j) in subscriber.history">
+          <div class="card-header">
+            <span class="float-end" v-if="entry.created_at">
+              {{ useDateFormat(entry.created_at, dateTimeFormat(currentUser)) }}
+            </span>
+            <span>{{ entry.summary }}</span>
+          </div>
+          <div class="card-body">
+            <small>{{ $t('details') }}</small>
+            <pre class="text-secondary" v-html="entry.details"></pre>
+            <small>{{ $t('info') }}</small>
+            <pre class="text-secondary mb-0">{{ entry.info }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="tab-pane fade" id="subscriber-lists" role="tabpanel" aria-labelledby="tab-lists">
       <ul class="mb-0" v-if="subscriber.mailing_lists && subscriber.mailing_lists.length > 0">
         <li v-for="list in subscriber.mailing_lists">{{ list.name }}</li>
@@ -179,6 +198,7 @@ const props = defineProps<Props>()
 // Composables
 const { data } = useAuth()
 const { label: attributeLabel } = useAttribute()
+const { nl2br } = useString()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const subscriber = computed<ISubscriber>(() => {

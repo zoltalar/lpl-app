@@ -171,8 +171,16 @@ export interface ISubscriber extends IBaseModel, ITimestamps, IUserstamps {
   active: number | null,
   unique_id: string | null,
   rss_frequency: string | null,
+  history?: ISubscriberHistory[] | null,
   mailing_lists?: IMailingList[] | null,
   subscriber_attributes?: IAttribute[] | null,
+}
+export interface ISubscriberHistory extends IBaseModel {
+  subscriber_id: number,
+  summary: string | null,
+  details: string | null,
+  info: Record<string, any>,
+  created_at: string | null
 }
 export interface ITemplate extends IBaseModel, ITimestamps, IUserstamps {
   name: string,
