@@ -163,3 +163,8 @@
     color: $gray-500;
   }    
 }
+
+.tab-pane-subscriber-history {
+  max-height: 30rem;
+  overflow-y: scroll;
+}

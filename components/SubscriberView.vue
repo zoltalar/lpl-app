@@ -1,14 +1,39 @@
 <template>
-  <div class="alert alert-danger" role="alert" v-if="subscriber.blacklisted === 1">
+  <div class="alert alert-danger text-center" role="alert" v-if="subscriber.blacklisted === 1">
     {{ $t('messages.subscriber_blacklisted') }}
   </div>
   <tabs id="tabs-subscriber-view">
-    <tab :title="$t('general')" target="#subscriber-general" active />
-    <tab :title="$t('attributes')" target="#subscriber-attributes" />
-    <tab :title="$t('mailing_lists')" target="#subscriber-lists" />
-    <tab :title="$t('activity')" target="#subscriber-history" />
-    <tab :title="$t('campaigns')" target="#subscriber-campaigns" />
-    <tab :title="$t('bounces')" target="#subscriber-bounces" />
+    <tab
+      :title="$t('general')"
+      target="#subscriber-general"
+      active
+      @selected="handleSelected"
+    />
+    <tab
+      :title="$t('attributes')"
+      target="#subscriber-attributes"
+      @selected="handleSelected"
+    />
+    <tab
+      :title="$t('mailing_lists')"
+      target="#subscriber-lists"
+      @selected="handleSelected"
+    />
+    <tab
+      :title="$t('activity')"
+      target="#subscriber-history"
+      @selected="handleSelected"
+    />
+    <tab
+      :title="$t('campaigns')"
+      target="#subscriber-campaigns"
+      @selected="handleSelected"
+    />
+    <tab
+      :title="$t('bounces')"
+      target="#subscriber-bounces"
+      @selected="handleSelected"
+    />
   </tabs>
   <div class="tab-content py-3">
     <div class="tab-pane fade show active" id="subscriber-general" role="tabpanel" aria-labelledby="tab-general">
@@ -160,21 +185,26 @@
       </div>
     </div>
     <div class="tab-pane fade" id="subscriber-history" role="tabpanel" aria-labelledby="tab-history">
-      <div v-if="subscriber.history && subscriber.history.length > 0">
+      <div class="tab-pane-subscriber-history" v-if="subscriber.history && subscriber.history.length > 0">
+        <div class="alert alert-warning text-center" role="alert">
+          {{ $t('messages.subscriber_history_limit') }}
+        </div>
         <div class="card border" :class="{'mb-3': (j < subscriber.history.length - 1)}" v-for="(entry, j) in subscriber.history">
           <div class="card-header">
-            <span class="float-end" v-if="entry.created_at">
-              {{ useDateFormat(entry.created_at, dateTimeFormat(currentUser)) }}
-            </span>
             <span>{{ entry.summary }}</span>
           </div>
           <div class="card-body">
             <small>{{ $t('details') }}</small>
             <pre class="text-secondary" v-html="entry.details"></pre>
             <small>{{ $t('info') }}</small>
-            <pre class="text-secondary mb-0">{{ entry.info }}</pre>
+            <pre class="text-secondary">{{ (entry.info ?? '-') }}</pre>
+            <small>{{ $t('created_at') }}</small>
+            <pre class="text-secondary mb-0">{{ useDateFormat(entry.created_at, dateTimeFormat(currentUser)) }}</pre>
           </div>
         </div>
+      </div>
+      <div class="text-center" v-else>
+        <p class="mt-3 mb-0">{{ $t('no_activity') }}</p>
       </div>
     </div>
     <div class="tab-pane fade" id="subscriber-lists" role="tabpanel" aria-labelledby="tab-lists">
@@ -195,10 +225,11 @@ interface Props {
   subscriber?: ISubscriber | null
 }
 const props = defineProps<Props>()
+const emits = defineEmits(['clearedHistory'])
+const selectedTab = ref<string>('')
 // Composables
 const { data } = useAuth()
 const { label: attributeLabel } = useAttribute()
-const { nl2br } = useString()
 const { dateTimeFormat, fullName } = useUser()
 // Computed
 const subscriber = computed<ISubscriber>(() => {
@@ -207,4 +238,20 @@ const subscriber = computed<ISubscriber>(() => {
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
 })
+// Functions
+const clearHistory = async (): Promise<void> => {
+  await useApi(`/admin/subscribers/clear-history/${subscriber.value.id}`, {
+    method: 'post',
+    onResponse({ response }) {
+      if (response.status === 204) {
+        emits('clearedHistory')
+      }
+    }
+  })
+}
+const handleSelected = (title: string): void => {
+  selectedTab.value = title
+}
+// Expose
+defineExpose({ selectedTab, clearHistory })
 </script>

@@ -247,7 +247,14 @@
       :title="$t('subscriber_details')"
       size="xl"
     >
-      <subscriber-view :subscriber="selectedSubscriber" />
+      <subscriber-view
+        :subscriber="selectedSubscriber"
+        ref="componentSubscriberView"
+        @clearedHistory="handleClearedHistory"
+      />
+      <template #footer v-if="selectedTab === 'activity' && selectedSubscriber?.history?.length > 0">
+        <button type="button" class="btn btn-primary" @click.prevent="clearHistory">{{ $t('clear') }}</button>
+      </template>
     </modal>
   </div>
 </template>
@@ -275,6 +282,7 @@ const formSubscriberCreate = useTemplateRef<HTMLFormElement>('formSubscriberCrea
 const formSubscriberImportFile = useTemplateRef<HTMLFormElement>('formSubscriberImportFile')
 const formSubscriberImportList = useTemplateRef<HTMLFormElement>('formSubscriberImportList')
 const formSubscriberEdit = useTemplateRef<HTMLFormElement>('formSubscriberEdit')
+const componentSubscriberView = ref<null | { selectedTab: string, clearHistory: () => void }>(null)
 const selectedSubscriber = ref<ISubscriber>({} as ISubscriber)
 // Composables
 const { t } = useI18n()
@@ -283,11 +291,17 @@ const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { $bootstrap } = useNuxtApp()
 // Computed
+const selectedTab = computed<string>(() => {
+  return componentSubscriberView?.value?.selectedTab ?? ''
+})
 const subscribers = computed<ISubscriber[]>(() => {
   return resource?.value?.data as ISubscriber[]
 })
 // Functions
-const destroy = async (subscriber: ISubscriber) => {
+const clearHistory = (): void => {
+  componentSubscriberView?.value?.clearHistory()
+}
+const destroy = async (subscriber: ISubscriber): Promise<void> => {
   const name = subscriber.email
   const model = t('subscriber')
   const message = t('messages.confirm_destroy_name', { name })
@@ -316,6 +330,9 @@ const edit = (subscriber: ISubscriber): void => {
   selectedSubscriber.value = subscriber
   $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-edit')?.show()
 }
+const handleClearedHistory = (): void => {
+  onClearedHistory()
+}
 const handleCreated = (): void => {
   onCreated()
 }
@@ -331,11 +348,20 @@ const handleProcessedImportList = (): void => {
 const handleUpdated = (): void => {
   onUpdated()
 }
+const onClearedHistory = (): void => {
+  const model = t('subscriber')
+  $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-view')?.hide()
+  refresh()
+  addToast({
+    header: t('success'),
+    body: t('messages.model_updated', { model })
+  })
+}
 const onCreated = (): void => {
   const model = t('subscriber')
   $bootstrap.Modal.getOrCreateInstance('#modal-subscriber-create')?.hide()
   refresh()
-  addToast({ 
+  addToast({
     header: t('success'),
     body: t('messages.model_created', { model })
   })
