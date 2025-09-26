@@ -253,6 +253,7 @@
         @clearedHistory="handleClearedHistory"
       />
       <template #footer v-if="selectedTab === 'activity' && selectedSubscriber?.history?.length > 0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
         <button type="button" class="btn btn-primary" @click.prevent="clearHistory">{{ $t('clear') }}</button>
       </template>
     </modal>

@@ -25,8 +25,8 @@
       @selected="handleSelected"
     />
     <tab
-      :title="$t('campaigns')"
-      target="#subscriber-campaigns"
+      :title="$t('the_messages')"
+      target="#subscriber-messages"
       @selected="handleSelected"
     />
     <tab
@@ -196,8 +196,10 @@
           <div class="card-body">
             <small>{{ $t('details') }}</small>
             <pre class="text-secondary" v-html="entry.details"></pre>
-            <small>{{ $t('info') }}</small>
-            <pre class="text-secondary">{{ (entry.info ?? '-') }}</pre>
+            <small>{{ $t('ip_address') }}</small>
+            <pre class="text-secondary">{{ (entry?.info?.ip ?? '-') }}</pre>
+            <small>{{ $t('browser') }}</small>
+            <pre class="text-secondary">{{ (entry?.info?.ua ?? '-') }}</pre>
             <small>{{ $t('created_at') }}</small>
             <pre class="text-secondary mb-0">{{ useDateFormat(entry.created_at, dateTimeFormat(currentUser)) }}</pre>
           </div>
@@ -219,6 +221,7 @@
 </template>
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 import type { ISubscriber, IUser } from '@/types'
 // Vars
 interface Props {
@@ -228,6 +231,7 @@ const props = defineProps<Props>()
 const emits = defineEmits(['clearedHistory'])
 const selectedTab = ref<string>('')
 // Composables
+const { t } = useI18n()
 const { data } = useAuth()
 const { label: attributeLabel } = useAttribute()
 const { dateTimeFormat, fullName } = useUser()
@@ -240,14 +244,17 @@ const currentUser = computed<IUser>(() => {
 })
 // Functions
 const clearHistory = async (): Promise<void> => {
-  await useApi(`/admin/subscribers/clear-history/${subscriber.value.id}`, {
-    method: 'post',
-    onResponse({ response }) {
-      if (response.status === 204) {
-        emits('clearedHistory')
+  const message = t('messages.confirm_subscriber_history_clear')
+  if (confirm(message)) {
+    await useApi(`/admin/subscribers/clear-history/${subscriber.value.id}`, {
+      method: 'post',
+      onResponse({ response }) {
+        if (response.status === 204) {
+          emits('clearedHistory')
+        }
       }
-    }
-  })
+    })
+  }
 }
 const handleSelected = (title: string): void => {
   selectedTab.value = title

@@ -1,13 +1,14 @@
 // Interfaces
 export interface IApiResource {
   data: 
-    IAttachment[] | 
-    IAttribute[] | 
+    IAttachment[] |
+    IAttribute[] |
     ICategory[] |
     ICountry[] |
-    IMailingList[] | 
+    IMailingList[] |
+    IProcess[] |
     ISubscribePage[] |
-    ISubscriber[] | 
+    ISubscriber[] |
     IUser[],
   meta?: IApiResourceMeta
 }
@@ -136,6 +137,15 @@ export interface IMessage extends IBaseModel, ITimestamps, IUserstamps {
 export interface IPermission extends IBaseModel, ITimestamps {
   name: string,
   guard_name: string
+}
+export interface IProcess extends IBaseModel, ITimestamps {
+  alive: number,
+  ip: string,
+  message_id: number | null,
+  subscriber_id: number | null,
+  type: number | null,
+  message?: IMessage | null,
+  subscriber?: ISubscriber | null
 }
 export interface IRole extends IBaseModel, ITimestamps {
   name: string,
