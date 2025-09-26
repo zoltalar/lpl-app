@@ -107,7 +107,7 @@
                       </td>
                     </tr>
                     <tr v-if="processes && processes.length === 0">
-                      <td colspan="7">
+                      <td colspan="8">
                         {{ $t('messages.no_processes') }}
                       </td>
                     </tr>
@@ -130,7 +130,7 @@
     <modal
       id="modal-process-view"
       :title="$t('process_details')"
-      size="md"
+      size="lg"
     >
       <process-view :process="selectedProcess" />
     </modal>

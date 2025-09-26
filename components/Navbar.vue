@@ -18,9 +18,9 @@
               {{ $t('create_new') }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdown-create">
-              <li><nuxt-link to="/" class="dropdown-item">{{ $t('campaign') }}</nuxt-link></li>
-              <li><nuxt-link to="/" class="dropdown-item">{{ $t('subscriber') }}</nuxt-link></li>
-              <li><nuxt-link to="/" class="dropdown-item">{{ $t('attribute') }}</nuxt-link></li>
+              <li><nuxt-link to="/messages/saved" class="dropdown-item">{{ $t('message') }}</nuxt-link></li>
+              <li><nuxt-link to="/subscribers" class="dropdown-item">{{ $t('subscriber') }}</nuxt-link></li>
+              <li><nuxt-link to="/attributes" class="dropdown-item">{{ $t('attribute') }}</nuxt-link></li>
             </ul>
           </li>
         </ul>

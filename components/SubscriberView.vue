@@ -198,7 +198,7 @@
             <pre class="text-secondary" v-html="entry.details"></pre>
             <small>{{ $t('ip_address') }}</small>
             <pre class="text-secondary">{{ (entry?.info?.ip ?? '-') }}</pre>
-            <small>{{ $t('browser') }}</small>
+            <small>{{ $t('user_agent') }}</small>
             <pre class="text-secondary">{{ (entry?.info?.ua ?? '-') }}</pre>
             <small>{{ $t('created_at') }}</small>
             <pre class="text-secondary mb-0">{{ useDateFormat(entry.created_at, dateTimeFormat(currentUser)) }}</pre>
