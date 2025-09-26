@@ -6,6 +6,10 @@
   background-color: var(--#{$prefix}danger);
 }
 
+.badge-light {
+  background-color: var(--#{$prefix}light);
+}
+
 .badge-primary {
   background-color: var(--#{$prefix}primary);
 }

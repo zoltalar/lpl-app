@@ -22,6 +22,6 @@ useHead({
   }
 })
 useSeoMeta({
-  'title': t('messages.title_processes'),
+  'title': t('messages.title_queue'),
 })
 </script>

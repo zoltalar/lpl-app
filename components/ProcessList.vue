@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="page-title-box">
-          <h4 class="page-title">{{ $t('processes') }}</h4>
+          <h4 class="page-title">{{ $t('queue') }}</h4>
         </div>
       </div>
     </div>
@@ -16,19 +16,27 @@
                 <!-- mobile options -->
                 <div class="d-inline-block d-md-none">
                   <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown-process-options" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown-queue-options" data-bs-toggle="dropdown" aria-expanded="false">
                       {{ $t('options') }}
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown-process-options">
-                      <li><a href="/processes" class="dropdown-item" v-if="hasRole('admin') || can('process-run')">{{ $t('run') }}</a></li>
-                      <li><a href="/processes" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('process-view')">{{ $t('refresh') }}</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-queue-options">
+                      <li>
+                        <a href="/processes" class="dropdown-item" v-if="hasRole('admin') || can('queue-process')">
+                          <span class="me-2">{{ $t('process_queue') }}</span>
+                          <span class="badge badge-danger" v-if="messageCount > 0">{{ messageCount }}</span>
+                        </a>
+                      </li>
+                      <li><a href="/processes" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('queue-view')">{{ $t('refresh') }}</a></li>
                     </ul>
                   </div>
                 </div>
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('user_options')">
-                    <button type="button" class="btn btn-primary" v-if="hasRole('admin') || can('process-run')">{{ $t('run') }}</button>
+                    <button type="button" class="btn btn-primary" v-if="hasRole('admin') || can('queue-process')">
+                      <span class="me-2">{{ $t('process_queue') }}</span>
+                      <span class="badge badge-danger" v-if="messageCount > 0">{{ messageCount }}</span>
+                    </button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('user-view')">{{ $t('refresh') }}</button>
                   </div>
                 </div>
@@ -101,8 +109,8 @@
                       </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(process)" v-if="hasRole('admin') || can('process-view')"><i class="mdi mdi-eye-outline"></i></button>
-                          <button type="button" class="btn btn-danger" :title="$t('kill')" @click.prevent="kill(process)" v-if="hasRole('admin') || can('process-kill')"><i class="mdi mdi-close-octagon-outline"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(process)" v-if="hasRole('admin') || can('queue-view')"><i class="mdi mdi-eye-outline"></i></button>
+                          <button type="button" class="btn btn-danger" :title="$t('kill')" @click.prevent="kill(process)" v-if="hasRole('admin') || can('queue-kill')"><i class="mdi mdi-close-octagon-outline"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -152,6 +160,7 @@ const {
   refresh
 } = useDataTable(props)
 const selectedProcess = ref<IProcess>({} as IProcess)
+const messageCount = ref<number>(0)
 // Composables
 const { t } = useI18n()
 const { messages, addToast } = useToasts()
@@ -193,11 +202,16 @@ const kill = async (process: IProcess) => {
     })
   }
 }
+const scheduledMessageCount = async (): Promise<number> => {
+  const response = await useApi<{ count: number }>('/admin/messages/scheduled-count')
+  return response.count as number
+}
 const show = (process: IProcess): void => {
   selectedProcess.value = process
   $bootstrap.Modal.getOrCreateInstance('#modal-process-view')?.show()
 }
-onMounted(() => {
+onMounted(async () => {
   refresh()
+  messageCount.value = await scheduledMessageCount()
 })
 </script>

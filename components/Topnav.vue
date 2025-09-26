@@ -28,8 +28,8 @@
             <li class="nav-item" v-if="hasRole('admin') || can('mailing-list-view')">
               <nuxt-link to="/mailing-lists" class="nav-link">{{ $t('mailing_lists') }}</nuxt-link>
             </li>
-            <li class="nav-item" v-if="hasRole('admin') || can('process-view')">
-              <nuxt-link to="/processes" class="nav-link">{{ $t('processes') }}</nuxt-link>
+            <li class="nav-item" v-if="hasRole('admin') || can('queue-view')">
+              <nuxt-link to="/queue" class="nav-link">{{ $t('queue') }}</nuxt-link>
             </li>
             <li class="nav-item dropdown">
               <a id="top-nav-system" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $t('system') }}</a>
