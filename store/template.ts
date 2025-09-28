@@ -4,7 +4,8 @@ import type { ITemplate } from '@/types'
 export const useTemplateStore = defineStore({
   id: 'template',
   state: () => ({
-    collection: [] as ITemplate[]
+    collection: [] as ITemplate[],
+    collectionFetched: false
   }),
   actions: {
     async fetchCollection(): Promise<ITemplate[]> {
@@ -18,11 +19,17 @@ export const useTemplateStore = defineStore({
     },
     setCollection(collection: ITemplate[]) {
       this.collection = collection
+    },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
     }
   },
   getters: {
     getCollection(state): ITemplate[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     }
   }
 })

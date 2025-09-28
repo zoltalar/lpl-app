@@ -5,6 +5,7 @@ export const useMailingListStore = defineStore({
   id: 'mailing-list',
   state: () => ({
     collection: [] as IMailingList[],
+    collectionFetched: false,
     meta: {} as TMailingListMeta
   }),
   actions: {
@@ -23,6 +24,9 @@ export const useMailingListStore = defineStore({
     setCollection(collection: IMailingList[]) {
       this.collection = collection
     },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
+    },
     setMeta(meta: TMailingListMeta) {
       this.meta = meta
     }
@@ -30,6 +34,9 @@ export const useMailingListStore = defineStore({
   getters: {
     getCollection(state): IMailingList[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     },
     getMeta(state): TMailingListMeta {
       return state.meta

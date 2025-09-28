@@ -5,7 +5,8 @@ export const useCountryStore = defineStore({
   id: 'country',
   state: () => {
     return {
-      collection: [] as ICountry[]
+      collection: [] as ICountry[],
+      collectionFetched: false
     }
   },
   actions: {
@@ -20,11 +21,17 @@ export const useCountryStore = defineStore({
     },
     setCollection(collection: ICountry[]) {
       this.collection = collection
+    },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
     }
   },
   getters: {
     getCollection(state): ICountry[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     }
   }
 })

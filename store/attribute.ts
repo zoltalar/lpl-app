@@ -5,6 +5,7 @@ export const useAttributeStore = defineStore({
   id: 'attribute',
   state: () => ({
     collection: [] as IAttribute[],
+    collectionFetched: false,
     meta: {} as TAttributeMeta
   }),
   actions: {
@@ -26,6 +27,9 @@ export const useAttributeStore = defineStore({
     setCollection(collection: IAttribute[]): void {
       this.collection = collection
     },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
+    },
     setMeta(meta: TAttributeMeta): void {
       this.meta = meta
     }
@@ -33,6 +37,9 @@ export const useAttributeStore = defineStore({
   getters: {
     getCollection(state): IAttribute[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     },
     getMeta(state): TAttributeMeta {
       return state.meta

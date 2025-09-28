@@ -4,7 +4,8 @@ import type { IPermission } from '@/types'
 export const usePermissionStore = defineStore({
   id: 'permission',
   state: () => ({
-    collection: [] as IPermission[]
+    collection: [] as IPermission[],
+    collectionFetched: false
   }),
   actions: {
     async fetchCollection(): Promise<IPermission[]> {
@@ -15,11 +16,17 @@ export const usePermissionStore = defineStore({
     },
     setCollection(collection: IPermission[]) {
       this.collection = collection
+    },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
     }
   },
   getters: {
     getCollection(state): IPermission[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     }
   }
 })

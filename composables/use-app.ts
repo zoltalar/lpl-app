@@ -33,9 +33,10 @@ export default function useApp() {
     const responses: any[] = []
     const increment = 6.667
     appStore.reset()
-    if (attachmentStore.getCollection.length === 0) {
+    if ( ! attachmentStore.getCollectionFetched) {
       const attachments = await attachmentStore.fetchCollection()
       attachmentStore.setCollection(attachments)
+      attachmentStore.setCollectionFetched(true)
       responses.push(attachments)
       appStore.increment(increment)
     }
@@ -45,15 +46,17 @@ export default function useApp() {
       responses.push(meta)
       appStore.increment(increment)
     }
-    if (attributeStore.getCollection.length === 0) {
+    if ( ! attributeStore.getCollectionFetched) {
       const attributes = await attributeStore.fetchCollection()
       attributeStore.setCollection(attributes)
+      attributeStore.setCollectionFetched(true)
       responses.push(attributes)
       appStore.increment(increment)
     }
-    if (configurationStore.getCollection.length === 0) {
+    if ( ! configurationStore.getCollectionFetched) {
       const configurations = await configurationStore.fetchCollection()
       configurationStore.setCollection(configurations)
+      configurationStore.setCollectionFetched(true)
       responses.push(configurations)
       appStore.increment(increment)
     }
@@ -63,21 +66,24 @@ export default function useApp() {
       responses.push(meta)
       appStore.increment(increment)
     }
-    if (countryStore.getCollection.length === 0) {
+    if ( ! countryStore.getCollectionFetched) {
       const countries = await countryStore.fetchCollection()
       countryStore.setCollection(countries)
+      countryStore.setCollectionFetched(true)
       responses.push(countries)
       appStore.increment(increment)
     }
-    if (languageStore.getCollection.length === 0) {
+    if ( ! languageStore.getCollectionFetched) {
       const languages = await languageStore.fetchCollection()
       languageStore.setCollection(languages)
+      languageStore.setCollectionFetched(true)
       responses.push(languages)
       appStore.increment(increment)
     }
-    if (mailinglistStore.getCollection.length === 0) {
+    if ( ! mailinglistStore.getCollectionFetched) {
       const lists = await mailinglistStore.fetchCollection()
       mailinglistStore.setCollection(lists)
+      mailinglistStore.setCollectionFetched(true)
       responses.push(lists)
       appStore.increment(increment)
     }
@@ -93,15 +99,17 @@ export default function useApp() {
       responses.push(meta)
       appStore.increment(increment)
     }
-    if (permissionStore.getCollection.length === 0) {
+    if ( ! permissionStore.getCollectionFetched) {
       const permissions = await permissionStore.fetchCollection()
       permissionStore.setCollection(permissions)
+      permissionStore.setCollectionFetched(true)
       responses.push(permissions)
       appStore.increment(increment)
     }
-    if (roleStore.getCollection.length === 0) {
+    if ( ! roleStore.getCollectionFetched) {
       const roles = await roleStore.fetchCollection()
       roleStore.setCollection(roles)
+      roleStore.setCollectionFetched(true)
       responses.push(roles)
       appStore.increment(increment)
     }
@@ -117,9 +125,10 @@ export default function useApp() {
       responses.push(meta)
       appStore.increment(increment)
     }
-    if (templateStore.getCollection.length === 0) {
+    if ( ! templateStore.getCollectionFetched) {
       const templates = await templateStore.fetchCollection()
       templateStore.setCollection(templates)
+      templateStore.setCollectionFetched(true)
       responses.push(templates)
       appStore.increment(increment)
     }

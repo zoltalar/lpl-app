@@ -4,7 +4,8 @@ import type { ILanguage } from '@/types'
 export const useLanguageStore = defineStore({
   id: 'language',
   state: () => ({
-    collection: [] as ILanguage[]
+    collection: [] as ILanguage[],
+    collectionFetched: false
   }),
   actions: {
     async fetchCollection(): Promise<ILanguage[]> {
@@ -15,11 +16,17 @@ export const useLanguageStore = defineStore({
     },
     setCollection(collection: ILanguage[]) {
       this.collection = collection
+    },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
     }
   },
   getters: {
     getCollection(state): ILanguage[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     }
   }
 })

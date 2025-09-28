@@ -5,6 +5,7 @@ export const useAttachmentStore = defineStore({
   id: 'attachment',
   state: () => ({
     collection: [] as IAttachment[],
+    collectionFetched: false
   }),
   actions: {
     async fetchCollection(): Promise<IAttachment[]> {
@@ -20,11 +21,17 @@ export const useAttachmentStore = defineStore({
     },
     setCollection(collection: IAttachment[]): void {
       this.collection = collection
+    },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
     }
   },
   getters: {
     getCollection(state): IAttachment[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     }
   }
 })

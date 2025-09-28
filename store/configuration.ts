@@ -5,6 +5,7 @@ export const useConfigurationStore = defineStore({
   id: 'configuration',
   state: () => ({
     collection: [] as IConfiguration[],
+    collectionFetched: false,
     meta: {} as TConfigurationMeta
   }),
   actions: {
@@ -25,6 +26,9 @@ export const useConfigurationStore = defineStore({
     setCollection(collection: IConfiguration[]): void {
       this.collection = collection
     },
+    setCollectionFetched(fetched: boolean): void {
+      this.collectionFetched = fetched
+    },
     setMeta(meta: TConfigurationMeta): void {
       this.meta = meta
     }
@@ -32,6 +36,9 @@ export const useConfigurationStore = defineStore({
   getters: {
     getCollection(state): IConfiguration[] {
       return state.collection
+    },
+    getCollectionFetched(state): boolean {
+      return state.collectionFetched
     },
     getMeta(state): TConfigurationMeta {
       return state.meta
