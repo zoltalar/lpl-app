@@ -21,12 +21,12 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-queue-options">
                       <li>
-                        <a href="/processes" class="dropdown-item" v-if="hasRole('admin') || can('queue-process')">
+                        <a href="/queue" class="dropdown-item" v-if="hasRole('admin') || can('queue-process')">
                           <span class="me-2">{{ $t('process_queue') }}</span>
                           <span class="badge badge-danger" v-if="messageCount > 0">{{ messageCount }}</span>
                         </a>
                       </li>
-                      <li><a href="/processes" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('queue-view')">{{ $t('refresh') }}</a></li>
+                      <li><a href="/queue" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('queue-view')">{{ $t('refresh') }}</a></li>
                     </ul>
                   </div>
                 </div>
@@ -34,8 +34,8 @@
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('user_options')">
                     <button type="button" class="btn btn-primary" v-if="hasRole('admin') || can('queue-process')">
-                      <span class="me-2">{{ $t('process_queue') }}</span>
-                      <span class="badge badge-danger" v-if="messageCount > 0">{{ messageCount }}</span>
+                      <span>{{ $t('process_queue') }}</span>
+                      <span class="badge badge-danger ms-2" v-if="messageCount > 0">{{ messageCount }}</span>
                     </button>
                     <button type="button" class="btn btn-secondary" @click.prevent="refresh" v-if="hasRole('admin') || can('user-view')">{{ $t('refresh') }}</button>
                   </div>
