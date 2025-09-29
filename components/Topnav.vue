@@ -37,6 +37,8 @@
                 <nuxt-link to="/attachments" class="dropdown-item" v-if="hasRole('admin') || can('attachment-view')">{{ $t('attachments') }}</nuxt-link>
                 <nuxt-link to="/subscribe-pages" class="dropdown-item" v-if="hasRole('admin') || can('subscribe-page-view')">{{ $t('subscribe_pages') }}</nuxt-link>
                 <nuxt-link to="/users" class="dropdown-item" v-if="hasRole('admin') || can('user-view')">{{ $t('users') }}</nuxt-link>
+                <div class="dropdown-divider"></div>
+                <nuxt-link to="/configuration" class="dropdown-item" v-if="hasRole('admin')">{{ $t('configuration') }}</nuxt-link>
               </div>
             </li>
           </ul>

@@ -4,6 +4,7 @@ export interface IApiResource {
     IAttachment[] |
     IAttribute[] |
     ICategory[] |
+    IConfiguration[] |
     ICountry[] |
     IMailingList[] |
     IProcess[] |
