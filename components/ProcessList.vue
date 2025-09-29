@@ -20,10 +20,10 @@
                       {{ $t('options') }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-queue-options">
-                      <li>
-                        <a href="/queue" class="dropdown-item" v-if="hasRole('admin') || can('queue-process')">
-                          <span class="me-2">{{ $t('process_queue') }}</span>
-                          <span class="badge badge-danger" v-if="messageCount > 0">{{ messageCount }}</span>
+                      <li v-if="(hasRole('admin') || can('queue-process')) && manuallyProcessQueue">
+                        <a href="/queue" class="dropdown-item">
+                          <span>{{ $t('process_queue') }}</span>
+                          <span class="badge badge-danger ms-2" v-if="messageCount > 0">{{ messageCount }}</span>
                         </a>
                       </li>
                       <li><a href="/queue" class="dropdown-item" @click.prevent="refresh" v-if="hasRole('admin') || can('queue-view')">{{ $t('refresh') }}</a></li>
@@ -33,7 +33,7 @@
                 <!-- desktop options -->
                 <div class="d-inline-block d-none d-md-inline-block">
                   <div class="btn-group" role="group" :aria-label="$t('user_options')">
-                    <button type="button" class="btn btn-primary" v-if="hasRole('admin') || can('queue-process')">
+                    <button type="button" class="btn btn-primary" v-if="(hasRole('admin') || can('queue-process')) && manuallyProcessQueue">
                       <span>{{ $t('process_queue') }}</span>
                       <span class="badge badge-danger ms-2" v-if="messageCount > 0">{{ messageCount }}</span>
                     </button>
@@ -167,11 +167,15 @@ const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
 const { can } = usePermission()
 const { data } = useAuth()
+const { mailSender } = useConfiguration()
 const { dateTimeFormat } = useUser()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const currentUser = computed<IUser>(() => {
   return data.value as IUser
+})
+const manuallyProcessQueue = computed<number>(() => {
+  return Number(mailSender.value.manually_process_queue)
 })
 const processes = computed<IProcess[]>(() => {
   return resource?.value?.data as IProcess[]
