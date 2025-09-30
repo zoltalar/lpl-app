@@ -111,6 +111,7 @@
                       </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(configuration)" v-if="hasRole('admin')"><i class="mdi mdi-pencil"></i></button>
                           <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(configuration)" v-if="hasRole('admin')"><i class="mdi mdi-eye-outline"></i></button>
                         </div>
                       </td>
@@ -142,6 +143,24 @@
       </div>
     </div>
     <toasts :messages="messages" />
+    <modal
+      id="modal-configuration-edit"
+      :title="$t('edit_configuration_item')"
+      size="lg"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <configuration-edit-form
+        :configuration="selectedConfiguration"
+        ref="formConfigurationEdit"
+        @updated="handleUpdated"
+        @errors="handleErrors"
+      />
+      <template #footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('close') }}</button>
+        <button type="button" class="btn btn-primary" @click.prevent="update">{{ $t('save') }}</button>
+      </template>
+    </modal>
     <modal
       id="modal-configuration-view"
       :title="$t('configuration_item_details')"
@@ -182,6 +201,10 @@ const configurations = computed<IConfiguration[]>(() => {
   return resource?.value?.data as IConfiguration[]
 })
 // Functions
+const edit = (configuration: IConfiguration): void => {
+  selectedConfiguration.value = configuration
+  $bootstrap.Modal.getOrCreateInstance('#modal-configuration-edit')?.show()
+}
 const show = (configuration: IConfiguration): void => {
   selectedConfiguration.value = configuration
   $bootstrap.Modal.getOrCreateInstance('#modal-configuration-view')?.show()
