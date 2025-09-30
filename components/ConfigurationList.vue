@@ -111,7 +111,7 @@
                       </td>
                       <td class="text-end">
                         <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(configuration)" v-if="hasRole('admin')"><i class="mdi mdi-pencil"></i></button>
+                          <button type="button" class="btn btn-light" :title="$t('edit')" @click.prevent="edit(configuration)" v-if="hasRole('admin') && configuration.updatable === 1"><i class="mdi mdi-pencil"></i></button>
                           <button type="button" class="btn btn-light" :title="$t('view')" @click.prevent="show(configuration)" v-if="hasRole('admin')"><i class="mdi mdi-eye-outline"></i></button>
                         </div>
                       </td>
@@ -190,11 +190,13 @@ const {
   refresh
 } = useDataTable(props)
 const toggleFilters = ref<boolean>(false)
+const formConfigurationEdit = useTemplateRef<HTMLFormElement>('formConfigurationEdit')
 const selectedConfiguration = ref<IConfiguration>({} as IConfiguration)
 // Composables
 const { t } = useI18n()
 const { messages, addToast } = useToasts()
 const { has: hasRole } = useRole()
+const { refresh: refreshConfigurations } = useConfiguration()
 const { $bootstrap } = useNuxtApp()
 // Computed
 const configurations = computed<IConfiguration[]>(() => {
@@ -205,10 +207,37 @@ const edit = (configuration: IConfiguration): void => {
   selectedConfiguration.value = configuration
   $bootstrap.Modal.getOrCreateInstance('#modal-configuration-edit')?.show()
 }
+const handleErrors = (errors: Record<string,string>): void => {
+  onErrors(errors)
+}
+const handleUpdated = (): void => {
+  onUpdated()
+}
+const onErrors = (errors: Record<string,string>): void => {
+  addToast({ 
+    header: t('failure'),
+    body: t('messages.form_errors', { count: Object.keys(errors).length }),
+    type: 'danger'
+  })
+}
+const onUpdated = (): void => {
+  const model = t('configuration')
+  $bootstrap.Modal.getOrCreateInstance('#modal-configuration-edit')?.hide()
+  refresh()
+  refreshConfigurations()
+  addToast({ 
+    header: t('success'),
+    body: t('messages.model_updated', { model })
+  })
+}
 const show = (configuration: IConfiguration): void => {
   selectedConfiguration.value = configuration
   $bootstrap.Modal.getOrCreateInstance('#modal-configuration-view')?.show()
 }
+const update = (): void => {
+  formConfigurationEdit.value?.update()
+}
+// Hooks
 onMounted(() => {
   refresh()
 })

@@ -16,6 +16,7 @@
       <input
         type="text"
         class="form-control"
+        :class="{'is-invalid': error('value') !== null}"
         :id="inputId('value')"
         maxlength="255"
         v-model="form.value"
@@ -38,6 +39,7 @@ const emits = defineEmits(['updated', 'errors'])
 // Composables
 const {
   errors,
+  clearErrors,
   error,
   getErrors,
   inputId
@@ -63,6 +65,9 @@ const normalize = (): FormData => {
   })
   return formData
 }
+const reset = (): void => {
+  clearErrors()
+}
 const update = async (): Promise<void> => {
   const configurationData: FormData = normalize()
   await useApi(`/admin/configurations/update/${configuration.value.id}`, {
@@ -73,6 +78,7 @@ const update = async (): Promise<void> => {
         errors.value = getErrors(response._data.errors)
         emits('errors', toRaw(errors.value))
       } else if (response?._data?.data) {
+        reset()
         emits('updated')
       }
     }
