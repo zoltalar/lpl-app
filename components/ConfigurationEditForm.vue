@@ -13,12 +13,10 @@
     </div>
     <div class="form-group mb-0">
       <label :for="inputId('value')" class="form-label">{{ $t('value') }}</label>
-      <input
-        type="text"
-        class="form-control"
-        :class="{'is-invalid': error('value') !== null}"
-        :id="inputId('value')"
-        maxlength="255"
+      <configuration-input
+        :configuration="configuration"
+        :inputId="inputId('value')"
+        :errored="error('value') !== null"
         v-model="form.value"
       />
       <div class="invalid-feedback d-block" v-if="error('value') !== null">

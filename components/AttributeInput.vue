@@ -3,6 +3,7 @@
     <input
       type="text"
       class="form-control"
+      :class="{'is-invalid': props.errored}"
       :id="inputId"
       :maxlength="maxlength"
       :placeholder="placeholder"
@@ -14,6 +15,7 @@
     <input
       type="number"
       class="form-control"
+      :class="{'is-invalid': props.errored}"
       :id="inputId"
       :placeholder="placeholder"
       :required="required"
@@ -23,6 +25,7 @@
     />
     <textarea
       class="form-control"
+      :class="{'is-invalid': props.errored}"
       :id="inputId"
       :maxlength="maxlength"
       :placeholder="placeholder"
@@ -34,6 +37,7 @@
     ></textarea>
     <select
       class="form-select"
+      :class="{'is-invalid': props.errored}"
       :id="inputId"
       :required="required"
       :disabled="props.disabled"
@@ -64,6 +68,7 @@
     <input
       type="date"
       class="form-control"
+      :class="{'is-invalid': props.errored}"
       :id="inputId"
       :required="required"
       :disabled="props.disabled"
