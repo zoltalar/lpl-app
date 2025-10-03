@@ -33,6 +33,7 @@ export default function useUser() {
     }
     return name
   }
+  // Return
   return {
     dateFormats,
     timeFormats,

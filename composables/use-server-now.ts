@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-export default function useServerNow(format: string = DateTime.DATETIME_SHORT_WITH_SECONDS) {
+export default function useServerNow(format: string = 'MM/dd/yyyy, hh:mm:ss a') {
   // Vars
   const now = ref<string>('')
   // Composables
@@ -8,7 +8,7 @@ export default function useServerNow(format: string = DateTime.DATETIME_SHORT_WI
   const update = () => {
     const timezone = appConfig.value.timezone
     setInterval(() => {
-      now.value = DateTime.now().setZone(timezone).toLocaleString(format)
+      now.value = DateTime.now().setZone(timezone).toFormat(format)
     }, 1000)
   }
   // Hooks
